@@ -1,6 +1,6 @@
 {% extends "_templates/_new-record.html" %}
 
-{% set pageHeading = "Review trainee record" %}
+{% set pageHeading = "Review draft record" %}
 {% set formAction = "./save" | addReferrer(referrer) %}
 {% set hideReturnLink = true %}
 {% set showIncomplete = true %}
@@ -8,7 +8,7 @@
 {% set backText = 'Back to draft record' %}
 {% set gridColumn = 'govuk-grid-column-full' %}
 
-{# This template shares lots of similarities with `check-record-apply-grouped-sections` - changes here likely want to be mirrored there #}
+{# This template shares lots of similarities with `check-record` - changes here likely want to be mirrored there #}
 
 {% block formContent %}
 
@@ -54,36 +54,49 @@
     {# Show a warning if the record isn’t ready to be submitted #}
     {{ recordIncompleteInsetTextWarning | safe }}
 
+    {# Not needed for apply? #}
     {# Inset text about the provider and route #}
-    {% include "_includes/providerAndRouteInsetText.njk" %}
+    {# {% include "_includes/providerAndRouteInsetText.njk" %} #}
 
   </div>
 </div>
 
+<h2 class="govuk-heading-m">Apply application</h2>
 
-<h2 class="govuk-heading-m">Personal details and education</h2>
+{# Show a blue banner if the 'trainee application' has not been marked as reviewed #}
+{% if data.settings.groupApplySections and (record.applyData.status != "Completed") %}
 
-{% include "_includes/summary-cards/personal-details.html" %}
+  {% set incompleteType = "warning" if errorList %}
+  {% set incompleteId = "trainee-application" %}
+  {% set incompleteText = "Trainee’s application not reviewed" %}
+  {% set incompleteLink = recordPath + "/apply-trainee-application" | addReferrer(referrer) %}
+  {% set incompleteLinkText = "Review their application" %}
+  {% include "_includes/incomplete.njk" %}
 
-{% include "_includes/summary-cards/contact-details.html" %}
+{% else %}
+  {# By default each of these summary cards will show a blue banner if 'not reviewed'. But with 'grouped sections' there's a single separate checkbox to track these #}
+  {% set showIncomplete = false %}
 
-{% include "_includes/summary-cards/diversity.html" %}
+  {% include "_includes/summary-cards/personal-details.html" %}
 
-{% include "_includes/summary-cards/gcse-details.html" %}
+  {% include "_includes/summary-cards/contact-details.html" %}
 
-{% include "_includes/summary-cards/degree/details.html" %}
+  {% include "_includes/summary-cards/diversity.html" %}
 
-{% include "_includes/summary-cards/undergraduate-qualification.html" %}
+  {% include "_includes/summary-cards/gcse-details.html" %}
 
-<h2 class="govuk-heading-m">About their teacher training</h2>
+  {% include "_includes/summary-cards/degree/details.html" %}
 
-{# Provider summary card not used - inset text instead #}
-{# {% include "_includes/summary-cards/provider-details.html" %} #}
+  {% include "_includes/summary-cards/undergraduate-qualification.html" %}
 
-{# Record setup not currently used - can probably delete soon #}
-{# {% include "_includes/summary-cards/record-setup.html" %} #}
+  {# Restore incomplete status #}
+  {% set showIncomplete = true %}
+
+{% endif %}
 
 {% include "_includes/summary-cards/course-details.html" %}
+
+<h2 class="govuk-heading-m">About their teacher training</h2>
 
 {% include "_includes/summary-cards/training-details/training-details.html" %}
 
