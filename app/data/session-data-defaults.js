@@ -31,7 +31,12 @@ let nonPublishRoutes = trainingRouteData.nonPublishRoutes
 let allTrainingRoutes       = Object.values(trainingRoutes).map(route => route.name)
 
 let courses                 = require('./courses.json')
-// let schools                 = require('./schools.json') // too big to load in to session
+// let schools                 = require('./gis-schools.js') // too big to load in to session
+
+// Super hacky method of picking 5 schools randomly from the list to
+// pretend to be the provider's recently used schools
+// let schoolsTop5             = schools.slice(1200).filter((school, index ) => (index % 330 == 0)).slice(0, 5)
+
 let providerData            = require('./providers.js')
 let providers               = providerData.selectedProviders
 let allProviders            = providerData.allProviders
@@ -136,6 +141,7 @@ module.exports = {
   allProviders,
   records,
   // schools,
+  // schoolsTop5,
   settings,
   statuses,
   strings,
