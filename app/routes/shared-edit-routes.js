@@ -3,8 +3,11 @@ const path = require('path')
 const moment = require('moment')
 const utils = require('./../lib/utils')
 const _ = require('lodash')
-const schools = require('./../data/gis-schools.js') // Loaded manually because this is too big to pass around in session
 
+// In function because this is too big to pass around in session
+const getSchools = () => {
+  return require('./../data/gis-schools.js')
+}
 
 module.exports = router => {
 
@@ -88,6 +91,7 @@ module.exports = router => {
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
     let schoolSearchTerm = req.query?._schoolSearch
+    const schools = getSchools()
 
     if (schoolSearchTerm){
       let results = false
@@ -110,6 +114,7 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
+    const schools = getSchools()
 
     // Input added with js by the autocomplete
     let autocompleteRawValue = req.body?._autocomplete_raw_value_school_picker
@@ -196,10 +201,12 @@ module.exports = router => {
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
     let schoolSearchTerm = req.query?._schoolSearch
+    const schools = getSchools()
 
     if (schoolSearchTerm){
       let results = false
       let resultsCount = 0
+      
       results = utils.searchSchools(schools, schoolSearchTerm)
       resultsCount = results.length
       results = results.slice(0, 15) // truncate results
@@ -218,6 +225,7 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
+    const schools = getSchools()
 
     // Input added with js by the autocomplete
     let autocompleteRawValue = req.body?._autocomplete_raw_value_school_picker
@@ -232,6 +240,7 @@ module.exports = router => {
     // raw autocomplete string submitted. If they don’t match, wipe the UUID as it’s invalid - and instead we should
     // run a string search for the given name.
     if (autocompleteUuid && autocompleteRawValue){
+
       let selectedSchool = schools.find(school => school.uuid == autocompleteUuid)
       if (selectedSchool?.schoolName != autocompleteRawValue){
         autocompleteUuid = undefined
