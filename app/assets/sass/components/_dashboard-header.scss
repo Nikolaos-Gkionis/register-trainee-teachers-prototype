@@ -1,0 +1,14 @@
+// Trainee record actions panel
+
+.app-dashboard-header {
+
+  & > * {
+    margin-bottom: 0 !important;
+  }
+
+  @include govuk-media-query($from: tablet) {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center
+  }
+}
