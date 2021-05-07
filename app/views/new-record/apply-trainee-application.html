@@ -1,14 +1,15 @@
 {% extends "_templates/_new-record.html" %}
 
-{% set pageHeading = "Trainee’s application" %}
+{% set pageHeading = "Trainee data" %}
 
-{% set formAction = "./overview" | orReferrer(referrer) %}
+{# {% set formAction = "./overview" | orReferrer(referrer) %} #}
 
 {% set hideReturnLink = true %}
 {% set showIncomplete = false %}
 {% set backLink = './overview' %}
 {% set backText = 'Back to draft record' %}
 {% set gridColumn = 'govuk-grid-column-full' %}
+{% set bodyClasses = "app-has-errors" if query.errors %}
 
 {% block formContent %}
 
@@ -41,16 +42,40 @@ of the page. #}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
 
-    {% if errorList %}
+    {% if query.errors %}
+      {% set invalidAnswerCount = record | countInvalidAnswers %}
+      {% set errorText %}
+        You must ammend {{invalidAnswerCount}} {{ 'answer' | pluralise(invalidAnswerCount)}} before marking the trainee data as reviewed
+      {% endset %}
+      {% set errorListArray = [] %}
+
+      {% set descriptionText %}
+        This trainee data contains {{invalidAnswerCount}} {{ 'answer' | pluralise(invalidAnswerCount)}} that you need to review and amend manually.
+      {% endset %}
+      {% for invalidAnswer in data.temp.invalidAnswers %}
+        {% set errorListArray = errorListArray | push(
+          {
+            text: invalidAnswer.name,
+            href: "#" + invalidAnswer.id
+          }) %}
+      {% endfor %}
+
+
       {{ govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [
-          {
-            text: "You must complete all sections before submitting for TRN"
-          }
-        ]
+        descriptionText: descriptionText,
+        errorList: errorListArray
       }) }}
+    {% else %}
+      {# This must come after the summary cards are rendered so that it can show
+      which fields have invalid answers and link to them #}
+      {% if hasInvalidAnswers %}
+        {% set invalidAnswerType = "application" %}
+        {% include "_includes/invalidAnswersBanner.njk" %}
+      {% endif %}
+      
     {% endif %}
+
 
     {% set draftRecordName %}
       {% if record.personalDetails.shortName %}
@@ -61,12 +86,7 @@ of the page. #}
     <span class="govuk-caption-l">{{'Draft record' + draftRecordName}}</span>
     <h1 class="govuk-heading-l govuk-!-margin-bottom-8">{{pageHeading}}</h1>
 
-    {# This must come after the summary cards are rendered so that it can show
-    which fields have invalid answers and link to them #}
-    {% if hasInvalidAnswers %}
-      {% set invalidAnswerType = "application" %}
-      {% include "_includes/invalidAnswersBanner.njk" %}
-    {% endif %}
+    
 
     {# Text shown if user belongs to multiple providers #}
     {# {% include "_includes/providerAndRouteInsetText.njk" %} #}
@@ -76,27 +96,27 @@ of the page. #}
 
 {{ allSummaryCards | safe }}
 
-{% if hasInvalidAnswers %}
+{# {% if hasInvalidAnswers %}
 
   {{ govukInsetText({
     text: "You need to ammend this record before you can mark it as reviewed."
   }) }}
 
 {% else %}
-
+ #}
   {{ govukCheckboxes({
     idPrefix: "apply-trainee-application-checkbox",
     name: "record[applyData][status]",
     items: [
       {
         value: "Completed",
-        text: "I have reviewed their application",
+        text: "I have reviewed the trainee data",
         checked: checked(record.applyData.status, "Completed")
       }
     ]
   }) }}
 
-{% endif %}
+{# {% endif %} #}
 
 {{ govukButton({
   text: "Continue"

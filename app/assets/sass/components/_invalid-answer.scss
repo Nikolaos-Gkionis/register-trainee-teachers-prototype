@@ -4,10 +4,22 @@ $invalid-colour: $govuk-brand-colour;
   border-color: $invalid-colour;  
 }
 
+.app-has-errors {
+  .app-inset-text--invalid-answer, .app-summary-list__value-inset {
+    border-color: $govuk-error-colour;  
+  }
+  .app-summary-list__message--invalid {
+    color: $govuk-error-colour;
+  }
+}
+
 .app-inset-text--narrow {
   border-width: 5px;
 }
 
+.app-inset-text--invalid-answer__heading {
+  color: $invalid-colour;
+}
 
 .app-tag--pink-inverted {
   background: govuk-shade(govuk-colour("pink"), 10);
@@ -26,4 +38,16 @@ $invalid-colour: $govuk-brand-colour;
 .app-summary-list__message--invalid {
   color: $invalid-colour;
   @include govuk-typography-weight-bold;
+}
+
+.app-invalid-answer .govuk-error-message {
+  color: $invalid-colour;
+}
+
+.app-invalid-answer .govuk-error-message {
+  color: $invalid-colour;
+}
+
+.app-invalid-answer .govuk-form-group--error {
+  border-color: $invalid-colour;
 }

@@ -619,7 +619,7 @@ exports.highlightInvalidRows = function(rows) {
 
   // We need to add to any existing answers from previous times
   // this filter has run on this page
-  let invalidAnswers = ctx.data?.record?.invalidAnswers || []
+  let invalidAnswers = ctx.data?.temp?.invalidAnswers || []
   let featureEnabled = ctx.data?.settings?.highlightInvalidAnswers == "true"
 
   if (rows) {
@@ -649,7 +649,7 @@ exports.highlightInvalidRows = function(rows) {
 
           // Store the row name so it can be used in a summary at 
           // the top of the page
-          invalidAnswers.push({name: key, id})
+          invalidAnswers.push({name: `${key} is not recognised`, id})
           
           // Error message that gets shown
           let messageContent = `${key} is not recognised`
@@ -662,7 +662,7 @@ exports.highlightInvalidRows = function(rows) {
           // If there’s more than one link (unlikely), do nothing
           if (actionItems && actionItems.length == 1){
             let href = row?.actions?.items[0].href
-            linkHtml = `<br><a class="govuk-link govuk-link--no-visited-state" href="${href}">
+            linkHtml = `<br><a class="govuk-link govuk-link--no-visited-state app-summary-list__link--invalid" href="${href}">
             Review the trainee’s answer<span class="govuk-visually-hidden"> for ${key.toLowerCase()}</span>
             </a>`
             delete row.actions.items
@@ -701,22 +701,39 @@ exports.highlightInvalidRows = function(rows) {
   // Save array back to context
   // using lodash on the rare chance record doesn’t acutally exist yet
   if (invalidAnswers.length){
-    _.set(this.ctx, 'data.record.invalidAnswers', invalidAnswers)
+    _.set(this.ctx, 'data.temp.invalidAnswers', invalidAnswers)
   }
   return rows
 }
 
 exports.captureInvalid = function(data){
   let ctx = Object.assign({}, this.ctx)
+  let invalidAnswers = ctx.data?.temp?.invalidAnswers || []
 
   delete this.ctx.data?.temp?.invalidString // just in case
 
   if (data.value && data.value.includes("**invalid**")){
+    let cleanedValue = data.value.replace("**invalid**", "")
+    let key = data.label.html || data.label.text
+    // let linkText = `${key} - the trainee entered ‘${cleanedValue}’. You need to search for the closest match.`
+    let linkText = `${key} not recognised`
+    invalidAnswers.push({name: linkText, id: data.id})
     // data.value = data.value.replace("**invalid**", "")
-    _.set(this.ctx, 'data.temp.invalidString', data.value)
+    _.set(this.ctx, 'data.temp.invalidString', cleanedValue)
+    
     // data.value = data.value.replace("**invalid**", "")
     data.value = '' // wipe the value
+    data.classes = (data.classes) ? `${data.classes} app-invalid-answer` : 'app-invalid-answer'
+    data.errorMessage = {
+      text: `The trainee entered ‘${cleanedValue}’. You need to search for the closest match.`
+    }
+
+    // Save array back to context
+    // using lodash on the rare chance record doesn’t acutally exist yet
+    _.set(this.ctx, 'data.temp.invalidAnswers', invalidAnswers)
+
   }
+
   return data
 }
 
@@ -800,17 +817,17 @@ exports.addQueryParam = (existing, param) => {
 // and put the remaining as the next referrer.
 // This lets us support multiple return destinations
 exports.getReferrerDestination = referrer => {
-  let referrerCopy = [...referrer]
-  if (typeof referrerCopy == 'string'){
-    referrerCopy = referrerCopy.split(",")
+  if (typeof referrer == 'string'){
+    referrer = referrer.split(",")
   }
-  if (!referrerCopy) return ''
-  else if (Array.isArray(referrerCopy)){
+  if (!referrer) return ''
+  else if (Array.isArray(referrer)){
+    let referrerCopy = [...referrer]
     let last = referrerCopy.pop()
     if (referrerCopy.length) return `${last}?referrer=${referrerCopy}`
     else return last
   }
-  else return referrerCopy
+  else return referrer
 }
 
 // Return first part of url to use in redirects
