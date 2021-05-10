@@ -15,9 +15,11 @@
 {# Merge with temp store #}
 {% set placementTemp = placement | mergeObjects(data.placementTemp) %}
 
+{% set label = "Search for a school by its unique reference number (URN), name or postcode" %}
+
 {{ govukInput({
   label: {
-    text: "Enter the unique reference number (URN) of the placement school or college.",
+    text: label,
     classes: "govuk-label--s"
   },
   hint: {
