@@ -13,36 +13,38 @@
         {{ govukButton({
           text: "Add a trainee",
           href: "./new-record/new",
-          isStartButton: true
+          _isStartButton: true
         }) }}
       </div>
     </div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter-from-desktop">
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a href="/records" class="govuk-link govuk-link--no-visited-state">Trainee records</a></h2>
-        <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-1">Review and manage your trainee records.</p>
+        <h2 class="govuk-!-font-size-19 govuk-!-margin-bottom-1 govuk-!-margin-top-0"><a href="/records" class="govuk-link govuk-link--no-visited-state">Trainee records</a></h2>
+        <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-3">Review and manage your trainee records.</p>
         {% if data.settings.includeGuidance %}
-          <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a href="/guidance" class="govuk-link govuk-link--no-visited-state">Guidance</a></h2>
-          <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-1">Service guidance for each route.</p>
+          <h2 class="govuk-heading-m govuk-!-margin-bottom-1"><a href="/guidance" class="govuk-link govuk-link--no-visited-state">Guidance</a></h2>
+          <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-3">Service guidance for each route.</p>
         {% endif %}
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a href="#" class="govuk-link govuk-link--no-visited-state">Give feedback</a></h2>
-        <p class="govuk-body  govuk-!-font-size-16 govuk-!-margin-bottom-1">This is a new service. Your views will help us improve it.</p>
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-2"><a href="/data-requirements" class="govuk-link govuk-link--no-visited-state">Check what data you need</a></h2>
-        <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-1">The data you need to complete a trainee record.</p>
-        <div class="app-action-required-item govuk-!-margin-top-2" style="flex-direction: row-reverse">
-          <span class="app-action-required-item__count govuk-!-margin-right-7" style="width: 30px; height: 30px; font-size: 19px">2</span>
+        <h2 class="govuk-!-font-size-19 govuk-!-margin-bottom-1"><a href="#" class="govuk-link govuk-link--no-visited-state">Give feedback</a></h2>
+        <p class="govuk-body  govuk-!-font-size-16 govuk-!-margin-bottom-3">This is a new service. Your views will help us improve it.</p>
+        <h2 class="govuk-!-font-size-19 govuk-!-margin-bottom-1"><a href="/data-requirements" class="govuk-link govuk-link--no-visited-state">Check what data you need</a></h2>
+        <p class="govuk-body govuk-!-font-size-16 govuk-!-margin-bottom-3">The data you need to complete a trainee record.</p>
+        {# <div class="app-action-required-item govuk-!-margin-top-1">
           <div class="app-action-required-item__content">
             <a href="/notifications" class="govuk-link app-action-required-item__text">Notifications</a>
           </div>
-        </div>
+          <span class="app-action-required-item__count govuk-!-margin-left-2" style="width: 30px; height: 30px; font-size: 19px">2</span>
+        </div> #}
       </div>
       <div class="govuk-grid-column-three-quarters-from-desktop">
 
         {# suggesting we move these to a dedicated page #}
         
-        {# {% if data.settings.showRequiresAttentionSection and combinedAlertCount > 0 %}
-          <h2 class="govuk-heading-m">Requires action</h2>
+        {% if data.settings.showRequiresAttentionSection and combinedAlertCount > 0 %}
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible hide-from-desktop">
+
+          <h2 class="govuk-heading-m">Requires your action</h2>
           {% if applyDraftCount > 0 %}
             <div class="app-action-required-item">
               <span class="app-action-required-item__count">{{applyDraftCount}}</span>
@@ -56,29 +58,31 @@
             <div class="app-action-required-item">
               <span class="app-action-required-item__count">{{recordsToBeReviewedCount}}</span>
               <div class="app-action-required-item__content">
-                <a href="#" class="govuk-link app-action-required-item__text">records for review before cycle ends</a>
+                <a href="#" class="govuk-link app-action-required-item__text">Records for review before cycle ends</a>
                 <span class="app-action-required-item__hint-text govuk-hint govuk-!-font-size-16">The cycle ends on August 27 2021</span>
               </div>
             </div>
           {% endif %}
+
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
         {% endif %}
 
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"> #}
-
         <h2 class="govuk-heading-m">Your total trainees</h2>
+        
+        {% set records = data.filteredRecords | filterByYear(data.currentYear)  %}
+
+        {% set nonDraftRecordsCount = records | removeWhere("status", ["Draft", "Apply draft"]) | length %}
 
         <div class="govuk-grid-row govuk-!-margin-bottom-6">
           <div class="govuk-grid-column-full">
-            <a href="" class="status-card status-card--pink">
-                <span class="status-card__count">247</span>
+            <a href="" class="status-card">
+                <span class="status-card__count">{{nonDraftRecordsCount}}</span>
                 <span class="status-card__status">Total trainees</span> <span class="govuk-visually-hidden"> records. View these records.</span>
             </a>
           </div>
         </div>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-        {% set records = data.filteredRecords | filterByYear(data.currentYear)  %}
 
         {% macro statusCard(records, status) %}
           <a href="/records?filterStatus={{status}}" class="status-card status-card--{{status | lower | kebabCase }} status-card--small">
