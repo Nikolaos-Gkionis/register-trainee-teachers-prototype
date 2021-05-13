@@ -99,7 +99,7 @@ filters.reviewIfInProgress = (url, data, path) => {
 }
 
 
-filters.canBeAmmended = status => {
+filters.canBeAmended = status => {
   let statusesThatCanAmend = [
     'Draft',
     'Apply draft',

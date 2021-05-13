@@ -45,7 +45,7 @@ of the page. #}
     {% if query.errors %}
       {% set invalidAnswerCount = record | countInvalidAnswers %}
       {% set errorText %}
-        You must ammend {{invalidAnswerCount}} {{ 'answer' | pluralise(invalidAnswerCount)}} before marking the trainee data as reviewed
+        You must amend {{invalidAnswerCount}} {{ 'answer' | pluralise(invalidAnswerCount)}} before marking the trainee data as reviewed
       {% endset %}
       {% set errorListArray = [] %}
 
@@ -99,7 +99,7 @@ of the page. #}
 {# {% if hasInvalidAnswers %}
 
   {{ govukInsetText({
-    text: "You need to ammend this record before you can mark it as reviewed."
+    text: "You need to amend this record before you can mark it as reviewed."
   }) }}
 
 {% else %}
