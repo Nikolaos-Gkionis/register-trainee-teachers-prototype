@@ -64,6 +64,7 @@ const generateDegree = require('../app/data/generators/degree')
 const generateGce = require('../app/data/generators/gce')
 const generateGcse = require('../app/data/generators/gcse')
 const generateEvents = require('../app/data/generators/events')
+const generateFinance = require('../app/data/generators/finance')
 const generatePlacement = require('../app/data/generators/placement')
 const generateUndergraduateQualification = require('../app/data/generators/undergraduate-qualifications')
 const generateSchools = require('../app/data/generators/schools')
@@ -130,6 +131,8 @@ const generateFakeApplication = (params = {}) => {
   if (requiredSections.includes('degree')) {
     application.degree           = (params.degree === null) ? undefined : { ...generateDegree(application), ...params.degree } 
   }
+
+  application.finance = (params.finance === null) ? undefined : { ...generateFinance(application), ...params.finance }
 
   // Undergraduate Qualification
   if (requiredSections.includes('undergraduateQualification')) {

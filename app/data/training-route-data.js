@@ -67,8 +67,14 @@ let defaultRouteData = {
     'placement',
     'diversity',
     'degree',
-    'placement'
-  ]
+    'placement',
+    'finance'
+  ],
+  initiatives: [
+    "Transition to teach",
+    "Now teach"
+  ],
+  bursariesAvailable: true
 }
 
 // Data for each route
@@ -82,11 +88,17 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree'
-    ]
+    ],
+    bursariesAvailable: false
   },
   "Provider-led (postgrad)": {
     defaultEnabled: true,
     hasAllocatedPlaces: true,
+    initiatives: [
+      "Transition to teach",
+      "Now teach",
+      "Maths and physics chairs programme / Researchers in schools"
+    ]
   },
   "School direct (salaried)": {
     defaultEnabled: true,
@@ -98,12 +110,19 @@ let baseRouteData = {
       'diversity',
       'degree',
       'schools',
-      'placement'
+      'placement',
+      'finance'
     ],
     fields: [
       "leadSchool",
       "employingSchool"
-    ]
+    ],
+    initiatives: [
+      "Future Teaching Scholars",
+      "Transition to teach",
+      "Now teach"
+    ],
+    bursariesAvailable: false
   },
   "School direct (tuition fee)": {
     defaultEnabled: true,
@@ -116,14 +135,22 @@ let baseRouteData = {
       'diversity',
       'degree',
       'schools',
-      'placement'
+      'placement',
+      'finance'
     ],
     fields: [
       "leadSchool",
+    ],
+    initiatives: [
+      "Transition to teach",
+      "Now teach",
+      "Maths and physics chairs programme / Researchers in schools"
     ]
   },
   "Teach first (postgrad)": {},
-  "Apprenticeship (postgrad)": {},
+  "Apprenticeship (postgrad)": {
+    bursariesAvailable: false
+  },
   "Opt-in undergrad": {},
   "Early years (graduate placement)": {
     defaultEnabled: true,
@@ -134,7 +161,8 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'placement'
+      'placement',
+      'finance'
     ],
     fields: [
       "employingSchool"
@@ -142,7 +170,8 @@ let baseRouteData = {
     qualifications: [
       "EYTS"
     ],
-    qualificationsSummary: "EYTS full time"
+    qualificationsSummary: "EYTS full time",
+    bursariesAvailable: false
   },
   "Early years (graduate entry)": {
     defaultEnabled: true,
@@ -153,7 +182,8 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'placement'
+      'placement',
+      'finance'
     ],
     qualifications: [
       "EYTS"
@@ -168,12 +198,14 @@ let baseRouteData = {
       'personalDetails',
       'contactDetails',
       'diversity',
-      'degree'
+      'degree',
+      'finance'
     ],
     qualifications: [
       "EYTS"
     ],
-    qualificationsSummary: "EYTS full time"
+    qualificationsSummary: "EYTS full time",
+    bursariesAvailable: false
   },
   "Early years (undergrad)": {
     defaultEnabled: true,
@@ -184,12 +216,14 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'undergraduateQualification',
-      'placement'
+      'placement',
+      'finance'
     ],
     qualifications: [
       "EYTS"
     ],
-    qualificationsSummary: "EYTS full time"
+    qualificationsSummary: "EYTS full time",
+    bursariesAvailable: false
   }
 }
 
@@ -204,6 +238,15 @@ Object.keys(allRoutes).forEach(routeName => {
 })
 
 let enabledTrainingRoutes = Object.values(trainingRoutes).filter(route => route.defaultEnabled == true).map(route => route.name)
+
+// Count initiatives
+let allInitiatives = []
+Object.keys(trainingRoutes).forEach(routeName => {
+  let initiatives = trainingRoutes[routeName]?.initiatives || []
+  allInitiatives = allInitiatives.concat(initiatives)
+})
+
+allInitiatives = [...new Set(allInitiatives)]
 
 let allocatedSubjects = [
   "Physical education"
@@ -256,6 +299,7 @@ let levels = {
 
 module.exports = {
   allRoutes: allRoutesArray,
+  allInitiatives,
   trainingRoutes,
   allocatedSubjects,
   enabledTrainingRoutes,
