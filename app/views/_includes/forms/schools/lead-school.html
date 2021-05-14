@@ -26,7 +26,8 @@
   }) }}
 </div>
 
-{# Only show the checkbox where we're using the autocomplete and we've not already got results #}
+{# Commented out for now as not sure about this #}
+{# {# Only show the checkbox where we're using the autocomplete and we've not already got results #}
 <div class="app-js-only">
   {# Show a checkbox only if employing school isn’t already set and we’re on a route that has employing school #}
   {% if record | requiresField("employingSchool") and not record.schools.employingSchool %}
@@ -40,7 +41,7 @@
       ]
     } | decorateAttributes(record, "record.schools.leadSchoolIsEmployingSchool")) }}
   {% endif %}
-</div>
+</div> #}
 
 
 {{ govukButton({
