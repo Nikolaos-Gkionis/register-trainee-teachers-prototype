@@ -21,30 +21,43 @@
   classes: "govuk-!-margin-bottom-6"
 }) }}
 
+<h2 class="govuk-heading-m">Getting a TRN</h2>
+
 <p class="govuk-body">The Department for Education (DfE) will issue a teacher reference number (TRN) within 3 working days. </p>
 
+<h2 class="govuk-heading-m">Notifying your trainees</h2>
 <p class="govuk-body">DfE will contact trainees to give them their TRN.</p>
 
-{% if data.submittedRecordId %}
-  <p class="govuk-body govuk-!-margin-bottom-7">
-    <a class="govuk-link" href="/record/{{data.submittedRecordId}}">View {{record.personalDetails.shortName}}’s record</a>
-  </p>
-{% endif %}
-
+<h2 class="govuk-heading-m">Giving us feedback</h2>
+<p class="govuk-body">Tell us how registering a trainee with the new service is working for you. We use this to make improvements. It takes 3 minutes to complete.</p>
 {{ govukButton({
-  text: "Add another record",
-  href: "/new-record/new"
+  text: "Give feedback (opens in a new tab)",
+  href: "/survey-trn"
 }) }}
 
-<p class="govuk-body govuk-!-margin-bottom-9">or <a href="/records" class="govuk-link">check trainee statuses and manage records</a></p>
-
-{% set insetTextHtml %}
-  <h2 class="govuk-heading-s">How are you finding this process?</h2>
-  <p class="govuk-body"><a href="#" class="govuk-link">Give feedback to help make the trainee registration process better</a></p>
+<h2 class="govuk-heading-m">Next steps</h2>
+{# The name is only stored short term so make sure we have a fallback #}
+{% set thisRecordName %}
+  {% if data.submittedRecordId %}
+    view {{record.personalDetails.shortName}}’s record
+  {% else %}
+    view this record
+  {% endif %}
 {% endset %}
 
+<ul class="govuk-list govuk-list--bullet">
+  <li><a class="govuk-link" href="/record/{{data.submittedRecordId}}">{{thisRecordName}}</a></li>
+  <li><a href="/new-record/new" class="govuk-link">add a new trainee</a></li>
+  <li><a href="/records" class="govuk-link">view all your trainees</a></li>
+</ul>
+
+{# Not used for now whilst we promote in a button instead #}
+{# {% set insetTextHtml %}
+  <h2 class="govuk-heading-s">How are you finding this process?</h2>
+  <p class="govuk-body"><a href="#" class="govuk-link">Give feedback to help improve the process of recommending trainees for {{ record | getQualificationText }}</a></p>
+{% endset %}
 {{ govukInsetText({
   html: insetTextHtml
-}) }}
+}) }} #}
 
 {% endblock %}
