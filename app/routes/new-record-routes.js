@@ -4,6 +4,8 @@ const moment = require('moment')
 const filters = require('./../filters.js')()
 const _ = require('lodash')
 const utils = require('./../lib/utils')
+const trainingRouteData = require('./../data/training-route-data')
+const trainingRoutes = trainingRouteData.trainingRoutes
 
 module.exports = router => {
 
@@ -31,6 +33,26 @@ module.exports = router => {
       data.record.provider = data.signedInProviders[0]
       res.redirect('/new-record/select-route')
     }
+  })
+
+  // UTILITY: Force all sections to complete (for testing)
+  // This mostly exists to help testing submitted journeys
+  // Doesn’t populate any data so *will* result in partial records!
+  router.get(['/new-record/complete', '/new-record/*/complete'], function (req, res) {
+    const data = req.session.data
+    let record = data.record
+    let route = record.route || false // some bugs result in route being lost
+    if (route){
+      let requiredSections = trainingRoutes[route].sections
+      requiredSections.forEach(section => {
+        _.set(record, `${section}.status`, "Completed")
+      })
+      if (utils.sourceIsApply(record)){
+        _.set(record, `applyData.status`, "Completed")
+      }
+      res.redirect('/new-record/overview')
+    }
+    res.redirect('/new-record/overview')
   })
 
   // We *really* need the provider to get set, so don't let users past
