@@ -74,6 +74,11 @@
       <h2 class="govuk-heading-s">Placement details</h2>
       {% include "_includes/summary-cards/placements/placement-overview.html" %}
     {% endif %}
+
+    {% if record | requiresSection("finance") %}
+      <h2 class="govuk-heading-s">Finance</h2>
+      {% include "_includes/summary-cards/finance.html" %}
+    {% endif %}
   </div>
 <div>
 

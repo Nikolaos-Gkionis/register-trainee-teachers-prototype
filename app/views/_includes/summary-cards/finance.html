@@ -1,0 +1,156 @@
+
+{# All routes have initiatives #}
+{% set initiativeRow = {
+  key: {
+    text: "Initiative"
+  },
+  value: {
+    text: record.finance.initiative or "Not provided"
+  },
+  actions: {
+    items: [
+      {
+        href: recordPath + "/finance/initiative" | addReferrer(referrer),
+        text: "Change",
+        visuallyHiddenText: "initiative"
+      }
+    ]
+  } if canAmend
+} %}
+
+{# Bursaries #}
+{# Only some routes have bursaries available #}
+{% set routeHasBursaries = data.trainingRoutes[record.route].bursariesAvailable | falsify %}
+
+{% set bursary = record.finance.bursary %}
+
+{% set courseFundingHtml %}
+  {% if bursary.selfFunded %}
+    Self funded
+  {% else %}
+    DfE funded (has bursary)
+  {% endif %}
+{% endset %}
+
+{% set courseFundingRow = {
+  key: {
+    text: "Course funding"
+  },
+  value: {
+    text: courseFundingHtml | safe or "Not provided"
+  },
+  actions: {
+    items: [
+      {
+        href: recordPath + "/finance/bursary" | addReferrer(referrer),
+        text: "Change",
+        visuallyHiddenText: "bursary details"
+      }
+    ]
+  } if canAmend
+} %}
+
+{% set bursaryValueRow = {
+  key: {
+    text: "Bursary value"
+  },
+  value: {
+    text: bursary.bursaryValue | currency or "Not provided"
+  },
+  actions: {
+    items: [
+      {
+        href: recordPath + "/finance/bursary" | addReferrer(referrer),
+        text: "Change",
+        visuallyHiddenText: "bursary value"
+      }
+    ]
+  } if canAmend
+} %}
+
+{% set degrees = record.degree.items %}
+{% set degreeCount = degrees | length %}
+{% set degreesRequired = record | requiresSection("degree") %}
+
+{% if degreeCount > 1 %}
+
+  {% set bursaryDegree = record.degree.items | find('id', record.degree.degreeToBeUsedForBursaries) %}
+
+  {% if bursaryDegree %}
+    {% set bursaryHtml %}
+      <p class="govuk-body">{{ bursaryDegree | getDegreeName }}</p>
+      <span class="govuk-hint">{{ bursaryDegree | getDegreeHint }}</span>
+    {% endset %}
+  {% elseif record.degree.degreeToBeUsedForBursaries %}
+    {% set bursaryHtml = "Not provided" %}
+  {% endif %}
+
+  {% set bursaryDegreeRow = {
+    key: {
+      text: "Degree that relates to awarded bursary"
+    },
+    value: {
+      html: bursaryHtml or "Not provided"
+    },
+    actions: {
+      items: [
+        {
+          href: recordPath + "/degree/bursary-selection" | addReferrer(referrer),
+          text: "Change",
+          visuallyHiddenText: "address"
+        }
+      ]
+    } if canAmend 
+  }
+  %}
+  
+{% endif %}
+
+
+
+{% set financeRows = [
+  initiativeRow,
+  courseFundingRow if routeHasBursaries,
+  bursaryValueRow if routeHasBursaries and not bursary.selfFunded,
+  bursaryDegreeRow if (routeHasBursaries and not bursary.selfFunded and bursaryDegreeRow)
+] %}
+
+{% set financeHtml %}
+  {{ govukSummaryList({
+    rows: financeRows
+  }) }}
+{% endset %}
+
+
+
+{% set complete = true if (record.finance | sectionIsCompleted ) %}
+{% set status  = record.finance | getStatusText %}
+{% set sectionIsRequired = record | requiresSection("finance") %}
+
+{% if not sectionIsRequired %}
+  {# Section not required #}
+{% elseif showIncomplete and not complete %}
+
+  {% set incompleteType = "warning" if errorList %}
+  {% set incompleteId = "finance" %}
+  {% if status == "In progress" %}
+    {% set incompleteText = "Finance details not marked as complete" %}
+    {% set incompleteLink = recordPath + "/finance/confirm" | addReferrer(referrer) %}
+    {% set incompleteLinkText = "Continue section" %}
+  {% else %}
+    {% set incompleteText = "Finance details not started" %}
+    {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
+    {% set incompleteLinkText = "Start section" %}
+  {% endif %}
+
+  {% include "_includes/incomplete.njk" %}
+
+{% else %}
+
+  {{ appSummaryCard({
+    classes: "govuk-!-margin-bottom-6",
+    titleText: "Finance",
+    html: financeHtml
+  }) }}
+
+{% endif %}

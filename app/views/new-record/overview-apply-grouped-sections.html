@@ -14,7 +14,7 @@
 
 {% set draftRecordName %}
   {% if record.personalDetails.shortName %}
-   for {{record.personalDetails.shortName}}
+   for {{record.personalDetails.shortName | safe}}
   {% endif %}
 {% endset %}
 
@@ -120,7 +120,17 @@
         classes: record.placement | getStatusText | getStatusClass,
         text: record.placement | getStatusText
       }
-    } if record | requiresSection("placement") 
+    } if record | requiresSection("placement"),
+    {
+    text: "Finance",
+    href: "finance" | reviewIfInProgress(record.finance),
+    _hint: "Initiatives, funding and bursaries",
+    id: "finance",
+    tag: {
+      classes: record.finance | getStatusText | getStatusClass,
+      text: record.finance | getStatusText
+    }
+  } if record | requiresSection("finance")
   ]
 }) if not closed }}
 
