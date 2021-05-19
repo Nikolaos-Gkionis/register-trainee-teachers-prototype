@@ -287,7 +287,8 @@ const generateFakeApplicationsForProvider = (provider, year, count) => {
     },
     placement: null,
     trainingDetails: null,
-    schools: null
+    schools: null,
+    finance: null
   }
 
   stubApplication.pendingTrn = {

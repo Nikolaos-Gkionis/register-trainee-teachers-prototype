@@ -690,12 +690,12 @@ module.exports = router => {
     }
     _.set(data, 'record.degree.items', existingDegrees)
 
-    if (existingDegrees?.length > 1){
-      res.redirect(`${recordPath}/degree/bursary-selection${referrer}`)
-    }
-    else {
+    // if (existingDegrees?.length > 1){
+    //   res.redirect(`${recordPath}/degree/bursary-selection${referrer}`)
+    // }
+    // else {
       res.redirect(`${recordPath}/degree/confirm${referrer}`)
-    }
+    // }
 
   })
 
@@ -848,5 +848,93 @@ module.exports = router => {
 
     res.redirect(`${recordPath}/placements/confirm${referrer}`)
   })
+
+  // =============================================================================
+  // Finance
+  // =============================================================================
+
+  // Forward on to the appropriate finacne pages depending on what the route needs
+  router.get(['/:recordtype/:uuid/finance','/:recordtype/finance'], function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let recordPath = utils.getRecordPath(req)
+    let referrer = utils.getReferrer(req.query.referrer)
+
+    if (utils.canStartFinanceSection(record)){
+      res.redirect(`${recordPath}/finance/initiatives${referrer}`)
+    }
+    else {
+      res.redirect(`${recordPath}/finance/not-available${referrer}`)
+    }
+
+  })
+
+
+  // Forward on to bursaries or confirm
+  router.post(['/:recordtype/:uuid/finance/initiatives','/:recordtype/finance/initiatives'], function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let recordPath = utils.getRecordPath(req)
+    let referrer = utils.getReferrer(req.query.referrer)
+
+    if (utils.bursariesApply(record)){
+      res.redirect(`${recordPath}/finance/funding${referrer}`)
+    }
+    else {
+      res.redirect(`${recordPath}/finance/confirm${referrer}`)
+    }
+  })
+
+  // Forward on to bursaries or confirm
+  router.post(['/:recordtype/:uuid/finance/funding','/:recordtype/finance/funding'], function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let recordPath = utils.getRecordPath(req)
+    let referrer = utils.getReferrer(req.query.referrer)
+
+    // No data
+    if (!record?.finance?.bursary?.selfFunded){
+      res.redirect(`${recordPath}/finance/funding${referrer}`)
+    }
+
+    let traineeHasBursary = (record.finance.bursary.selfFunded != 'true')
+
+    if (traineeHasBursary){
+
+      let existingDegrees = record?.degree?.items || []
+
+      if (existingDegrees.length > 1){
+        res.redirect(`${recordPath}/finance/bursary-selection${referrer}`)
+      }
+      else {
+        res.redirect(`${recordPath}/finance/level${referrer}`)
+      }
+    }
+    else {
+      res.redirect(`${recordPath}/finance/confirm${referrer}`)
+    }
+  })
+
+  // // Forward on to bursaries or confirm
+  // router.post(['/:recordtype/:uuid/finance/level','/:recordtype/finance/level'], function (req, res) {
+  //   let data = req.session.data
+  //   let record = data.record
+  //   let recordPath = utils.getRecordPath(req)
+  //   let referrer = utils.getReferrer(req.query.referrer)
+
+  //   let existingDegrees = record?.degree?.items || []
+
+  //   if (existingDegrees.length > 1){
+  //     res.redirect(`${recordPath}/finance/bursary-selection${referrer}`)
+  //   }
+  //   else {
+  //     res.redirect(`${recordPath}/finance/confirm${referrer}`)
+  //   }
+
+  // })
+
+
+
+
 
 }
