@@ -2,7 +2,7 @@
 {# All routes have initiatives #}
 {% set initiativeRow = {
   key: {
-    text: "Initiative"
+    text: "Training initiative"
   },
   value: {
     text: record.finance.initiative or "Not provided"
@@ -10,9 +10,9 @@
   actions: {
     items: [
       {
-        href: recordPath + "/finance/initiative" | addReferrer(referrer),
+        href: recordPath + "/finance/initiatives" | addReferrer(referrer),
         text: "Change",
-        visuallyHiddenText: "initiative"
+        visuallyHiddenText: "training initiative"
       }
     ]
   } if canAmend
@@ -20,15 +20,17 @@
 
 {# Bursaries #}
 {# Only some routes have bursaries available #}
-{% set routeHasBursaries = data.trainingRoutes[record.route].bursariesAvailable | falsify %}
+{% set routeHasBursaries = record.route | routeHasBursaries %}
 
 {% set bursary = record.finance.bursary %}
 
 {% set courseFundingHtml %}
-  {% if bursary.selfFunded %}
-    Self funded
+  {% if bursary.selfFunded == 'true' %}
+    Self funded (non bursary)
+  {% elseif bursary.selfFunded == 'false' %}
+    DfE funded (bursary)
   {% else %}
-    DfE funded (has bursary)
+    Not provided
   {% endif %}
 {% endset %}
 
@@ -42,7 +44,7 @@
   actions: {
     items: [
       {
-        href: recordPath + "/finance/bursary" | addReferrer(referrer),
+        href: recordPath + "/finance/funding" | addReferrer(referrer),
         text: "Change",
         visuallyHiddenText: "bursary details"
       }
@@ -60,7 +62,7 @@
   actions: {
     items: [
       {
-        href: recordPath + "/finance/bursary" | addReferrer(referrer),
+        href: recordPath + "/finance/level" | addReferrer(referrer),
         text: "Change",
         visuallyHiddenText: "bursary value"
       }
@@ -106,13 +108,13 @@
   
 {% endif %}
 
-
+{% set isSelfFunded = bursary.selfFunded | falsify %}
 
 {% set financeRows = [
   initiativeRow,
   courseFundingRow if routeHasBursaries,
-  bursaryValueRow if routeHasBursaries and not bursary.selfFunded,
-  bursaryDegreeRow if (routeHasBursaries and not bursary.selfFunded and bursaryDegreeRow)
+  bursaryValueRow if routeHasBursaries and not isSelfFunded,
+  bursaryDegreeRow if (routeHasBursaries and not isSelfFunded and bursaryDegreeRow)
 ] %}
 
 {% set financeHtml %}
@@ -134,11 +136,11 @@
   {% set incompleteType = "warning" if errorList %}
   {% set incompleteId = "finance" %}
   {% if status == "In progress" %}
-    {% set incompleteText = "Finance details not marked as complete" %}
+    {% set incompleteText = "Finance section not marked as complete" %}
     {% set incompleteLink = recordPath + "/finance/confirm" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Continue section" %}
   {% else %}
-    {% set incompleteText = "Finance details not started" %}
+    {% set incompleteText = "Finance section not started" %}
     {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Start section" %}
   {% endif %}

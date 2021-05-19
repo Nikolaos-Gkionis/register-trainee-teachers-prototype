@@ -1,3 +1,12 @@
+// -------------------------------------------------------------------
+// Imports and setup
+// -------------------------------------------------------------------
+const _ = require('lodash')
+const ittSubjects = require('./itt-subjects.js')
+let expandedLanguages = ittSubjects.modernLanguagesSubjects
+expandedLanguages.push("English studies")
+
+
 // A non-exhaustive list of routes
 // Publish and non publish can overlap
 
@@ -67,14 +76,14 @@ let defaultRouteData = {
     'placement',
     'diversity',
     'degree',
-    'placement',
+    // 'placement',
     'finance'
   ],
   initiatives: [
-    "Transition to teach",
-    "Now teach"
+    "Now teach",
+    "Transition to teach"
   ],
-  bursariesAvailable: true
+  bursariesAvailable: false
 }
 
 // Data for each route
@@ -87,7 +96,8 @@ let baseRouteData = {
       'personalDetails',
       'contactDetails',
       'diversity',
-      'degree'
+      'degree',
+      'finance'
     ],
     bursariesAvailable: false
   },
@@ -95,9 +105,34 @@ let baseRouteData = {
     defaultEnabled: true,
     hasAllocatedPlaces: true,
     initiatives: [
-      "Transition to teach",
-      "Now teach",
-      "Maths and physics chairs programme / Researchers in schools"
+    "Maths and physics chairs programme / Researchers in schools",
+    "Now teach",
+    "Transition to teach"
+    ],
+    bursariesAvailable: true,
+    bursaries: [
+      {
+        subjects: [
+          "Chemistry",
+          "Computing",
+          "Mathematics",
+          "Physics"
+          ],
+        value: "24000"
+      },
+      {
+        subjects: [
+          "Languages",
+          "Classics"
+          ],
+        value: "10000"
+      },
+      {
+        subjects: [
+          "Biology"
+          ],
+        value: "7000"
+      }
     ]
   },
   "School direct (salaried)": {
@@ -110,7 +145,7 @@ let baseRouteData = {
       'diversity',
       'degree',
       'schools',
-      'placement',
+      // 'placement',
       'finance'
     ],
     fields: [
@@ -119,8 +154,8 @@ let baseRouteData = {
     ],
     initiatives: [
       "Future Teaching Scholars",
-      "Transition to teach",
-      "Now teach"
+      "Now teach",
+      "Transition to teach"
     ],
     bursariesAvailable: false
   },
@@ -135,23 +170,61 @@ let baseRouteData = {
       'diversity',
       'degree',
       'schools',
-      'placement',
+      // 'placement',
       'finance'
     ],
     fields: [
       "leadSchool",
     ],
     initiatives: [
-      "Transition to teach",
+      "Maths and physics chairs programme / Researchers in schools",
       "Now teach",
-      "Maths and physics chairs programme / Researchers in schools"
+      "Transition to teach"
+    ],
+    bursariesAvailable: true,
+    bursaries: [
+      {
+        subjects: [
+          "Chemistry",
+          "Computing",
+          "Mathematics",
+          "Physics"
+          ],
+        value: "24000"
+      },
+      {
+        subjects: [
+          "Languages",
+          "Classics"
+          ],
+        value: "10000"
+      },
+      {
+        subjects: [
+          "Biology"
+          ],
+        value: "7000"
+      }
     ]
   },
   "Teach first (postgrad)": {},
   "Apprenticeship (postgrad)": {
     bursariesAvailable: false
   },
-  "Opt-in undergrad": {},
+  "Opt-in undergrad": {
+    bursariesAvailable: true,
+    bursaries: [
+      {
+        subjects: [
+          "Languages",
+          "Computing",
+          "Mathematics",
+          "Physics"
+          ],
+        value: "9000"
+      }
+    ]
+  },
   "Early years (graduate placement)": {
     defaultEnabled: true,
     sections: [
@@ -161,7 +234,7 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'placement',
+      // 'placement',
       'finance'
     ],
     fields: [
@@ -182,7 +255,7 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'placement',
+      // 'placement',
       'finance'
     ],
     qualifications: [
@@ -216,7 +289,7 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'undergraduateQualification',
-      'placement',
+      // 'placement',
       'finance'
     ],
     qualifications: [
@@ -234,6 +307,16 @@ let trainingRoutes = {}
 Object.keys(allRoutes).forEach(routeName => {
   let routeData = Object.assign({}, defaultRouteData, allRoutes[routeName], baseRouteData[routeName])
   routeData.name = routeName
+
+  // Expand 'Languages' in to each individual language
+  if (routeData.bursaries){
+    routeData.bursaries.forEach(bursaryLevel => {
+      if (bursaryLevel.subjects.includes('Languages')){
+        _.pull(bursaryLevel.subjects, 'Languages')
+        bursaryLevel.subjects = bursaryLevel.subjects.concat(expandedLanguages)
+      }
+    })
+  }
   trainingRoutes[routeName] = routeData
 })
 
@@ -246,7 +329,7 @@ Object.keys(trainingRoutes).forEach(routeName => {
   allInitiatives = allInitiatives.concat(initiatives)
 })
 
-allInitiatives = [...new Set(allInitiatives)]
+allInitiatives = [...new Set(allInitiatives)].sort()
 
 let allocatedSubjects = [
   "Physical education"

@@ -1,0 +1,34 @@
+
+{{ govukRadios({
+  fieldset: {
+    legend: {
+      text: pageHeading,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  hint: {
+    text: ""
+  },
+  items: [
+    {
+      text: "DfE funded (bursary)",
+      value: "false"
+    },
+    {
+      text: "Self funded (non bursary)",
+      value: "true"
+    }
+  ]
+} | decorateAttributes(record, "record.finance.bursary.selfFunded")) }}
+
+
+{{ govukButton({
+  text: "Continue"
+}) }}
+
+
+
+
+
+

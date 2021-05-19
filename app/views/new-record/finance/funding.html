@@ -1,0 +1,8 @@
+{% extends "_templates/_new-record.html" %}
+
+{% set pageHeading = "How is the trainee funded?" %}
+{# {% set formAction = "./confirm" | addReferrer(referrer) %} #}
+
+{% block formContent %}
+  {% include "_includes/forms/finance/funding.html" %}
+{% endblock %}
