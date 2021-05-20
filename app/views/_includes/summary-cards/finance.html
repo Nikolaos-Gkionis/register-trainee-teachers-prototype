@@ -55,14 +55,21 @@
 
 {% else %}
 
-  {% set courseFundingRow = {
-    key: {
-      text: "Bursary funding"
-    },
-    value: {
-      text: "Bursary not applicable for course"
+  {% if record | isNotDraft %}
+    {# Only show course funding row for submitted records - confusing to see it on drafts #}
+    {% set courseFundingRow = {
+      key: {
+        text: "Bursary funding"
+      },
+      value: {
+        text: "Bursary not applicable for course"
+      }
     }
-  } %}
+     %}
+   {% else %}
+     {% set courseFundingRow = false %}
+  {% endif %}
+  
   
 {% endif %}
 
