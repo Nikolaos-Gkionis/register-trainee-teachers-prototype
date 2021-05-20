@@ -87,18 +87,6 @@
 
 <h2 class="govuk-heading-m">About their teacher training</h2>
 
-{% set financeHint %}
-  {% if not record | canStartFinanceSection %}
-    {% if not (record.courseDetails | sectionIsComplete) and not (record.degree | sectionIsComplete) %}
-      Complete degree and course details sections first
-    {% elseif not record.courseDetails | sectionIsComplete %}
-      Complete the course details section first
-    {% else %}
-      Complete the degree details section first
-    {% endif %}
-  {% endif %}
-{% endset %}
-
 {{ appTaskList({
   classes: "govuk-!-margin-bottom-8",
   items: [{
@@ -148,13 +136,12 @@
   } if record | requiresSection("placement"),
   {
     text: "Finance",
-    href: "finance" | reviewIfInProgress(record.finance),
+    href: "finance" | reviewIfInProgress(record.finance) if record | canStartFinanceSection,
     _hint: "Initiatives, funding and bursaries",
-    hint: financeHint if not record | canStartFinanceSection,
     id: "finance",
     tag: {
       classes: record.finance | getStatusText | getStatusClass,
-      text: record.finance | getStatusText
+      text: record.finance | getStatusText("Cannot start yet" if not record | canStartFinanceSection)
     }
   } if record | requiresSection("finance")
   ]

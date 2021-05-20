@@ -1,13 +1,38 @@
 {% extends "_templates/_new-record.html" %}
 
-{% set pageHeading = "Not available" %}
+{% set pageHeading = "Finance section cannot be started yet" %}
+{% set backText = 'Back to draft record' %}
 {% set formAction = "./../overview" | orReferrer(referrer) %}
 
 {% block formContent %}
   {# {% include "_includes/forms/schools/lead-school.html" %} #}
   <h1 class="govuk-heading-l">{{pageHeading}}</h1>
 
+  <p class="govuk-body govuk-!-margin-bottom-8">
+    {% if not record | canStartFinanceSection %}
+      {% if not (record.courseDetails | sectionIsComplete) and not (record.degree | sectionIsComplete or record.applyData | sectionIsComplete) %}
+        {% if record | sourceIsApply %}
+          You must complete the course details and trainee data sections first
+        {% else %}
+          You must complete the degree and course details sections first
+        {% endif %}
+        
+      {% elseif not record.courseDetails | sectionIsComplete %}
+        You must complete the course details section first
+      {% else %}
+        {% if record | sourceIsApply %}
+          You must complete the trainee data section first
+        {% else %}
+          You must complete the degree details section first
+        {% endif %}
+        
+      {% endif %}
+        as this section requires information from them to be completed.
+    {% endif %}
+  </p>
+  
+
   {{ govukButton({
-    text: "Continue"
+    text: "Return to draft record"
   }) }}
 {% endblock %}

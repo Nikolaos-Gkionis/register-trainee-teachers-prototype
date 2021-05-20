@@ -897,44 +897,21 @@ module.exports = router => {
       res.redirect(`${recordPath}/finance/funding${referrer}`)
     }
 
-    let traineeHasBursary = (record.finance.bursary.selfFunded != 'true')
-
-    if (traineeHasBursary){
-
-      let existingDegrees = record?.degree?.items || []
-
-      if (existingDegrees.length > 1){
-        res.redirect(`${recordPath}/finance/bursary-selection${referrer}`)
-      }
-      else {
-        res.redirect(`${recordPath}/finance/level${referrer}`)
-      }
-    }
-    else {
+    // Commented out as we think we can avoid asking about bursary selection
+    // let traineeHasBursary = (record.finance.bursary.selfFunded != 'true')
+    // if (traineeHasBursary){
+    //   let existingDegrees = record?.degree?.items || []
+    //   if (existingDegrees.length > 1){
+    //     res.redirect(`${recordPath}/finance/bursary-selection${referrer}`)
+    //   }
+    //   else {
+    //     res.redirect(`${recordPath}/finance/level${referrer}`)
+    //   }
+    // }
+    // else {
       res.redirect(`${recordPath}/finance/confirm${referrer}`)
-    }
+    // }
   })
-
-  // // Forward on to bursaries or confirm
-  // router.post(['/:recordtype/:uuid/finance/level','/:recordtype/finance/level'], function (req, res) {
-  //   let data = req.session.data
-  //   let record = data.record
-  //   let recordPath = utils.getRecordPath(req)
-  //   let referrer = utils.getReferrer(req.query.referrer)
-
-  //   let existingDegrees = record?.degree?.items || []
-
-  //   if (existingDegrees.length > 1){
-  //     res.redirect(`${recordPath}/finance/bursary-selection${referrer}`)
-  //   }
-  //   else {
-  //     res.redirect(`${recordPath}/finance/confirm${referrer}`)
-  //   }
-
-  // })
-
-
-
 
 
 }

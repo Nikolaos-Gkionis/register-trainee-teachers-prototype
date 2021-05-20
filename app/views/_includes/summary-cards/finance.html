@@ -19,8 +19,6 @@
 } %}
 
 {# Bursaries #}
-{# Only some routes have bursaries available #}
-{% set routeHasBursaries = record.route | routeHasBursaries %}
 
 {% set bursary = record.finance.bursary %}
 
@@ -28,49 +26,48 @@
   {% if bursary.selfFunded == 'true' %}
     Self funded (non bursary)
   {% elseif bursary.selfFunded == 'false' %}
-    DfE funded (bursary)
+    Bursary applied for
+    <p class="govuk-hint">{{record | getBursaryValue | currency }} estimated bursary</p>
   {% else %}
     Not provided
   {% endif %}
 {% endset %}
 
-{% set courseFundingRow = {
-  key: {
-    text: "Course funding"
-  },
-  value: {
-    text: courseFundingHtml | safe or "Not provided"
-  },
-  actions: {
-    items: [
-      {
-        href: recordPath + "/finance/funding" | addReferrer(referrer),
-        text: "Change",
-        visuallyHiddenText: "bursary details"
-      }
-    ]
-  } if canAmend
-} %}
+{% if record | bursariesApply %}
 
-{% set bursaryValueRow = {
-  key: {
-    text: "Bursary value"
-  },
-  value: {
-    text: bursary.bursaryValue | currency or "Not provided"
-  },
-  actions: {
-    items: [
-      {
-        href: recordPath + "/finance/level" | addReferrer(referrer),
-        text: "Change",
-        visuallyHiddenText: "bursary value"
-      }
-    ]
-  } if canAmend
-} %}
+  {% set courseFundingRow = {
+    key: {
+      text: "Bursary funding"
+    },
+    value: {
+      text: courseFundingHtml | safe or "Not provided"
+    },
+    actions: {
+      items: [
+        {
+          href: recordPath + "/finance/funding" | addReferrer(referrer),
+          text: "Change",
+          visuallyHiddenText: "bursary details"
+        }
+      ]
+    } if canAmend
+  } %}
 
-{% set degrees = record.degree.items %}
+{% else %}
+
+  {% set courseFundingRow = {
+    key: {
+      text: "Bursary funding"
+    },
+    value: {
+      text: "Bursary not applicable for course"
+    }
+  } %}
+  
+{% endif %}
+
+
+{# {% set degrees = record.degree.items %}
 {% set degreeCount = degrees | length %}
 {% set degreesRequired = record | requiresSection("degree") %}
 
@@ -106,16 +103,16 @@
   }
   %}
   
-{% endif %}
+{% endif %} #}
 
-{% set isSelfFunded = bursary.selfFunded | falsify %}
 
 {% set financeRows = [
   initiativeRow,
-  courseFundingRow if routeHasBursaries,
-  bursaryValueRow if routeHasBursaries and not isSelfFunded,
-  bursaryDegreeRow if (routeHasBursaries and not isSelfFunded and bursaryDegreeRow)
+  courseFundingRow
 ] %}
+
+{#   bursaryValueRow if routeHasBursaries and not isSelfFunded,
+  bursaryDegreeRow if (routeHasBursaries and not isSelfFunded and bursaryDegreeRow) #}
 
 {% set financeHtml %}
   {{ govukSummaryList({
@@ -139,6 +136,10 @@
     {% set incompleteText = "Finance section not marked as complete" %}
     {% set incompleteLink = recordPath + "/finance/confirm" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Continue section" %}
+  {% elseif not record | canStartFinanceSection %}
+    {% set incompleteText = "Finance section cannot be started yet" %}
+    {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
+    {% set incompleteLinkText = "Review section" %}
   {% else %}
     {% set incompleteText = "Finance section not started" %}
     {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}

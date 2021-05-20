@@ -155,6 +155,7 @@ exports.getBursaryByRouteAndSubject = (route, subject) => {
     if (subject && bursaryLevel.subjects.includes(subject)) {
       bursary.value = bursaryLevel.value
       bursary.subjects = bursaryLevel.subjects
+      bursary.subject = subject
       bursaryMatch = true
       return
     }
@@ -192,7 +193,8 @@ exports.canStartFinanceSection = record => {
   else {
     let courseDetailsComplete = exports.sectionIsComplete(record.courseDetails)
     let degreeDetailsComplete = exports.sectionIsComplete(record.degree)
-    return (courseDetailsComplete && degreeDetailsComplete)
+    let applyDataComplete = exports.sectionIsComplete(record.applyData)
+    return (courseDetailsComplete && (applyDataComplete || degreeDetailsComplete))
   }
 }
 
@@ -267,32 +269,10 @@ exports.routeHasPublishCourses = function(record){
   return (providerCourses.length > 0)
 }
 
-
-// Combine multiple subject names together
-// Eg Biology with English, Chemistry with physical education
-// A bit similar to:
-// https://github.com/DFE-Digital/teacher-training-api/blob/045a4b3e97df0ccdb72c38b3611dcb8d094c29cc/app/services/courses/generate_course_name_service.rb#L51
-exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
-  // No data?
-  if (!subjects || subjects.length == 0) {
-    return ''
-  }
-
-  // A string or just one subject
-  if (typeof subjects === 'string' || subjects.length == 1){
-    return subjects
-  }
-
-  // Shallow copy as we’re about to shift() it
-  // Also do some cleanup on the data
-  let subjectsCopy = [...subjects].map(subject => {
-    return subject
-      .replace('Modern languages', '_modern_lang') // Temporarily rename this
-      .replace(' language', '') // Strip out language from 'English language' etc
-      .replace('English studies', 'English') // Shorten this
-      .replace('_modern_lang', 'Modern languages') // Restore 'Modern languages'
-  })
-
+// Lowercase array excluding some proper nouns
+exports.dynamicLowercase = input => {
+  if (!input) return input
+  
   // These things shouldn’t get lowercased
   let ignoreSubjects = [
   "English",
@@ -305,20 +285,60 @@ exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
   "Spanish"
   ]
 
-  const lowercaseSubjects = array => {
+  const makeLowercase = item =>{
+    return ignoreSubjects.some(ignoreSubject => item.startsWith(ignoreSubject)) ? item : item.toLowerCase()
+  }
+
+  if (typeof input === 'string') {
+    return makeLowercase(input)
+  }
+  else {
+    let array = [].concat(input)
     return array.map(subject => {
-      return ignoreSubjects.some(ignoreSubject => subject.startsWith(ignoreSubject)) ? subject : subject.toLowerCase()
+      return makeLowercase(subject)
     })
   }
 
-  // Lowercase all the subjects except those starting with words in ignoreSubjects
-  if (lowercaseFirst){
-    subjectsCopy = lowercaseSubjects([subjectsCopy])
-  }
-  else {
-    subjectsCopy = [subjectsCopy.shift()].concat(lowercaseSubjects(subjectsCopy))
+}
+
+// Combine multiple subject names together
+// Eg Biology with English, Chemistry with physical education and physics
+// A bit similar to:
+// https://github.com/DFE-Digital/teacher-training-api/blob/045a4b3e97df0ccdb72c38b3611dcb8d094c29cc/app/services/courses/generate_course_name_service.rb#L51
+exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
+  // No data?
+  if (!subjects || subjects.length == 0) {
+    return ''
   }
 
+  // A string or just one subject
+  // Return straight away so we don’t shorten the string
+  if (typeof subjects === 'string' || subjects.length == 1){
+    if (lowercaseFirst) return exports.dynamicLowercase(subjects)
+    else return subjects
+  }
+
+  // Shallow copy as we’re about to shift() the first item
+  // Also do some cleanup on the data
+  let subjectsCopy = [...subjects].map(subject => {
+    return subject
+      .replace('Modern languages', '_modern_lang') // Temporarily rename this
+      .replace(' language', '') // Strip out language from 'English language' etc
+      .replace('English studies', 'English') // Shorten this
+      .replace('_modern_lang', 'Modern languages') // Restore 'Modern languages'
+  })
+
+  // Lowercase everything
+  if (lowercaseFirst){
+    subjectsCopy = exports.dynamicLowercase(subjectsCopy)
+  }
+  // Lowercase all the subjects except those starting with words in ignoreSubjects
+  else {
+    subjectsCopy = [subjectsCopy.shift()].concat(exports.dynamicLowercase(subjectsCopy))
+  }
+
+  // Join with ‘with’ and ‘and’
+  // ‘a with b’ or ‘a with b and c’
   let returnString = arrayFilters.withSeparate(subjectsCopy)
   return returnString
 }

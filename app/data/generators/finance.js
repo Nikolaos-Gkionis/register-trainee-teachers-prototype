@@ -35,18 +35,19 @@ module.exports = (params) => {
 
     let degreeItems = params?.degree?.items
 
-    if (bursary.selfFunded == 'false'){
+    // Commented out for now as we'll dynamically look it up
+    // if (bursary.selfFunded == 'false'){
 
-      // Value depends on subject chosen
-      bursary.bursaryValue = availableBursary.value
+    //   // Value depends on subject chosen
+    //   bursary.bursaryValue = availableBursary.value
 
-      // If a person has a bursary and multiple degrees, they need to pick which
-      // degree the bursary is for
-      if (degreeItems && degreeItems.length > 1){
-        bursary.degreeToBeUsedForBursaries = faker.helpers.randomize(degreeItems).id
-      }
+    //   // If a person has a bursary and multiple degrees, they need to pick which
+    //   // degree the bursary is for
+    //   if (degreeItems && degreeItems.length > 1){
+    //     bursary.degreeToBeUsedForBursaries = faker.helpers.randomize(degreeItems).id
+    //   }
 
-    }
+    // }
 
   }
 

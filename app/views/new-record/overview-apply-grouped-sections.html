@@ -8,7 +8,7 @@
 
 
 {% block formContent %}
-
+{{record | log}}
 {# Rendered from /new-record/overview #}
 {% set referrer = currentPageUrl %}
 
@@ -123,12 +123,12 @@
     } if record | requiresSection("placement"),
     {
     text: "Finance",
-    href: "finance" | reviewIfInProgress(record.finance),
+    href: "finance" | reviewIfInProgress(record.finance) if record | canStartFinanceSection,
     _hint: "Initiatives, funding and bursaries",
     id: "finance",
     tag: {
       classes: record.finance | getStatusText | getStatusClass,
-      text: record.finance | getStatusText
+      text: record.finance | getStatusText("Cannot start yet" if not record | canStartFinanceSection)
     }
   } if record | requiresSection("finance")
   ]
