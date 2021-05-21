@@ -140,15 +140,15 @@
   {% set incompleteType = "warning" if errorList %}
   {% set incompleteId = "finance" %}
   {% if status == "In progress" %}
-    {% set incompleteText = "Finance section not marked as complete" %}
+    {% set incompleteText = "Funding section not marked as complete" %}
     {% set incompleteLink = recordPath + "/finance/confirm" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Continue section" %}
   {% elseif not record | canStartFinanceSection %}
-    {% set incompleteText = "Finance section cannot be started yet" %}
+    {% set incompleteText = "Funding section cannot be started yet" %}
     {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Review section" %}
   {% else %}
-    {% set incompleteText = "Finance section not started" %}
+    {% set incompleteText = "Funding section not started" %}
     {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Start section" %}
   {% endif %}
@@ -159,7 +159,7 @@
 
   {{ appSummaryCard({
     classes: "govuk-!-margin-bottom-6",
-    titleText: "Finance",
+    titleText: "Funding",
     html: financeHtml
   }) }}
 

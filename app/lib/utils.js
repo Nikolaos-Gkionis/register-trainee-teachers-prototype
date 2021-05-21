@@ -192,9 +192,10 @@ exports.canStartFinanceSection = record => {
   if (!exports.routeHasBursaries(record?.route)) return true
   else {
     let courseDetailsComplete = exports.sectionIsComplete(record.courseDetails)
-    let degreeDetailsComplete = exports.sectionIsComplete(record.degree)
-    let applyDataComplete = exports.sectionIsComplete(record.applyData)
-    return (courseDetailsComplete && (applyDataComplete || degreeDetailsComplete))
+    // let degreeDetailsComplete = exports.sectionIsComplete(record.degree)
+    // let applyDataComplete = exports.sectionIsComplete(record.applyData)
+    // return (courseDetailsComplete && (applyDataComplete || degreeDetailsComplete))
+    return courseDetailsComplete
   }
 }
 

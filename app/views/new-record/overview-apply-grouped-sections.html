@@ -102,16 +102,6 @@
       }
     } if record | requiresSection("schools"),
     {
-      text: "Funding",
-      href: "funding" | reviewIfInProgress(record.funding) | addReferrer(referrer),
-      hint: 'Bursaries and initiatives',
-      id: "funding-details",
-      tag: {
-        classes: record.funding | getStatusText | getStatusClass,
-        text: record.funding | getStatusText
-      }
-    } if record | requiresSection("funding"),
-    {
       text: "Placement details",
       _href: "placements/confirm" if (record.placement) else "placements/can-add-placement",
       href: "placements/can-add-placement" | reviewIfInProgress(record.placement, "placements") | addReferrer(referrer),
@@ -122,9 +112,9 @@
       }
     } if record | requiresSection("placement"),
     {
-    text: "Finance",
+    text: "Funding",
     href: "finance" | reviewIfInProgress(record.finance) if record | canStartFinanceSection,
-    _hint: "Initiatives, funding and bursaries",
+    _hint: "Complete the degree details section first" if not record | canStartFinanceSection,
     id: "finance",
     tag: {
       classes: record.finance | getStatusText | getStatusClass,
