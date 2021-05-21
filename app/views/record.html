@@ -75,9 +75,9 @@
       {% include "_includes/summary-cards/placements/placement-overview.html" %}
     {% endif %}
 
-    {% if record | requiresSection("finance") %}
+    {% if record | requiresSection("funding") %}
       <h2 class="govuk-heading-s">Funding</h2>
-      {% include "_includes/summary-cards/finance.html" %}
+      {% include "_includes/summary-cards/funding.html" %}
     {% endif %}
   </div>
 <div>

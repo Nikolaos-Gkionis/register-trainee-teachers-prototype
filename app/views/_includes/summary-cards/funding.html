@@ -5,12 +5,12 @@
     text: "Training initiative"
   },
   value: {
-    text: record.finance.initiative or "Not provided"
+    text: record.funding.initiative or "Not provided"
   },
   actions: {
     items: [
       {
-        href: recordPath + "/finance/initiatives" | addReferrer(referrer),
+        href: recordPath + "/funding/initiatives" | addReferrer(referrer),
         text: "Change",
         visuallyHiddenText: "training initiative"
       }
@@ -20,7 +20,7 @@
 
 {# Bursaries #}
 
-{% set bursary = record.finance.bursary %}
+{% set bursary = record.funding.bursary %}
 
 {% set courseFundingHtml %}
   {% if bursary.selfFunded == 'true' %}
@@ -45,7 +45,7 @@
     actions: {
       items: [
         {
-          href: recordPath + "/finance/funding" | addReferrer(referrer),
+          href: recordPath + "/funding/funding" | addReferrer(referrer),
           text: "Change",
           visuallyHiddenText: "bursary details"
         }
@@ -113,7 +113,7 @@
 {% endif %} #}
 
 
-{% set financeRows = [
+{% set fundingRows = [
   initiativeRow,
   courseFundingRow
 ] %}
@@ -121,35 +121,35 @@
 {#   bursaryValueRow if routeHasBursaries and not isSelfFunded,
   bursaryDegreeRow if (routeHasBursaries and not isSelfFunded and bursaryDegreeRow) #}
 
-{% set financeHtml %}
+{% set fundingHtml %}
   {{ govukSummaryList({
-    rows: financeRows
+    rows: fundingRows
   }) }}
 {% endset %}
 
 
 
-{% set complete = true if (record.finance | sectionIsCompleted ) %}
-{% set status  = record.finance | getStatusText %}
-{% set sectionIsRequired = record | requiresSection("finance") %}
+{% set complete = true if (record.funding | sectionIsCompleted ) %}
+{% set status  = record.funding | getStatusText %}
+{% set sectionIsRequired = record | requiresSection("funding") %}
 
 {% if not sectionIsRequired %}
   {# Section not required #}
 {% elseif showIncomplete and not complete %}
 
   {% set incompleteType = "warning" if errorList %}
-  {% set incompleteId = "finance" %}
+  {% set incompleteId = "funding" %}
   {% if status == "In progress" %}
     {% set incompleteText = "Funding section not marked as complete" %}
-    {% set incompleteLink = recordPath + "/finance/confirm" | addReferrer(referrer) %}
+    {% set incompleteLink = recordPath + "/funding/confirm" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Continue section" %}
-  {% elseif not record | canStartFinanceSection %}
+  {% elseif not record | canStartFundingSection %}
     {% set incompleteText = "Funding section cannot be started yet" %}
-    {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
+    {% set incompleteLink = recordPath + "/funding" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Review section" %}
   {% else %}
     {% set incompleteText = "Funding section not started" %}
-    {% set incompleteLink = recordPath + "/finance" | addReferrer(referrer) %}
+    {% set incompleteLink = recordPath + "/funding" | addReferrer(referrer) %}
     {% set incompleteLinkText = "Start section" %}
   {% endif %}
 
@@ -160,7 +160,7 @@
   {{ appSummaryCard({
     classes: "govuk-!-margin-bottom-6",
     titleText: "Funding",
-    html: financeHtml
+    html: fundingHtml
   }) }}
 
 {% endif %}

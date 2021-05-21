@@ -107,7 +107,7 @@ exports.requiresSection = (record, sectionNames) => {
 }
 
 // -------------------------------------------------------------------
-// Finance / bursaries
+// Funding - initiatives and bursaries
 // -------------------------------------------------------------------
 
 exports.hasInitiatives = (record) => {
@@ -119,7 +119,7 @@ exports.hasInitiatives = (record) => {
 }
 
 exports.isOnInitiative = record => {
-  return record?.finance?.initiative != 'Not on a training initiative'
+  return record?.funding?.initiative != 'Not on a training initiative'
 }
 
 exports.getAllocationSubject = input => {
@@ -188,7 +188,7 @@ exports.bursariesApply = (record) => {
   else return false
 }
 
-exports.canStartFinanceSection = record => {
+exports.canStartFundingSection = record => {
   if (!exports.routeHasBursaries(record?.route)) return true
   else {
     let courseDetailsComplete = exports.sectionIsComplete(record.courseDetails)

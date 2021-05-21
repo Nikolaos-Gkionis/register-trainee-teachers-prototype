@@ -77,7 +77,7 @@ let defaultRouteData = {
     'diversity',
     'degree',
     // 'placement',
-    'finance'
+    'funding'
   ],
   initiatives: [
     "Now teach",
@@ -97,7 +97,7 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'finance'
+      'funding'
     ],
     bursariesAvailable: false
   },
@@ -146,7 +146,7 @@ let baseRouteData = {
       'degree',
       'schools',
       // 'placement',
-      'finance'
+      'funding'
     ],
     fields: [
       "leadSchool",
@@ -171,7 +171,7 @@ let baseRouteData = {
       'degree',
       'schools',
       // 'placement',
-      'finance'
+      'funding'
     ],
     fields: [
       "leadSchool",
@@ -235,7 +235,7 @@ let baseRouteData = {
       'diversity',
       'degree',
       // 'placement',
-      'finance'
+      'funding'
     ],
     fields: [
       "employingSchool"
@@ -256,7 +256,7 @@ let baseRouteData = {
       'diversity',
       'degree',
       // 'placement',
-      'finance'
+      'funding'
     ],
     qualifications: [
       "EYTS"
@@ -272,7 +272,7 @@ let baseRouteData = {
       'contactDetails',
       'diversity',
       'degree',
-      'finance'
+      'funding'
     ],
     qualifications: [
       "EYTS"
@@ -290,7 +290,7 @@ let baseRouteData = {
       'diversity',
       'undergraduateQualification',
       // 'placement',
-      'finance'
+      'funding'
     ],
     qualifications: [
       "EYTS"
