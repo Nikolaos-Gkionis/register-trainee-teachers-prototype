@@ -45,7 +45,7 @@
     actions: {
       items: [
         {
-          href: recordPath + "/funding/funding" | addReferrer(referrer),
+          href: recordPath + "/funding/bursary" | addReferrer(referrer),
           text: "Change",
           visuallyHiddenText: "bursary details"
         }
@@ -55,7 +55,7 @@
 
 {% else %}
 
-  {% if record | isNotDraft %}
+  {% if showBursaryRow %}
     {# Only show course funding row for submitted records - confusing to see it on drafts #}
     {% set courseFundingRow = {
       key: {

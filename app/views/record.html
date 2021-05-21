@@ -16,7 +16,7 @@
 {% set recordPath = "/record/" + record.id %}
 
 <div class="govuk-grid-row">
-
+{{record | log}}
   <div class="govuk-grid-column-full">
 
     {# Hide the record actions ui if it's empty #}
@@ -77,6 +77,7 @@
 
     {% if record | requiresSection("funding") %}
       <h2 class="govuk-heading-s">Funding</h2>
+      {% set showBursaryRow = true %}
       {% include "_includes/summary-cards/funding.html" %}
     {% endif %}
   </div>
