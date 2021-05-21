@@ -876,9 +876,9 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
-
+    console.log("initiatives route")
     if (utils.bursariesApply(record)){
-      res.redirect(`${recordPath}/funding/funding${referrer}`)
+      res.redirect(`${recordPath}/funding/bursary${referrer}`)
     }
     else {
       res.redirect(`${recordPath}/funding/confirm${referrer}`)
@@ -886,7 +886,7 @@ module.exports = router => {
   })
 
   // Forward on to bursaries or confirm
-  router.post(['/:recordtype/:uuid/funding/funding','/:recordtype/funding/funding'], function (req, res) {
+  router.post(['/:recordtype/:uuid/funding/bursary','/:recordtype/funding/bursary'], function (req, res) {
     let data = req.session.data
     let record = data.record
     let recordPath = utils.getRecordPath(req)
@@ -894,7 +894,7 @@ module.exports = router => {
 
     // No data
     if (!record?.funding?.bursary?.selfFunded){
-      res.redirect(`${recordPath}/funding/funding${referrer}`)
+      res.redirect(`${recordPath}/funding/bursary${referrer}`)
     }
 
     // Commented out as we think we can avoid asking about bursary selection
