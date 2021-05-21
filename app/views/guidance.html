@@ -13,41 +13,231 @@
   {% endif %}
 {% endblock %}
 
+{% set aboutSectionHtml %}
+<p class="govuk-body">Register trainee teachers is the service that will eventually replace the Database of Trainee Teachers & Providers (DTTP) portal.</p>
+
+<p class="govuk-body">Accredited Initial Teacher Training Providers (ITT), or organisations partnered with accredited ITT providers, use it to provide DfE with their trainee data.</p>
+
+<p class="govuk-body">Training providers can also perform tasks on behalf of their trainees within Register. Those tasks are getting Teacher Reference Numbers (TRN) and recommending them for Qualified Teacher Status (QTS) or Early Years Teacher Status (EYTS).</p>
+
+<p class="govuk-body">DfE also uses the data for funding and analysis purposes.</p>
+
+<h3 class="govuk-heading-m">Getting a Teacher Reference Number (TRN)</h3>
+
+<p class="govuk-body">When you’ve added a trainee into Register the first action you can take is to request a TRN for the trainee.</p>
+
+<p class="govuk-body">Every teacher has a TRN and it stays with them throughout their career. It appears on their payslips and pension statements.</p>
+
+<p class="govuk-body">They also use it to access the teacher self service portal where they can view their teacher record, view their qualifications and update personal details.</p>
+
+<p class="govuk-body">When you’ve requested a TRN in Register, it usually gets sent to the trainee within 3 days. It will also be recorded in Register.</p>
+
+<h3 class="govuk-heading-m">Recommending a trainee for Qualified Teacher Status (QTS) or Early Years Teacher Status (EYTS)</h3>
+
+<p class="govuk-body">When a trainee has successfully completed their training and met the required standards, you can recommend them for QTS or EYTS in Register.</p>
+
+<p class="govuk-body">DfE will usually award QTS or EYTS within 3 days, if appropriate.</p>
+
+<h3 class="govuk-heading-m">Funding</h3>
+
+<p class="govuk-body">ITT data supports the funding of bursaries and scholarships, for example, it’s used to provide accurate funding to training providers.</p>
+
+<p class="govuk-body">It also provides evidence for financial audits.</p>
+
+<h3 class="govuk-heading-m">Census</h3>
+
+<p class="govuk-body">DfE publishes an annual census of trainee teachers who are starting their training. This is so we have an indication of who will be entering the teaching workforce and can plan teacher recruitment activity.</p>
+
+<p class="govuk-body">The census happens in September and October every year.</p>
+{% endset %}
+
+
+{% set dataRequirementsHtml %}
+<p class='govuk-body'>You’ll need the following information about a trainee to complete their record.</p>
+
+<h3 class="govuk-heading-m">Personal details</h3>
+
+<ul class='govuk-list'>
+  <li>
+    First names
+  </li>
+  <li>
+    Middle names
+  </li>
+  <li>
+    Last or family name
+  </li>
+  <li>
+    Date of birth
+  </li>
+  <li>
+    Gender
+  </li>
+  <li>
+    Nationality
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Contact details</h3>
+
+<ul class='govuk-list'>
+  <li>
+    Address
+  </li>
+  <li>
+    Email address
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Diversity information (optional)</h3>
+
+<div class="govuk-inset-text">
+  If the trainee chose not to share this information during the application process, do not ask for it for the purpose of registering them.
+</div>
+
+<ul class='govuk-list'>
+  <li>
+    Ethnicity
+  </li>
+  <li>
+    Disability
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Degrees</h3>
+
+<h3 class='govuk-heading-s'>If it’s a UK degree</h3>
+
+<ul class='govuk-list'>
+  <li>
+    Type (for example, BA, BSc or other)
+  </li>
+  <li>
+    Subject
+  </li>
+  <li>
+    Institution
+  </li>
+  <li>
+    Graduation year
+  </li>
+  <li>
+    Grade
+  </li>
+</ul>
+
+<h4 class='govuk-heading-s'>If it’s not a UK degree</h4>
+
+<ul class='govuk-list'>
+  <li>
+    UK ENIC comparable degree (if provided)
+  </li>
+  <li>
+    Subject
+  </li>
+  <li>
+    Country where the degree was obtained
+  </li>
+  <li>
+    Graduation year
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Course details</h3>
+
+<ul class='govuk-list'>
+  <li>
+    Subject
+  </li>
+  <li>
+    Age range
+  </li>
+  <li>
+    Start date
+  </li>
+  <li>
+    End date
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Allocations information</h3>
+
+<p class="govuk-body">If the course has allocated places, you’ll need to know whether the trainee is using an allocated place.</p>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Placement details</h3>
+
+<p class="govuk-body">This is required for all training types except assessment only.</p>
+
+<ul class='govuk-list'>
+  <li>
+    Unique reference number (URN) of the placement school or college
+  </li>
+  <li>
+    Start month
+  </li>
+  <li>
+    Duration in weeks
+  </li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<h3 class='govuk-heading-m'>Funding details</h3>
+
+<ul class='govuk-list'>
+  <li>
+    Whether the trainee is on a training initiative
+  </li>
+</ul>
+<h3 class='govuk-heading-s'>For courses with bursaries available</h3>
+<ul class='govuk-list'>
+  <li>
+    Whether a bursary has been awarded to the trainee
+  </li>
+</ul>
+
+{% endset %}
+
 {% block content %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">{{pageHeading}}</h1>
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h1 class="govuk-heading-xl">{{pageHeading}}</h1>
 
-        <h2 class="govuk-heading-m">Contents</h2>
+        <h2 class="govuk-heading-l">Contents</h2>
         <ul class="govuk-list govuk-list--dash govuk-!-margin-bottom-8">
-          <li><a class="govuk-link" href="#section-assessment-only">Assessment Only (AO) route guidance</a></li>
-          <li><a class="govuk-link" href="#section-provider-led">Provider-led route guidance</a></li>
+          <li><a class="govuk-link" href="#section-about-register">About Register trainee teachers</a></li>
+          <li><a class="govuk-link" href="#section-check-data">Check what data you need</a></li>
         </ul>
 
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-        <section id="section-assessment-only"> 
-          <h2 class="govuk-heading-m">Assessment Only (AO) route guidance</h2>
-          <p class="govuk-body">Assessment Only is a route to Qualified Teacher Status (QTS) in England for:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>experienced teachers with a degree</li>
-            <li>people with teaching qualifications from other countries</li>
-          </ul>
-          <p class="govuk-body">It allows teachers to demonstrate that they already meet all the QTS standards over a period of no more than 12 weeks. They are not considered to be trainees as they already have experience or qualifications.</p>
-          <p class="govuk-body">To find out more details on the criteria that ITT providers need to meet and entry requirements, read <a href="https://www.gov.uk/government/publications/the-assessment-only-route-to-qts" class="govuk-link">AO: criteria and supporting advice</a>.</p>
-          <h2 class="govuk-heading-m">Registering AO candidates and census</h2>
-          <p class="govuk-body">AO candidates do not count towards the ITT census as they are already teaching or have a teaching qualification from another country. This means that there are no deadlines for registering AO candidates.</p>
-          <p class="govuk-body">You can register AO candidates at any stage during the academic year.</p>
+        <section id="section-about-register"> 
+          <h2 class="govuk-heading-l">About Register trainee teachers</h2>
+          {{ aboutSectionHtml | safe }}
         </section>
 
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
         
-        <section id="section-provider-led"> 
-          <h2 class="govuk-heading-m">Provider-led route guidance</h2>
-          <p class="govuk-body">This is a placeholder for Provider-led route guidance.</p>
+        <section id="section-check-data"> 
+          <h2 class="govuk-heading-l">Check what data you need</h2>
+          
+          {{ dataRequirementsHtml | safe }}
+
         </section>
 
       </div>
