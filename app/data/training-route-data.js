@@ -3,8 +3,7 @@
 // -------------------------------------------------------------------
 const _ = require('lodash')
 const ittSubjects = require('./itt-subjects.js')
-let expandedLanguages = ittSubjects.modernLanguagesSubjects
-expandedLanguages.push("English studies")
+let modernLanguages = ittSubjects.modernLanguagesSubjects
 
 
 // A non-exhaustive list of routes
@@ -313,7 +312,7 @@ Object.keys(allRoutes).forEach(routeName => {
     routeData.bursaries.forEach(bursaryLevel => {
       if (bursaryLevel.subjects.includes('Languages')){
         _.pull(bursaryLevel.subjects, 'Languages')
-        bursaryLevel.subjects = bursaryLevel.subjects.concat(expandedLanguages)
+        bursaryLevel.subjects = bursaryLevel.subjects.concat(modernLanguages)
       }
     })
   }

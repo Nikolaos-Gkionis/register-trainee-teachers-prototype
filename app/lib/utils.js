@@ -8,6 +8,7 @@ const path = require('path')
 const trainingRouteData = require('./../data/training-route-data')
 const trainingRoutes = trainingRouteData.trainingRoutes
 const arrayFilters = require('./../filters/arrays.js').filters
+const ittSubjects = require('./../data/itt-subjects')
 
 // -------------------------------------------------------------------
 // General
@@ -122,6 +123,14 @@ exports.isOnInitiative = record => {
   return record?.funding?.initiative != 'Not on a training initiative'
 }
 
+exports.subjectToAllocationSubject = subject => {
+  if(!subject){
+    console.log("Err: subject missing")
+    return false
+  }
+  return ittSubjects.subjectSpecialisms[subject].allocationSubject
+}
+
 exports.getAllocationSubject = input => {
   // Support passing in a course or a record
   let courseSubject = input?.subjects || input?.courseDetails?.subjects || []
@@ -130,7 +139,8 @@ exports.getAllocationSubject = input => {
     return false
   }
   else {
-    return courseSubject[0] // first subject is used for allocation subject
+    let allocationSubject = exports.subjectToAllocationSubject(courseSubject[0])
+    return allocationSubject
   }
 }
 
@@ -323,6 +333,7 @@ exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
   // Also do some cleanup on the data
   let subjectsCopy = [...subjects].map(subject => {
     return subject
+      .replace('Primary teaching', 'Primary')
       .replace('Modern languages', '_modern_lang') // Temporarily rename this
       .replace(' language', '') // Strip out language from 'English language' etc
       .replace('English studies', 'English') // Shorten this
