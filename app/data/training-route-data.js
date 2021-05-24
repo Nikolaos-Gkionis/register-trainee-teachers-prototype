@@ -72,7 +72,6 @@ let defaultRouteData = {
     'courseDetails',
     'personalDetails',
     'contactDetails',
-    'placement',
     'diversity',
     'degree',
     // 'placement',
@@ -104,9 +103,9 @@ let baseRouteData = {
     defaultEnabled: true,
     hasAllocatedPlaces: true,
     initiatives: [
-    "Maths and physics chairs programme / Researchers in schools",
-    "Now teach",
-    "Transition to teach"
+      "Maths and physics chairs programme / Researchers in schools",
+      "Now teach",
+      "Transition to teach"
     ],
     bursariesAvailable: true,
     bursaries: [

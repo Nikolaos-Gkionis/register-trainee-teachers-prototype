@@ -876,7 +876,6 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
-    console.log("initiatives route")
     if (utils.bursariesApply(record)){
       res.redirect(`${recordPath}/funding/bursary${referrer}`)
     }
