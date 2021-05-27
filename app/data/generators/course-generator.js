@@ -161,7 +161,8 @@ module.exports = (params) => {
   let subjects
 
   if (route.includes('Early years')){
-    subjects = 'Early years'
+    // This subject isn’t really used or shown - but matches how DTTP handles it
+    subjects = 'Early years teaching'
   }
   else if (level == 'Primary'){
     subjects = getPrimarySubjects(weighted.select([1,2],[0.7,0.3])) // 70% just primary
