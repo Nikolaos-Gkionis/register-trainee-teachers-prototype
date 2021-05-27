@@ -128,7 +128,8 @@ exports.subjectToAllocationSubject = subject => {
     console.log("Err: subject missing")
     return false
   }
-  return ittSubjects.subjectSpecialisms[subject].allocationSubject
+  let allocationSubject = ittSubjects.subjectSpecialisms?.[subject]?.allocationSubject || false
+  return allocationSubject
 }
 
 exports.getAllocationSubject = input => {
