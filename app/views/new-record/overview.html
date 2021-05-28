@@ -143,7 +143,7 @@
   {
     text: "Funding",
     href: "funding" | reviewIfInProgress(record.funding) if record | canStartFundingSection,
-    _hint: "Complete the degree details section first" if not record | canStartFundingSection,
+    hint: "Complete degree details first" if not record | canStartFundingSection,
     id: "funding",
     tag: {
       classes: record.funding | getStatusText | getStatusClass,
@@ -153,10 +153,10 @@
   ]
 }) if not closed }}
 
-<h2 class="govuk-heading-m">Review and submit</h2>
+<h2 class="govuk-heading-m">Final check</h2>
 
 {{ govukButton({
-  text: "Review this record",
+  text: "Check this record",
   href: "check-record"
 }) }}
 
