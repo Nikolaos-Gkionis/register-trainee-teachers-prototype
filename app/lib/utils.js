@@ -287,18 +287,32 @@ exports.dynamicLowercase = input => {
   
   // These things shouldn’t get lowercased
   let ignoreSubjects = [
+  "Arabic",
+  "Chinese",
   "English",
   "French",
   "German",
+  "Greek",
+  "Ancient Hebrew",
   "Italian",
   "Japanese",
+  "Latin",
   "Mandarin",
+  "Portugese",
   "Russian",
-  "Spanish"
+  "Spanish",
+  "Welsh",
   ]
 
-  const makeLowercase = item =>{
-    return ignoreSubjects.some(ignoreSubject => item.startsWith(ignoreSubject)) ? item : item.toLowerCase()
+  const makeLowercase = item => {
+    let output = item.toLowerCase()
+
+    ignoreSubjects.forEach(subject => {
+      let regex = new RegExp(`${subject.toLowerCase()}`, "g") // match multiple times
+      // Note: if we upgrade to node 16, we could use output.replaceAll instead
+      output = output.replace(regex, subject)
+    })
+    return output
   }
 
   if (typeof input === 'string') {
@@ -336,6 +350,7 @@ exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
     return subject
       .replace('Primary teaching', 'Primary')
       .replace('Modern languages', '_modern_lang') // Temporarily rename this
+      .replace(' languages', '') // Strip out languages from 'Chinese languages' etc
       .replace(' language', '') // Strip out language from 'English language' etc
       .replace('English studies', 'English') // Shorten this
       .replace('_modern_lang', 'Modern languages') // Restore 'Modern languages'
