@@ -24,7 +24,7 @@ const _ = require('lodash')
 */
 
 filters.getStatusText = function(data, defaultNotStarted=false, defaultInProgress=false) {
-  if (!data) return defaultNotStarted || "Not started"
+  if (!data) return defaultNotStarted || "Incomplete"
   if (data?.status) return data.status
   else return defaultInProgress || "In progress"
 }
@@ -39,6 +39,7 @@ filters.getStatusClass = (status) => {
 
     // Application phases
     case 'Not started':
+    case 'Incomplete':
       return 'govuk-tag--grey'
     case 'Review':
       return 'govuk-tag--pink'

@@ -1,6 +1,11 @@
 {% extends "_templates/_new-record.html" %}
 
 {% set pageHeading = "Register a trainee" %}
+{% if data.record.personalDetails.shortName %}
+  {% set pageHeading %}
+    Register {{data.record.personalDetails.shortName | safe }}
+  {% endset %}
+{% endif %}
 
 {% set hideReturnLink = true %}
 {% set backLink = '/records' %}
@@ -18,12 +23,13 @@
   {% endif %}
 {% endset %}
 
-<span class="govuk-caption-l">{{'Apply draft' + draftRecordName}}</span>
+{# <span class="govuk-caption-l">{{'Apply draft' + draftRecordName}}</span> #}
+<span class="govuk-caption-l">Recruited through Apply</span>
 <h1 class="govuk-heading-l govuk-!-margin-bottom-8">{{pageHeading}}</h1>
 
 {% set insetTextHtml %}
   {% if record.courseDetails %}
-    <p class="govuk-body">Trainee recruited on {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
+    <p class="govuk-body">Trainee recruited to {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
   {% else %}
     No data to show
   {% endif %}
@@ -37,7 +43,12 @@
 {# {% include "_includes/providerAndRouteInsetText.njk" %} #}
 
 <h2 class="govuk-heading-m">Registration data from Apply</h2>
-<p class="govuk-body">Application submitted on {{ record.applyData.applicationDate | govukDate }}, and recruited in Manage on {{ record.applyData.recruitedDate | govukDate }}</p>
+{# <p class="govuk-body">
+  Application submitted on {{ record.applyData.applicationDate | govukDate }}
+</p> #}
+<p class="govuk-body">
+  Met all conditions on {{ record.applyData.recruitedDate | govukDate }}
+</p>
 
 {{ appTaskList({
   classes: "govuk-!-margin-bottom-8",
@@ -114,7 +125,7 @@
     {
     text: "Funding",
     href: "funding" | reviewIfInProgress(record.funding) if record | canStartFundingSection,
-    _hint: "Complete the degree details section first" if not record | canStartFundingSection,
+    hint: "Complete degree details first" if not record | canStartFundingSection,
     id: "funding",
     tag: {
       classes: record.funding | getStatusText | getStatusClass,
@@ -124,11 +135,11 @@
   ]
 }) if not closed }}
 
-<h2 class="govuk-heading-m">Review and submit</h2>
+<h2 class="govuk-heading-m">Final check</h2>
 
 {{ govukButton({
-  text: "Review this record",
-  href: "check-record" | addReferrer(referrer)
+  text: "Check this record",
+  href: "check-record"
 }) }}
 
 <p class="govuk-body"><a href="./save-as-draft" class="govuk-link govuk-link--no-visited-state">Return to this draft record later</a></p>
