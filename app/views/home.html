@@ -18,7 +18,7 @@
         }) }}
       </div>
     </div>
-    
+
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
     <div class="govuk-grid-row">
@@ -27,14 +27,14 @@
         <h2 class="govuk-heading-m"><a href="/records" class="govuk-link govuk-link--no-visited-state">Trainee records</a></h2>
         <p class="govuk-body">Review and manage your trainee records.</p>
       </div>
-      
+
       <div class="govuk-grid-column-one-third">
         <h2 class="govuk-heading-m"><a href="#" class="govuk-link govuk-link--no-visited-state">Give feedback</a></h2>
         <p class="govuk-body">This is a new service. Your views will help us improve it.</p>
       </div>
       <div class="govuk-grid-column-one-third">
         <h2 class="govuk-heading-m"><a href="/guidance" class="govuk-link govuk-link--no-visited-state">Guidance</a></h2>
-        {# <p class="govuk-body">Text to go here</p> #}
+        <p class="govuk-body">Find out about Register and the data you need.</p>
       </div>
 
     </div>
@@ -65,7 +65,7 @@
           {% endif %}
         </div>
       </div>
-      
+
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     {% endif %}
 
@@ -99,7 +99,7 @@
 
       {% set eytsCount = records | where("status", ['EYTS recommended', 'EYTS awarded']) | length %}
       {% set qtsCount = records | where("status", ['QTS recommended', 'QTS awarded']) | length %}
-      
+
       {% if eytsCount == 0 %}
         <div class="govuk-grid-row govuk-!-margin-bottom-6 home-statuses__flex-row">
           {% set statuses = ['QTS recommended','QTS awarded', 'Deferred', 'Withdrawn'] %}

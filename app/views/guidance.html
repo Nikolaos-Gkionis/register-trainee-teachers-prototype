@@ -16,11 +16,13 @@
 {% set aboutSectionHtml %}
 <p class="govuk-body">Register trainee teachers is the service that will eventually replace the Database of Trainee Teachers & Providers (DTTP) portal.</p>
 
-<p class="govuk-body">Accredited Initial Teacher Training Providers (ITT), or organisations partnered with accredited ITT providers, use it to provide DfE with their trainee data.</p>
+<p class="govuk-body">Accredited Initial Teacher Training Providers (ITT) use it to provide DfE with their trainee data.</p>
 
-<p class="govuk-body">Training providers can also perform tasks on behalf of their trainees within Register. Those tasks are getting Teacher Reference Numbers (TRN) and recommending them for Qualified Teacher Status (QTS) or Early Years Teacher Status (EYTS).</p>
+<p class="govuk-body">Training providers can also perform tasks on behalf of their trainees within Register.</p>
 
-<p class="govuk-body">DfE also uses the data for funding and analysis purposes.</p>
+<p class="govuk-body"> Those tasks include withdrawing, deferring, getting Teacher Reference Numbers (TRN) and recommending for Qualified Teacher Status (QTS) or Early Years Teacher Status (EYTS).
+
+<p class="govuk-body">DfE also uses the data for funding, the ITT census and analysis to inform policy development.</p>
 
 <h3 class="govuk-heading-m">Getting a Teacher Reference Number (TRN)</h3>
 
@@ -30,25 +32,38 @@
 
 <p class="govuk-body">They also use it to access the teacher self service portal where they can view their teacher record, view their qualifications and update personal details.</p>
 
-<p class="govuk-body">When you’ve requested a TRN in Register, it usually gets sent to the trainee within 3 days. It will also be recorded in Register.</p>
+<p class="govuk-body">When you’ve requested a TRN in Register, it usually gets sent to the trainee within 3 days - it can be as quick as overnight. It will be updated in Register.</p>
+
+<p class="govuk-body">AO candidates will usually receive an email with their TRN. For all other routes, trainees will receive a letter. This means trainees may contact you to find out their TRN.</p>
+
 
 <h3 class="govuk-heading-m">Recommending a trainee for Qualified Teacher Status (QTS) or Early Years Teacher Status (EYTS)</h3>
 
-<p class="govuk-body">When a trainee has successfully completed their training and met the required standards, you can recommend them for QTS or EYTS in Register.</p>
+<p class="govuk-body">When a trainee has successfully completed their training (or completed their assessement for AO) and met the required standards, you can recommend them for QTS or EYTS in Register.</p>
 
-<p class="govuk-body">DfE will usually award QTS or EYTS within 3 days, if appropriate.</p>
+<p class="govuk-body">DfE will usually award QTS or EYTS within 3 days.</p>
+
+<h3 class="govuk-heading-m">Withdraw and defer</h3>
+
+<p class="govuk-body">Once you've added a record and requested a TRN, you can withdraw or defer the trainee.</p>
+
+<p class="govuk-body">You can do this using the links on the trainee record.</p>
 
 <h3 class="govuk-heading-m">Funding</h3>
 
-<p class="govuk-body">ITT data supports the funding of bursaries and scholarships, for example, it’s used to provide accurate funding to training providers.</p>
+<p class="govuk-body">For the ITT routes where funding applies, the data supports bursaries and scholarships, for example, it’s used to provide accurate funding to training providers.</p>
 
-<p class="govuk-body">It also provides evidence for financial audits.</p>
+<p class="govuk-body">It's used for the funding of salary grants on the school direct salaried route. It also provides evidence for DfE when its finances are audited</p>
 
 <h3 class="govuk-heading-m">Census</h3>
 
 <p class="govuk-body">DfE publishes an annual census of trainee teachers who are starting their training. This is so we have an indication of who will be entering the teaching workforce and can plan teacher recruitment activity.</p>
 
 <p class="govuk-body">The census happens in September and October every year.</p>
+
+<h3 class="govuk-heading-m">Profiles (outcomes)</h3>
+
+<p class="govuk-body">DfE publishes data on how many people have successfully completed their training each year.</p>
 {% endset %}
 
 
@@ -226,16 +241,16 @@
 
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-        <section id="section-about-register"> 
+        <section id="section-about-register">
           <h2 class="govuk-heading-l">About Register trainee teachers</h2>
           {{ aboutSectionHtml | safe }}
         </section>
 
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-        
-        <section id="section-check-data"> 
+
+        <section id="section-check-data">
           <h2 class="govuk-heading-l">Check what data you need</h2>
-          
+
           {{ dataRequirementsHtml | safe }}
 
         </section>
