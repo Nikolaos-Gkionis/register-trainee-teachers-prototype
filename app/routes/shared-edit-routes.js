@@ -481,7 +481,7 @@ module.exports = router => {
     // Check for autocomplete submitted subject
     let subjectAutocomplete1 = req.body?._autocompleteRawValue_subject_1
 
-    // Special handling for editing your answers to delete subjects.
+    // Special handling to cope with users deleting values from autocompletes.
     // Autocompletes make it hard to clear a value when used as an enhanced select.
     // Clearing the answer does not correctly select the empty select item. Instead,
     // we submit the raw autocomplete values and prefer them if they exist.
@@ -489,7 +489,12 @@ module.exports = router => {
       let subjectsTemp = [subjectAutocomplete1]
         .concat(req.body?._autocompleteRawValue_subject_2)
         .concat(req.body?._autocompleteRawValue_subject_3)
-      record.courseDetails.subjects = subjectsTemp // Replace any existing data
+        .filter(Boolean)
+      // Now need to compare the values we got from the autocompletes with the values from the selects
+      // They have different casing, so need to check caselessly
+      record.courseDetails.subjects = record.courseDetails.subjects.filter(subject => {
+        return subjectsTemp.map(autocompleteSubject => autocompleteSubject.toLowerCase()).includes(subject.toLowerCase())
+      })
     }
 
     // Clean up subjects data

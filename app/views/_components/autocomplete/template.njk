@@ -32,6 +32,12 @@
       text: item[0],
       selected: params.value == item[1]
     }) %}
+  {% elseif item | isObject %}
+    {% set selectItems = selectItems | push({
+      text: item.text,
+      value: item.value,
+      selected: params.value == item.value
+    }) %}
   {% else %}
     {% set selectItems = selectItems | push({
       value: item,
