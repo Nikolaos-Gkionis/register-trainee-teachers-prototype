@@ -3,7 +3,7 @@
   {% if query.sortOrder == "lastName" %}
     <span class="">Last name</span>
   {% else %}
-    <a href="{{ linkSortByName }}" class="govuk-link govuk-link--no-visited-state">Last name</a>
+    <a href="{{ currentPageUrl | createSortLink('lastName') }}" class="govuk-link govuk-link--no-visited-state">Last name</a>
   {% endif %}
 </span>
  
@@ -11,10 +11,10 @@
 
 {% set dateUpdatedLink %}
 <span class="govuk-!-margin-left-1 govuk-!-margin-right-1">
-  {% if query.sortOrder == "dateUpdated" or not query.sortOrder %}
+  {% if query.sortOrder == "updatedDate" or not query.sortOrder %}
     <span class="">Date updated</span>
   {% else %}
-    <a href="{{ linkSortByDateUpdated }}" class="govuk-link govuk-link--no-visited-state">Date updated</a>
+    <a href="{{ currentPageUrl | createSortLink('updatedDate') }}" class="govuk-link govuk-link--no-visited-state">Date updated</a>
   {% endif %}
 </span>
 

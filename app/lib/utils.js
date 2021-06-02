@@ -5,6 +5,7 @@ const _ = require('lodash')
 const faker = require('faker')
 const moment = require('moment')
 const path = require('path')
+const url = require('url')
 const trainingRouteData = require('./../data/training-route-data')
 const trainingRoutes = trainingRouteData.trainingRoutes
 const arrayFilters = require('./../filters/arrays.js').filters
@@ -518,6 +519,87 @@ exports.getRecordById = (records, id) => {
   return records.find(record => record.id == id)
 }
 
+// -------------------------------------------------------------------
+// Filter records
+// -------------------------------------------------------------------
+
+// Filter down a set of records for those that match provided filter object
+exports.filterRecords = (records, data, filters = {}) => {
+
+  let filteredRecords = records
+  let applyEnabled = data.settings.enableApplyIntegration
+
+  // Only allow records for the signed-in providers
+  filteredRecords = exports.filterBySignedIn(filteredRecords, data)
+
+  // Only show records for training routes that are enabled
+  let enabledTrainingRoutes = data.settings.enabledTrainingRoutes
+
+  // Only show records for currently enabled routes or draft records
+  filteredRecords = filteredRecords.filter(record => enabledTrainingRoutes.includes(record.route) || (exports.isDraft(record)))
+
+  if (!applyEnabled){
+    filteredRecords = filteredRecords.filter(record => exports.sourceIsManual(record))
+  }
+
+
+  // Cycle not implimented yet
+  // if (filter.cycle){
+  //   filteredRecords = filteredRecords.filter(record => filter.cycle.includes(record.cycle))
+  // }
+  if (filters.providers){
+    filteredRecords = filteredRecords.filter(record => filters.providers.includes(record.provider))
+  }
+
+  if (filters.trainingRoutes){
+    filteredRecords = filteredRecords.filter(record => filters.trainingRoutes.includes(record.route))
+  }
+
+  if (filters.status){
+    filteredRecords = filteredRecords.filter(record => {
+
+      // Special handling of Apply drafts so they get caught by the 'draft' filter
+      // Avoiding using the 'isDraft' filter here so that 'Apply draft' can also be 
+      // manually searched for
+      if (record.status == "Apply draft" && filters.status.includes("Draft")){
+        return true
+      }
+      else return filters.status.includes(record.status)
+    })
+  }
+
+  if (filters.subject && filters.subject != "All subjects"){
+    filteredRecords = filteredRecords.filter(record => {
+      return record?.courseDetails?.subjects && record?.courseDetails?.subjects.includes(filters.subject)
+    })
+  }
+
+  return filteredRecords
+}
+
+// Text search across a few selected fields
+exports.filterRecordsBySearchTerm = (records, searchQuery=false) => {
+  if (!searchQuery) return records
+
+  let searchQueryLowercase = searchQuery.toLowerCase()
+
+  let filteredRecords = records.filter(record => {
+    let fullName = record?.personalDetails?.fullName.toLowerCase() || "" // Draft records might not have a full name
+
+    // Check that every part exists in the trainee’s name
+    let searchParts = searchQueryLowercase.split(' ')
+    let nameMatch = searchParts.every(part => fullName.includes(part))
+
+    let traineeIdMatch = searchParts.some(part => (record?.trainingDetails?.traineeId || "").toLowerCase().includes(part))
+
+    let trnMatch = searchParts.some(part => (record?.trn || "").toString().includes(part))
+
+    return traineeIdMatch || trnMatch || nameMatch
+  })
+
+  return filteredRecords
+}
+
 // Utility function to filter by a key
 // Basically identical to the ‘where’ filter
 exports.filterRecordsBy = (records, key, array) => {
@@ -558,15 +640,63 @@ exports.filterByYear = (records, array) => {
   return exports.filterRecordsBy(records, 'academicYear', array)
 }
 
-// Sort by last name or draft record
-exports.sortRecordsByLastName = records => {
-  let sorted = records.sort((a, b) => {
-    let aString = `${a?.personalDetails?.familyName}` || 'Draft record'
-    let bString = `${b?.personalDetails?.familyName}` || 'Draft record'
-    return exports.sortAlphabetical(aString, bString)
-  })
-  return sorted
+// -------------------------------------------------------------------
+// Sort records
+// -------------------------------------------------------------------
+
+// Sort by a date
+// Uses lodash.get so we can read nested properties
+exports.sortRecordsByDate = (records, sortKey, reverse=false) => {
+  records = records.sort((a, b) => new Date(_.get(b, sortKey)).getTime() - new Date(_.get(a, sortKey)).getTime())
+  return (reverse) ? records.reverse() : records
 }
+
+// Sort records by thing. Tests for specific cases and otherwise falls back to string comparison of field
+exports.sortRecordsBy = (records, sortType) => {
+
+  const compareStrings = (a, b) => {
+    if (a && b){
+      return a.localeCompare(b)
+    }
+    else return (a) ? 1 : -1
+  }
+
+  if (!sortType) return records
+
+  switch (sortType){
+    case "lastName":
+      records.sort( (a, b) => compareStrings(a?.personalDetails?.familyName, b?.personalDetails?.familyName))
+      break
+    case "firstName":
+      records.sort( (a, b) => compareStrings(a?.personalDetails?.givenName, b?.personalDetails?.givenName))
+      break
+    case "updatedDate":
+      records = exports.sortRecordsByDate(records, 'updatedDate')
+      break
+    default:
+      console.log(`Sorting records by unknown type: ${sortType}`)
+      records.sort( (a, b) => compareStrings(_.get(a, sortType), _.get(b, sortType)))
+      break
+  }
+
+  return records
+
+}
+
+// Sort by last name
+exports.sortRecordsByLastName = records => {
+  return exports.sortRecordsBy(records, 'lastName')
+}
+
+// Sort by date updated
+exports.sortRecordsByDateUpdated = records => {
+  return exports.sortRecordsByDate(records, 'updatedDate')
+}
+
+// -------------------------------------------------------------------
+// Misc
+// -------------------------------------------------------------------
+
 
 // Add an event to a record’s timeline
 exports.addEvent = (record, content) => {
@@ -741,59 +871,7 @@ exports.recommendForAward = (record, params) => {
   return true
 }
 
-// Filter down a set of records for those that match provided filter object
-exports.filterRecords = (records, data, filters = {}) => {
 
-  let filteredRecords = records
-  let applyEnabled = data.settings.enableApplyIntegration
-
-  // Only allow records for the signed-in providers
-  filteredRecords = exports.filterBySignedIn(filteredRecords, data)
-
-  // Only show records for training routes that are enabled
-  let enabledTrainingRoutes = data.settings.enabledTrainingRoutes
-
-  // Only show records for currently enabled routes or draft records
-  filteredRecords = filteredRecords.filter(record => enabledTrainingRoutes.includes(record.route) || (exports.isDraft(record)))
-
-  if (!applyEnabled){
-    filteredRecords = filteredRecords.filter(record => exports.sourceIsManual(record))
-  }
-
-
-  // Cycle not implimented yet
-  // if (filter.cycle){
-  //   filteredRecords = filteredRecords.filter(record => filter.cycle.includes(record.cycle))
-  // }
-  if (filters.providers){
-    filteredRecords = filteredRecords.filter(record => filters.providers.includes(record.provider))
-  }
-
-  if (filters.trainingRoutes){
-    filteredRecords = filteredRecords.filter(record => filters.trainingRoutes.includes(record.route))
-  }
-
-  if (filters.status){
-    filteredRecords = filteredRecords.filter(record => {
-
-      // Special handling of Apply drafts so they get caught by the 'draft' filter
-      // Avoiding using the 'isDraft' filter here so that 'Apply draft' can also be 
-      // manually searched for
-      if (record.status == "Apply draft" && filters.status.includes("Draft")){
-        return true
-      }
-      else return filters.status.includes(record.status)
-    })
-  }
-
-  if (filters.subject && filters.subject != "All subjects"){
-    filteredRecords = filteredRecords.filter(record => {
-      return record?.courseDetails?.subjects && record?.courseDetails?.subjects.includes(filters.subject)
-    })
-  }
-
-  return filteredRecords
-}
 
 /*
 Highlight invalid summary list rows
@@ -1023,6 +1101,28 @@ exports.getReferrer = referrer => {
 // Used so we can add query params whilst also providing a referrer
 exports.addQueryParam = (existing, param) => {
   return (existing) ? `${existing}&${param}` : `?${param}`
+}
+
+exports.setQueryParam = (query, key, value) => {
+  let newQuery = Object.assign({}, query)
+  _.set(newQuery, key, value)
+  return newQuery
+}
+
+// Combine pathname and query
+exports.makeUrlWithQuery = (pathname, query) => {
+  return url.format({
+    pathname,
+    query: query,
+  })
+}
+
+// Update the current query with sort order set
+exports.createSortLink = function(pathname, sortOrder){
+  let ctx = Object.assign({}, this.ctx)
+  let query = ctx.query
+  query = exports.setQueryParam(query, 'sortOrder', sortOrder)
+  return exports.makeUrlWithQuery(pathname, query)
 }
 
 // Referrer could be an array of urls. If so, return the last one
