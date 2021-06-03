@@ -1,12 +1,12 @@
 {% extends "_templates/_page.html" %}
 
 {% set pageHeading %}
-  Trainee records ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})
+  Draft records ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})
 {% endset %}
 
 {% set backText = "Home" %}
 {% set backLink = '/home' %}
-{% set navActive = "records" %}
+{% set navActive = "drafts" %}
 
 {# Dual skip links to support skipping to results rather than #main-content #}
 {% block skipLink %}
@@ -49,19 +49,21 @@
 
 {% set filterOptionsHtml %}
 
-  {% set filterCycleCurrentYearDefault = 'checked' %}
   {% include "_includes/filter-panel/cycles.njk" %}
 
+  {% include "_includes/filter-panel/source.njk" %}
+
   {% include "_includes/filter-panel/level.njk" %}
+
+  {% include "_includes/filter-panel/subjects.njk" %}
 
   {% include "_includes/filter-panel/signed-in-providers.njk" %}
 
   {% include "_includes/filter-panel/training-routes.njk" %}
 
-  {% include "_includes/filter-panel/statuses.njk" %}
+  {# {% include "_includes/filter-panel/statuses.njk" %} #}
 
-  {% include "_includes/filter-panel/subjects.njk" %}
-
+  
 {% endset %}
 
 {% set filterContentHtml %}
@@ -87,15 +89,17 @@
 
       {% set draftRecords = filteredRecords | where("status", ["Draft", "Apply draft"]) %}
 
-      {% if draftRecords | length %}
+      {% set completeDrafts = filteredRecords | filterByComplete %}
+
+      {% if completeDrafts | length %}
 
         {# Bulk actions on drafts #}
         <form action="/bulk-action/new/direct" method="post" novalidate>
 
           <div class="govuk-!-margin-bottom-8">
             <div class="govuk-grid-row">
-              <div class="govuk-grid-column-one-half">
-                <h2 class="govuk-heading-m">Draft records</h2>
+              <div class="govuk-grid-column-two-thirds">
+                <h2 class="govuk-heading-m">Completed drafts - ready to submit</h2>
               </div>
 
               {% if data.settings.showBulkLinks %}
@@ -107,7 +111,7 @@
 
             </div>
 
-            {% for record in draftRecords %}
+            {% for record in completeDrafts %}
               {% include "_includes/trainee-record-card.njk" %}
             {% endfor %}
 
@@ -119,14 +123,17 @@
 
       {% set nonDraftRecords = filteredRecords | removeWhere("status", ["Draft", "Apply draft"]) %}
 
-      {% if nonDraftRecords | length %}
+      {% set incompleteDrafts = filteredRecords | filterByIncomplete %}
+      {# {% set incompleteDrafts = [] %} #}
+
+      {% if incompleteDrafts | length %}
 
         {# Bulk actions on non drafts #}
         <form action="/bulk-action/new/direct" method="post" novalidate>
 
           <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-              <h2 class="govuk-heading-m">Records</h2>
+            <div class="govuk-grid-column-two-thirds">
+              <h2 class="govuk-heading-m">Incomplete drafts</h2>
             </div>
 
             {% if data.settings.showBulkLinks %}
@@ -138,12 +145,70 @@
             
           </div>
 
-          {% for record in nonDraftRecords %}
+          {% for record in incompleteDrafts %}
             {% include "_includes/trainee-record-card.njk" %}
           {% endfor %}
 
         </form>
       {% endif %}
+
+      {% set applyDrafts = filteredRecords | filterByIncomplete | where("source", "Apply") %}
+
+      {% if applyDrafts | length and false %}
+
+        {# Bulk actions on non drafts #}
+        <form action="/bulk-action/new/direct" method="post" novalidate>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Drafts imported from Apply</h2>
+              <p class="govuk-body">Recruited trainees with all conditions met</p>
+            </div>
+
+            {% if data.settings.showBulkLinks %}
+              <div class="govuk-grid-column-one-half">
+                <input type="hidden" name="[bulk][action]" value="Recommend a group of trainees for EYTS or QTS">
+                <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
+              </div>
+            {% endif %}
+            
+          </div>
+
+          {% for record in applyDrafts %}
+            {% include "_includes/trainee-record-card.njk" %}
+          {% endfor %}
+
+        </form>
+      {% endif %}
+
+      {% set manualDrafts = filteredRecords | filterByIncomplete | removeWhere("source", "Apply") %}
+
+      {% if manualDrafts | length and false %}
+
+        {# Bulk actions on non drafts #}
+        <form action="/bulk-action/new/direct" method="post" novalidate>
+
+          <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+              <h2 class="govuk-heading-m">Drafts added manually</h2>
+            </div>
+
+            {% if data.settings.showBulkLinks %}
+              <div class="govuk-grid-column-one-half">
+                <input type="hidden" name="[bulk][action]" value="Recommend a group of trainees for EYTS or QTS">
+                <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
+              </div>
+            {% endif %}
+            
+          </div>
+
+          {% for record in manualDrafts %}
+            {% include "_includes/trainee-record-card.njk" %}
+          {% endfor %}
+
+        </form>
+      {% endif %}
+
     </div>
     
     {# Dummy pagination - not hooked up to data yet #}
@@ -154,7 +219,6 @@
     <p class="govuk-body">Try <a href="/records">clearing your search and filters</a>.</p>
   {% endif %}
 {% endset %}
-
 
 
 {{ appSubNavigation({
@@ -174,12 +238,13 @@
   ]
 }) }}
 
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
 
-    {# This heading set separately than {{pageHeading}} as it uses html #}
-    <h1 class="govuk-heading-xl">Trainee records ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
+    {# This heading set separately than {{pageHeading}} as it is html #}
+    <h1 class="govuk-heading-xl">Draft records ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
     
     {{ govukButton({
       text: "Add a trainee",
@@ -222,12 +287,15 @@
 
   <div class="govuk-grid-column-full">
 
+    
+
     {{ appFilterPage({
       filterOptions: filterOptionsHtml,
       selectedFilters: selectedFilters,
       filterContent: filterContentHtml
       })
     }}
+
   </div>
 
 </div>
