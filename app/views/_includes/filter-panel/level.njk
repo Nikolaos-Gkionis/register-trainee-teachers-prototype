@@ -1,0 +1,24 @@
+{{ govukCheckboxes({
+  classes: "govuk-checkboxes--small js-auto-submit",
+  fieldset: {
+    legend: {
+      text: "Course level",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  items: [
+    {
+      text: "Early years",
+      checked: checked(query.filterLevel, "Early years")
+    },
+    {
+      text: "Primary",
+      checked: checked(query.filterLevel, "Primary")
+    },
+    {
+      text: "Secondary",
+      checked: checked(query.filterLevel, "Secondary")
+    }
+  ]
+} | decorateAttributes(data, "data.filterLevel"))}}

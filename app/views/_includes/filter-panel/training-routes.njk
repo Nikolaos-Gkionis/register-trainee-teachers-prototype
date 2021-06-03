@@ -1,0 +1,27 @@
+{% set enabledTrainingRoutes = data.settings.enabledTrainingRoutes %}
+
+{# Only show route filter if there's more than 1 route #}
+{% if enabledTrainingRoutes | length > 1 %}
+
+  {% set routeItems = [] %}
+  {% for route in enabledTrainingRoutes %}
+    {% set routeItems = routeItems | push({
+      text: route,
+      checked: checked(query.filterTrainingRoutes, route)
+    }) %}
+  {% endfor %}
+  {{ govukCheckboxes({
+    classes: "govuk-checkboxes--small js-auto-submit",
+    fieldset: {
+      legend: {
+        text: "Type of training",
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      text: ""
+    },
+    items: routeItems
+  } | decorateAttributes(data, "data.filterTrainingRoutes")) }}
+
+{% endif %}

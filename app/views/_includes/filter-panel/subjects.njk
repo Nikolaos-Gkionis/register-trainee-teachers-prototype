@@ -1,0 +1,28 @@
+{% set subjectItems = [] %}
+
+{# Default state - first value is 'all' #}
+{% set subjectItems = subjectItems | push({
+  value: "All subjects",
+  text: "All subjects",
+  selected: true if (not query.filterSubject or query.filterSubject ==  "All subjects")
+}) %}
+
+{# Remaining subjects #}
+{% for subject in data.ittSubjects %}
+  {% set subjectItems = subjectItems | push({
+    value: subject,
+    text: subject,
+    selected: true if (subject == query.filterSubject)
+  }) %}
+{% endfor %}
+
+{{ govukSelect({
+  id: "subject-select",
+  name: "filterSubject",
+  classes: "js-auto-submit",
+  label: {
+    text: "Subject",
+    classes: "govuk-label--s"
+  },
+  items: subjectItems
+}) }}

@@ -1,0 +1,52 @@
+{{ govukCheckboxes({
+  classes: "govuk-checkboxes--small js-auto-submit",
+  attributes: {
+    "id": 'filterStatusCheckboxes'
+  }
+  ,
+  fieldset: {
+    legend: {
+      text: "Status",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  items: [
+    {
+      text: "Draft",
+      checked: checked(query.filterStatus, "Draft")
+    } if false,
+    {
+      text: "Pending TRN",
+      checked: checked(query.filterStatus, "Pending TRN")
+    },
+    {
+      text: "TRN received",
+      checked: checked(query.filterStatus, "TRN received")
+    },
+    {
+      text: "EYTS recommended",
+      checked: checked(query.filterStatus, "EYTS recommended")
+    },
+    {
+      text: "EYTS awarded",
+      checked: checked(query.filterStatus, "EYTS awarded")
+    },
+    {
+      text: "QTS recommended",
+      checked: checked(query.filterStatus, "QTS recommended")
+    },
+    {
+      text: "QTS awarded",
+      checked: checked(query.filterStatus, "QTS awarded")
+    },
+    {
+      text: "Deferred",
+      checked: checked(query.filterStatus, "Deferred")
+    },
+    {
+      text: "Withdrawn",
+      checked: checked(query.filterStatus, "Withdrawn")
+    }
+  ]
+} | decorateAttributes(data, "data.filterStatus"))}}

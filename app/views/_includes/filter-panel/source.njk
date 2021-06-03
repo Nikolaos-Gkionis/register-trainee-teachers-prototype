@@ -1,0 +1,22 @@
+{{ govukCheckboxes({
+  classes: "govuk-checkboxes--small js-auto-submit",
+  fieldset: {
+    legend: {
+      text: "Data source",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  items: [
+    {
+      text: "Imported from Apply",
+      value: "Apply",
+      checked: checked(query.filterSource, "Apply")
+    },
+    {
+      text: "Manually added",
+      value: "Manual",
+      checked: checked(query.filterSource, "Manual")
+    }
+  ]
+} | decorateAttributes(data, "data.filterSource"))}}
