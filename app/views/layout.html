@@ -44,6 +44,9 @@
 {% from "_components/timeline/macro.njk"   import appTimeline %}
 {% from "_components/invalid-answer/macro.njk"   import appInvalidAnswer with context %}
 
+{# Wrapper of moj’s filter stuff #}
+{% from "_components/filter-page/macro.njk"         import appFilterPage %}
+
 {# moj components #}
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
@@ -103,6 +106,11 @@
       text: 'Home',
       href: '/home',
       active: true if navActive == 'home'
+    },
+    {
+      text: 'Draft records',
+      href: '/drafts',
+      active: true if navActive == 'drafts'
     },
     {
       text: 'Trainee records',

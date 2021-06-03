@@ -478,8 +478,6 @@ module.exports = router => {
       res.redirect(`${recordPath}/course-details`)
     }
 
-    console.log("Body", req.body)
-
     // Check for autocomplete submitted subject
     let subjectAutocomplete1 = req.body?._autocompleteRawValue_subject_1
 
