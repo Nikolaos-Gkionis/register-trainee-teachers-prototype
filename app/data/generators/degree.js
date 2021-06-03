@@ -2,9 +2,9 @@ const faker   = require('faker')
 const weighted = require('weighted')
 const degreeData = require('../degree')
 
-module.exports = (params) => {
+module.exports = (params, application) => {
 
-  const isApplyDraft = (params.source == 'Apply' && params.status == "Apply draft")
+  const isApplyDraft = (application.source == 'Apply' && application.status == "Apply draft")
   
   const item = (faker) => {
     let subject = faker.helpers.randomize(degreeData().subjects)
@@ -12,16 +12,16 @@ module.exports = (params) => {
     const endDate = faker.helpers.randomize(['2020','2019','2018','2017','2016','2015'])
     const startDate = (parseInt(endDate) - 4).toString()
     const id = faker.random.uuid()
-
-    
+    const sectionIsComplete = (params?.status == "Completed")
 
     // Make 1/3rd of subjects be invalid responses for Apply applications
-    if (isApplyDraft){
+    // But don’t spit out invalid data if the section is marked as completed
+    if (isApplyDraft && !sectionIsComplete){
       let invalidSubject = `**invalid**${faker.helpers.randomize(degreeData().invalidSubjects)}`
       subject = faker.helpers.randomize([subject, subject, invalidSubject])
     }
 
-    if (params.isInternationalTrainee) {
+    if (application.isInternationalTrainee) {
       return {
         // type: 'Diplôme',
         type: 'Bachelor degree', // ENIC equivalent
@@ -44,7 +44,8 @@ module.exports = (params) => {
       let org = faker.helpers.randomize(degreeData().orgs)
 
       // Make 1/3rd of types and orgs be invalid responses
-      if (isApplyDraft){
+      // But don’t spit out invalid data if the section is marked as completed
+      if (isApplyDraft && !sectionIsComplete){
         let randomInvalidType = `**invalid**${faker.helpers.randomize(degreeData().invalidTypes)}`
         type = faker.helpers.randomize([type, type, randomInvalidType])
 

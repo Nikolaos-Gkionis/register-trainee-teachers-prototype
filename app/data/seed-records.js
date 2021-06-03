@@ -113,7 +113,7 @@ seedRecords.push({
     sex: 'Female',
     status: 'Completed'
   },
-  route: 'Assessment only',
+  route: 'School direct (salaried)',
   "trainingDetails": {
     // "traineeStarted": "true",
     "traineeId": "2020/21-053",
@@ -122,7 +122,7 @@ seedRecords.push({
     ]
   },
   courseDetails: {
-    "isPublishCourse" : false,
+    "isPublishCourse" : true,
     status: 'Completed'
   },
   contactDetails: {
@@ -134,11 +134,19 @@ seedRecords.push({
   degree: {
     status: 'Completed'
   },
-  placement: null
+  schools: {
+    status: 'Completed'
+  },
+  placement: {
+    status: 'Completed'
+  },
+  funding: {
+    status: 'Completed'
+  }
 })
 
 seedRecords.push({
-  status: 'Draft',
+  status: 'Apply draft',
   personalDetails: {
     givenName: "Rachel",
     familyName: "Laverty",
@@ -153,6 +161,12 @@ seedRecords.push({
       "Completed"
     ]
   },
+  source: "Apply",
+  applyData: {
+    recruitedDate: "2021-05-23T18:24:34.886Z",
+    applicationDate: "2021-04-10T18:17:24.509Z",
+    status: "Completed"
+  },
   courseDetails: {
     status: 'Completed'
   },
@@ -166,6 +180,9 @@ seedRecords.push({
     status: 'Completed'
   },
   placement: {
+    status: 'Completed'
+  },
+  funding: {
     status: 'Completed'
   }
 })
@@ -199,6 +216,9 @@ seedRecords.push({
     status: 'Completed'
   },
   placement: {
+    status: 'Completed'
+  },
+  funding: {
     status: 'Completed'
   }
 })
