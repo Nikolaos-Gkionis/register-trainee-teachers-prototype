@@ -108,6 +108,29 @@ exports.requiresSection = (record, sectionNames) => {
   return requiredSections.some(section => sectionNames.includes(section))
 }
 
+// Returns: false / Early years / Primary / Secondary
+// Todo: should this be explicitly set on the record?
+exports.getCourseLevel = record => {
+
+  let levels = trainingRouteData.levels
+
+  let matchedLevel
+
+  // Defer to an explicit level if it exists - not all records have this
+  if (record?.courseDetails?.level) matchedLevel = record?.courseDetails?.level
+
+  // Early years routes don’t have an age range - but they’re all implicitly 'Early years'
+  else if (record?.route && record?.route.includes("Early years")) matchedLevel = "Early years"
+
+  // Age range can be used to derive the level
+  else if (record?.courseDetails?.ageRange) {
+    matchedLevel = Object.keys(levels).filter(level => Array.isArray(levels[level]?.ageRanges) && levels[level].ageRanges.includes(record.courseDetails.ageRange)).pop()
+  }
+  else return false
+
+  return matchedLevel
+}
+
 // -------------------------------------------------------------------
 // Funding - initiatives and bursaries
 // -------------------------------------------------------------------
@@ -519,6 +542,11 @@ exports.getRecordById = (records, id) => {
   return records.find(record => record.id == id)
 }
 
+// Look up several records using UUID
+exports.getRecordsById = (records, array) => {
+  return exports.filterRecordsBy(records, 'id', array)
+}
+
 // -------------------------------------------------------------------
 // Filter records
 // -------------------------------------------------------------------
@@ -547,6 +575,18 @@ exports.filterRecords = (records, data, filters = {}) => {
   // if (filter.cycle){
   //   filteredRecords = filteredRecords.filter(record => filter.cycle.includes(record.cycle))
   // }
+
+  // Apply or manual
+  if (filters.source){
+    filteredRecords = filteredRecords.filter(record => filters.source.includes(record.source))
+  }
+
+  // Primary / Secondary etc
+  if (filters.level){
+    filteredRecords = filteredRecords.filter(record => filters.level.includes(exports.getCourseLevel(record)))
+  }
+
+  // List of providers if signed in as multiple
   if (filters.providers){
     filteredRecords = filteredRecords.filter(record => filters.providers.includes(record.provider))
   }
@@ -605,14 +645,9 @@ exports.filterRecordsBySearchTerm = (records, searchQuery=false) => {
 exports.filterRecordsBy = (records, key, array) => {
   array = [].concat(array) // force to array
   let filtered = records.filter(record => {
-    return array.includes(record[key])
+    return array.includes(_.get(record, key))
   })
   return filtered
-}
-
-// Look up several records using UUID
-exports.getRecordsById = (records, array) => {
-  return exports.filterRecordsBy(records, 'id', array)
 }
 
 // Filter records for particular providers
@@ -638,6 +673,16 @@ exports.filterBySignedIn = function(records, data=false){
 // Only records from a specific academic year or years
 exports.filterByYear = (records, array) => {
   return exports.filterRecordsBy(records, 'academicYear', array)
+}
+
+// For use on drafts only?
+exports.filterByComplete = records => {
+  return records.filter(record => exports.recordIsComplete(record))
+}
+
+// For use on drafts only?
+exports.filterByIncomplete = records => {
+  return records.filter(record => !exports.recordIsComplete(record))
 }
 
 // -------------------------------------------------------------------
@@ -838,6 +883,7 @@ exports.registerForTRN = (record) => {
   }
   else {
     record.status = 'Pending TRN'
+    record.source = record.source || "Manual" // just in case
     delete record?.placement?.status
     record.submittedDate = new Date()
     record.updatedDate = new Date()

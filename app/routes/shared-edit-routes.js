@@ -478,6 +478,8 @@ module.exports = router => {
       res.redirect(`${recordPath}/course-details`)
     }
 
+    console.log("Body", req.body)
+
     // Check for autocomplete submitted subject
     let subjectAutocomplete1 = req.body?._autocompleteRawValue_subject_1
 
@@ -492,14 +494,19 @@ module.exports = router => {
         .filter(Boolean)
       // Now need to compare the values we got from the autocompletes with the values from the selects
       // They have different casing, so need to check caselessly
-      record.courseDetails.subjects = record.courseDetails.subjects.filter(subject => {
-        return subjectsTemp.map(autocompleteSubject => autocompleteSubject.toLowerCase()).includes(subject.toLowerCase())
-      })
+      if (record?.courseDetails?.subjects){
+        record.courseDetails.subjects = record.courseDetails.subjects.filter(subject => {
+          return subjectsTemp.map(autocompleteSubject => autocompleteSubject.toLowerCase()).includes(subject.toLowerCase())
+        })
+      }
+
     }
 
     // Clean up subjects data
     // Remove empty and force in to array
-    record.courseDetails.subjects = [].concat(record.courseDetails.subjects.filter(Boolean))
+    if (record?.courseDetails?.subjects){
+      record.courseDetails.subjects = [].concat(record.courseDetails.subjects.filter(Boolean))
+    }
 
     // Merge autocomplete and radio answers
     if (courseDetails.ageRange == 'Other age range'){

@@ -163,7 +163,7 @@ filters.deleteBlankAttributes = (dictionary) => {
 filters.where = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
-    return compare.includes(item[key])
+    return compare.includes(_.get(item, key))
   })
   return filtered
 }
@@ -172,7 +172,7 @@ filters.where = (arr, key, compare) => {
 filters.removeWhere = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
-    return !compare.includes(item[key])
+    return !compare.includes(_.get(item, key))
   })
   return filtered
 }
