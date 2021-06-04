@@ -32,6 +32,7 @@ const getFilters = req => {
   // And these values may contain '_unchecked'
   let filtersToClean = [
   'filterStatus',
+  'filterCompleteStatus',
   'filterSource',
   'filterLevel',
   'filterCycle',
@@ -44,6 +45,7 @@ const getFilters = req => {
   let filters = { 
     status: query.filterStatus,
     source: query.filterSource,
+    completeStatus: query.filterCompleteStatus,
     cycle: query.filterCycle,
     level: query.filterLevel,
     providers: query.filterUserProviders,
@@ -56,7 +58,7 @@ const getFilters = req => {
 
 // Todo: this could probably be simpler
 const getHasFilters = (filters, searchQuery) => {
-  return !!(filters.status) || !!(filters.source) || !!(filters.level) || !!(searchQuery) || !!(filters.subject && filters.subject != 'All subjects') || !!(filters.cycle) || !!(filters.trainingRoutes) || !!(filters.providers)
+  return !!(filters.status) || !!(filters.completeStatus) || !!(filters.source) || !!(filters.level) || !!(searchQuery) || !!(filters.subject && filters.subject != 'All subjects') || !!(filters.cycle) || !!(filters.trainingRoutes) || !!(filters.providers)
 }
 
 // Make object to hold details of selected filters with appropriate links to clear each one
@@ -99,6 +101,24 @@ const getSelectedFilters = req => {
         newQuery.filterCycle = filters.cycle.filter(a => a != cycle)
         return {
           text: cycle,
+          href: url.format({
+            pathname,
+            query: newQuery,
+          })
+        }
+      })
+    })
+  }
+
+  if (filters.completeStatus) {
+    selectedFilters.categories.push({
+      heading: { text: 'Record completion' },
+      items: filters.completeStatus.map((completeStatus) => {
+
+        let newQuery = Object.assign({}, query)
+        newQuery.filterCompleteStatus = filters.completeStatus.filter(a => a != completeStatus)
+        return {
+          text: completeStatus,
           href: url.format({
             pathname,
             query: newQuery,

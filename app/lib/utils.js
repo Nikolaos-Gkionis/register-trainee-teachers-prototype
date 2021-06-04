@@ -576,6 +576,13 @@ exports.filterRecords = (records, data, filters = {}) => {
   //   filteredRecords = filteredRecords.filter(record => filter.cycle.includes(record.cycle))
   // }
 
+  if (filters.completeStatus){
+    filteredRecords = filteredRecords.filter(record => {
+      let completeStatus = (exports.recordIsComplete(record)) ? 'Complete' : 'Incomplete'
+      return filters.completeStatus.includes(completeStatus)
+    })
+  }
+
   // Apply or manual
   if (filters.source){
     filteredRecords = filteredRecords.filter(record => filters.source.includes(record.source))
