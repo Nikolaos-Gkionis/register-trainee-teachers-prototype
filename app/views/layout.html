@@ -111,7 +111,7 @@
       text: 'Draft records',
       href: '/drafts',
       active: true if navActive == 'drafts'
-    },
+    } if data.settings.draftsInPrimaryNav == 'true',
     {
       text: 'Trainee records',
       href: '/records',
@@ -128,6 +128,9 @@
       active: true if navActive == 'courses'
     } if false
     ] %}
+
+    {# MOJ primary nav does’t handle empty items well, so remove them here #}
+    {% set navItems = navItems | removeEmpty %}
 
   {% if not hidePrimaryNav %}
 

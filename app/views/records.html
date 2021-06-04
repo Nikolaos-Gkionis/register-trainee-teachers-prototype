@@ -1,7 +1,9 @@
 {% extends "_templates/_page.html" %}
 
+{% set pageBaseName = "Trainee records" if data.settings.draftsInPrimaryNav else "Registered trainees" %}
+
 {% set pageHeading %}
-  Trainee records ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})
+  {{pageBaseName}} ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})
 {% endset %}
 
 {% set backText = "Home" %}
@@ -125,9 +127,9 @@
         <form action="/bulk-action/new/direct" method="post" novalidate>
 
           <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
+            {# <div class="govuk-grid-column-one-half">
               <h2 class="govuk-heading-m">Records</h2>
-            </div>
+            </div> #}
 
             {% if data.settings.showBulkLinks %}
               <div class="govuk-grid-column-one-half">
@@ -157,29 +159,31 @@
 
 
 
-{{ appSubNavigation({
-  label: 'Sub navigation',
-  classes: 'govuk-!-margin-bottom-8',
-  items: [
-  {
-    text: 'Draft records',
-    href: '/drafts',
-    active: (currentPageUrl == "/drafts")
-  },
-  {
-    text: 'Trainee records',
-    href: '/records',
-    active: (currentPageUrl == "/records")
-  }
-  ]
-}) }}
+{% if not data.settings.draftsInPrimaryNav | falsify %}
+  {{ appSubNavigation({
+    label: 'Sub navigation',
+    classes: 'govuk-!-margin-bottom-8',
+    items: [
+    {
+      text: 'Draft records',
+      href: '/drafts',
+      active: (currentPageUrl == "/drafts")
+    },
+    {
+      text: 'Registered trainees',
+      href: '/records',
+      active: (currentPageUrl == "/records")
+    }
+    ]
+  }) }}
+{% endif %}
 
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
 
     {# This heading set separately than {{pageHeading}} as it uses html #}
-    <h1 class="govuk-heading-xl">Trainee records ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
+    <h1 class="govuk-heading-xl">{{pageBaseName}} ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
     
     {{ govukButton({
       text: "Add a trainee",

@@ -6,7 +6,7 @@
 
 {% set backText = "Home" %}
 {% set backLink = '/home' %}
-{% set navActive = "drafts" %}
+{% set navActive = "drafts" if data.settings.draftsInPrimaryNav | falsify else "records" %}
 
 {# Dual skip links to support skipping to results rather than #main-content #}
 {% block skipLink %}
@@ -103,11 +103,15 @@
               <div class="govuk-grid-column-two-thirds">
                 <h2 class="govuk-heading-m">Completed drafts - ready to submit</h2>
               </div>
-
+              <div class="govuk-grid-column-one-third">
+                <p class="govuk-body"><a href="/bulk-action/new/register-for-trn?_select=all" class="govuk-link align-right">Submit for TRN</a></p>
+              </div>
               {% if data.settings.showBulkLinks %}
-                <div class="govuk-grid-column-one-half">
-                  <input type="hidden" name="[bulk][action]" value="Submit a group of records and request TRNs">
-                  <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Submit draft records for TRN</button>
+                <div class="govuk-grid-column-one-third">
+                  {# <input type="hidden" name="[bulk][action]" value="Submit a group of records and request TRNs"> #}
+                  {# <input type="hidden" name="[bulk][select]" value="all"> #}
+                  <p class="govuk-body"><a href="/bulk-action/new/register-for-trn?_select=all" class="govuk-link align-right">Submit for TRN</a></p>
+                  {# <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Submit draft records for TRN</button> #}
                 </div>
               {% endif %}
 
@@ -222,23 +226,24 @@
   {% endif %}
 {% endset %}
 
-
-{{ appSubNavigation({
-  label: 'Sub navigation',
-  classes: 'govuk-!-margin-bottom-8',
-  items: [
-  {
-    text: 'Draft records',
-    href: '/drafts',
-    active: (currentPageUrl == "/drafts")
-  },
-  {
-    text: 'Trainee records',
-    href: '/records',
-    active: (currentPageUrl == "/records")
-  }
-  ]
-}) }}
+{% if not data.settings.draftsInPrimaryNav %}
+  {{ appSubNavigation({
+    label: 'Sub navigation',
+    classes: 'govuk-!-margin-bottom-8',
+    items: [
+    {
+      text: 'Draft records',
+      href: '/drafts',
+      active: (currentPageUrl == "/drafts")
+    },
+    {
+      text: 'Registered trainees',
+      href: '/records',
+      active: (currentPageUrl == "/records")
+    }
+    ]
+  }) }}
+{% endif %}
 
 
 <div class="govuk-grid-row">
