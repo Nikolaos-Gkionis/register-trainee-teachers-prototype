@@ -1,6 +1,6 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageBaseName = "Trainee records" if data.settings.draftsInPrimaryNav else "Registered trainees" %}
+{% set pageBaseName = "Trainee records" if data.settings.draftsInPrimaryNav | falsify else "Registered trainees" %}
 
 {% set pageHeading %}
   {{pageBaseName}} ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})

@@ -226,7 +226,7 @@
   {% endif %}
 {% endset %}
 
-{% if not data.settings.draftsInPrimaryNav %}
+{% if not data.settings.draftsInPrimaryNav | falsify %}
   {{ appSubNavigation({
     label: 'Sub navigation',
     classes: 'govuk-!-margin-bottom-8',
