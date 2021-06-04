@@ -38,7 +38,17 @@ module.exports = router => {
     data.bulk = {
       action: "Submit a group of records and request TRNs",
     }
-    res.redirect(`/bulk-action/filter-trainees`)
+
+    // Hack to bypass filter page
+    // Todo: provide a simpler method of filtering all
+    if (req.query?._select == 'all'){
+      data.bulk.filters = { subject: 'All subjects' }
+      res.redirect(`/bulk-action/select-trainees`)
+    }
+    else {
+      res.redirect(`/bulk-action/filter-trainees`)
+    }
+
   })
 
   // Bypass action page
@@ -136,6 +146,7 @@ module.exports = router => {
 
       // Coming from the filters page
       else if (bulk?.filters){
+        console.log(bulk.filters)
 
         // Create group of records using provided filters
         filteredRecords = utils.filterRecords(allRecords, data, bulk.filters)
@@ -244,7 +255,14 @@ module.exports = router => {
     delete data.bulk
 
     req.flash('success', `${successCount} ${filters.pluralise('record', successCount)} submitted`)
-    res.redirect(`/records/`)
+
+    if (bulk.action == 'Recommend a group of trainees for EYTS or QTS'){
+      res.redirect(`/records`)
+    }
+    else {
+      res.redirect(`/drafts`)
+    }
+
   })
 
 }

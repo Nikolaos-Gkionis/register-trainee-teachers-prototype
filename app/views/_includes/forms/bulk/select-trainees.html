@@ -34,7 +34,7 @@
   {% set incompleteDraftTextHtml %}
     {% if incompleteCount != 1 %}
       <p class="govuk-body">
-        There are {{incompleteCount}} {{'more ' if filteredRecords | length }}draft records that match your filters but are not complete and cannot be submitted. {{ draftLinkHtml | safe }}
+        There are {{incompleteCount}} {{'more ' if filteredRecords | length }}draft records that are not complete and cannot be submitted. {{ draftLinkHtml | safe }}
       </p>
     {% else %}
       <p class="govuk-body">
