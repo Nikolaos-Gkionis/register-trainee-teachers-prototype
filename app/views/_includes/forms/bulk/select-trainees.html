@@ -28,13 +28,13 @@
   {% set draftLinkHtml %}
     <p class="govuk-body govuk-!-margin-bottom-0">
       <a href="/drafts?filterCompleteStatus=Incomplete" class="govuk-link">View incomplete draft records</a>
-    </p> 
+    </p>
   {% endset %}
 
   {% set incompleteDraftTextHtml %}
     {% if incompleteCount != 1 %}
       <p class="govuk-body">
-        There are {{incompleteCount}} {{'more ' if filteredRecords | length }}draft records that are not complete and cannot be submitted. {{ draftLinkHtml | safe }}
+        You have {{incompleteCount}} {{'more ' if filteredRecords | length }}draft records that are incomplete and cannot be registered yet. {{ draftLinkHtml | safe }}
       </p>
     {% else %}
       <p class="govuk-body">
@@ -54,7 +54,7 @@
   {% set linkHtml %}
     <p class="govuk-body govuk-!-margin-bottom-0">
       <a href="/records" class="govuk-link">Complete the outstanding actions to recommend them for QTS</a>
-    </p> 
+    </p>
   {% endset %}
 
   {% set incompleteTextHtml %}
@@ -107,7 +107,7 @@
 
   {# No inset text, so legend is the h1 #}
   {% else %}
-    
+
     {{ govukCheckboxes({
       fieldset: {
         legend: {

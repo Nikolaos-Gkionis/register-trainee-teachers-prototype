@@ -12,7 +12,7 @@
 {% set record = data.records | getRecordById(data.submittedRecordId) or {} %}
 
 {% set panelTitleText %}
-  Record submitted {{ ("for " + record.personalDetails.shortName) if record.personalDetails.shortName }}
+ {{ (record.personalDetails.shortName) if record.personalDetails.shortName }} is registered
 {% endset %}
 
 {{ govukPanel({

@@ -28,7 +28,7 @@
 
 {% set insetTextHtml %}
   {% if record.courseDetails %}
-    <p class="govuk-body">Trainee recruited to {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
+    <p class="govuk-body">All conditions met and trainee recruited to {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
   {% else %}
     No data to show
   {% endif %}
@@ -45,9 +45,9 @@
 {# <p class="govuk-body">
   Application submitted on {{ record.applyData.applicationDate | govukDate }}
 </p> #}
-<p class="govuk-body">
+{#<p class="govuk-body">
   Met all conditions on {{ record.applyData.recruitedDate | govukDate }}
-</p>
+</p>#}
 
 {{ appTaskList({
   classes: "govuk-!-margin-bottom-8",

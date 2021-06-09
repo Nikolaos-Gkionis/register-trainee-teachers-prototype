@@ -42,7 +42,7 @@ const getFilters = req => {
 
   // Remap to an object so we can pass it to the filterRecords function
   // that is shared by the
-  let filters = { 
+  let filters = {
     status: query.filterStatus,
     source: query.filterSource,
     completeStatus: query.filterCompleteStatus,
@@ -112,7 +112,7 @@ const getSelectedFilters = req => {
 
   if (filters.completeStatus) {
     selectedFilters.categories.push({
-      heading: { text: 'Record completion' },
+      heading: { text: 'Draft completion' },
       items: filters.completeStatus.map((completeStatus) => {
 
         let newQuery = Object.assign({}, query)
@@ -130,7 +130,7 @@ const getSelectedFilters = req => {
 
   if (filters.source) {
     selectedFilters.categories.push({
-      heading: { text: 'Data source' },
+      heading: { text: 'Record source' },
       items: filters.source.map((source) => {
 
         let newQuery = Object.assign({}, query)

@@ -1,6 +1,6 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageBaseName = "Trainee records" if data.settings.draftsInPrimaryNav | falsify else "Registered trainees" %}
+{% set pageBaseName = "Registered trainee records" if data.settings.draftsInPrimaryNav | falsify else "Registered trainees" %}
 
 {% set pageHeading %}
   {{pageBaseName}} ({{filteredRecords | length}} {{ "record" | pluralise(filteredRecords | length) }})
@@ -137,7 +137,7 @@
                 <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
               </div>
             {% endif %}
-            
+
           </div>
 
           {% for record in nonDraftRecords %}
@@ -147,7 +147,7 @@
         </form>
       {% endif %}
     </div>
-    
+
     {# Dummy pagination - not hooked up to data yet #}
     {% include "_includes/pagination.njk" %}
 
@@ -184,7 +184,7 @@
 
     {# This heading set separately than {{pageHeading}} as it uses html #}
     <h1 class="govuk-heading-xl">{{pageBaseName}} ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
-    
+
     {{ govukButton({
       text: "Add a trainee",
       href: "./new-record/new",

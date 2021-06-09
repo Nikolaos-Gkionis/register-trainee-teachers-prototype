@@ -24,7 +24,7 @@
     <div class="govuk-grid-row">
 
       <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-heading-m"><a href="/records" class="govuk-link govuk-link--no-visited-state">Trainee records</a></h2>
+        <h2 class="govuk-heading-m"><a href="/records" class="govuk-link govuk-link--no-visited-state">Registered trainees</a></h2>
         <p class="govuk-body">Review and manage your trainee records.</p>
       </div>
 
@@ -82,8 +82,8 @@
         {% set searchStatus = status %}
         <a href="/records?filterStatus={{status}}" class="status-card status-card--{{ status | lower | kebabCase }}">
       {% endif %}
-      
-        
+
+
         {% set recordCount = records | where("status", searchStatus) | length %}
         <span class="status-card__count">{{recordCount}}</span>
         <span class="status-card__status">{{status}}</span><span class="govuk-visually-hidden"> records. View these records.</span>

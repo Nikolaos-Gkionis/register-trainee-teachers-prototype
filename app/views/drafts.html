@@ -65,7 +65,7 @@
 
   {# {% include "_includes/filter-panel/statuses.njk" %} #}
 
-  
+
 {% endset %}
 
 {% set filterContentHtml %}
@@ -101,10 +101,10 @@
           <div class="govuk-!-margin-bottom-8">
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
-                <h2 class="govuk-heading-m">Completed drafts - ready to submit</h2>
+                <h2 class="govuk-heading-m">Complete drafts - ready to register</h2>
               </div>
               <div class="govuk-grid-column-one-third">
-                <p class="govuk-body"><a href="/bulk-action/new/register-for-trn?_select=all" class="govuk-link align-right">Submit for TRN</a></p>
+                <p class="govuk-body"><a href="/bulk-action/new/register-for-trn?_select=all" class="govuk-link align-right">Register trainees</a></p>
               </div>
               {% if data.settings.showBulkLinks %}
                 <div class="govuk-grid-column-one-third">
@@ -148,7 +148,7 @@
                 <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
               </div>
             {% endif %}
-            
+
           </div>
 
           {% for record in incompleteDrafts %}
@@ -177,7 +177,7 @@
                 <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
               </div>
             {% endif %}
-            
+
           </div>
 
           {% for record in applyDrafts %}
@@ -205,7 +205,7 @@
                 <button role="link" class="govuk-body app-button-as-link govuk-link align-right">Recommend trainees for EYTS or QTS</button>
               </div>
             {% endif %}
-            
+
           </div>
 
           {% for record in manualDrafts %}
@@ -216,7 +216,7 @@
       {% endif %}
 
     </div>
-    
+
     {# Dummy pagination - not hooked up to data yet #}
     {% include "_includes/pagination.njk" %}
 
@@ -252,7 +252,7 @@
 
     {# This heading set separately than {{pageHeading}} as it is html #}
     <h1 class="govuk-heading-xl">Draft records ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
-    
+
     {{ govukButton({
       text: "Add a trainee",
       href: "./new-record/new",
@@ -294,7 +294,7 @@
 
   <div class="govuk-grid-column-full">
 
-    
+
 
     {{ appFilterPage({
       filterOptions: filterOptionsHtml,
