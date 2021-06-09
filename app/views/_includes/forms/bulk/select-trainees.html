@@ -38,7 +38,7 @@
       </p>
     {% else %}
       <p class="govuk-body">
-        There is {{incompleteCount}} {{'more ' if filteredRecords | length }}draft record that matches your filters but is not complete and cannot be submitted. {{ draftLinkHtml | safe }}
+        You have {{incompleteCount}} {{'more ' if filteredRecords | length }}draft record that matches your filters. It is incomplete and cannot be submitted yet. {{ draftLinkHtml | safe }}
       </p>
     {% endif %}
   {% endset %}
