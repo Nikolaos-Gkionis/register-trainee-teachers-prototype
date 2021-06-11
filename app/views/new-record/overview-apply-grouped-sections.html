@@ -76,8 +76,7 @@
 
 <h2 class="govuk-heading-m">About their teacher training</h2>
 
-{# Conditional hint text #}
-{# Todo: remove this when making schools a separate section #}
+{# Conditional section label #}
 {% set includesSchools = record | requiresField(["leadSchool", "employingSchool"]) %}
 {% if includesSchools %}
   {% if record | requiresField(["leadSchool", "employingSchool"]) %}
