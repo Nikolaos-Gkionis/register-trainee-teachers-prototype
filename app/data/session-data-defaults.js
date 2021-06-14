@@ -89,6 +89,9 @@ settings.includeDeclaration = false
 // Enable timeline on records
 settings.showBulkLinks = false
 
+// Where drafts page should live
+settings.draftsInPrimaryNav = 'true'
+
 // Start date is required when registering trainees
 settings.requireTraineeStartDate = 'true'
 

@@ -7,8 +7,8 @@
 {% endif %}
 
 {% set hideReturnLink = true %}
-{% set backLink = '/records' %}
-{% set backText = "All records" %}
+{% set backLink = '/drafts' %}
+{% set backText = "All drafts" %}
 
 
 {% block formContent %}
@@ -97,6 +97,18 @@
   {% endif %}
 {% endset %}
 
+{# Conditional section label #}
+{% set includesSchools = record | requiresField(["leadSchool", "employingSchool"]) %}
+{% if includesSchools %}
+  {% if record | requiresField(["leadSchool", "employingSchool"]) %}
+    {% set schoolSectionLabel = "Lead and employing schools" %}
+  {% elseif record | requiresField(["leadSchool"]) %}
+    {% set schoolSectionLabel = "Lead school" %}
+  {% elseif record | requiresField(["employingSchool"]) %}
+    {% set schoolSectionLabel = "Employing school" %}
+  {% endif %}
+{% endif %}
+
 {{ appTaskList({
   classes: "govuk-!-margin-bottom-8",
   items: [{
@@ -127,7 +139,7 @@
     }
   } if record | requiresSection("trainingDetails"),
   {
-    text: "Schools",
+    text: schoolSectionLabel,
     href: "schools" | reviewIfInProgress(record.schools),
     id: "schools",
     tag: {

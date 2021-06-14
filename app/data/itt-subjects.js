@@ -209,8 +209,6 @@ commonPrimarySubjects = upcaseFirstChar([
   "French language",
 ])
 
-console.log(commonPrimarySubjects)
-
 commonSecondarySubjects = upcaseFirstChar([
   "creative arts and design",
   "biology",

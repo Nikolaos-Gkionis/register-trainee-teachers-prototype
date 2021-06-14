@@ -97,6 +97,15 @@
         items: [
           {
             value: 'true',
+            text: "Include drafts in primary nav"
+          }
+        ]
+      } | decorateAttributes(data, "data.settings.draftsInPrimaryNav")) }}
+
+      {{ govukCheckboxes({
+        items: [
+          {
+            value: 'true',
             text: "Trainees need a start date to register for TRN"
           }
         ]

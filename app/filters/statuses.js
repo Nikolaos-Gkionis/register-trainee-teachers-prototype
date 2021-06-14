@@ -25,6 +25,7 @@ const _ = require('lodash')
 
 filters.getStatusText = function(data, defaultNotStarted=false, defaultInProgress=false) {
   if (!data) return defaultNotStarted || "Incomplete"
+  if (data?.status == "Apply draft") return "Draft"
   if (data?.status) return data.status
   else return defaultInProgress || "In progress"
 }

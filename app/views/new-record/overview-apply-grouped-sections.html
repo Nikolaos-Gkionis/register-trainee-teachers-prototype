@@ -7,8 +7,8 @@
 {% endif %}
 
 {% set hideReturnLink = true %}
-{% set backLink = '/records' %}
-{% set backText = "All records" %}
+{% set backLink = '/drafts' %}
+{% set backText = "All drafts" %}
 
 
 {% block formContent %}
@@ -28,7 +28,7 @@
 
 {% set insetTextHtml %}
   {% if record.courseDetails %}
-    <p class="govuk-body">Trainee recruited to {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
+    <p class="govuk-body">All conditions met and trainee recruited to {{ record.courseDetails | getCourseName }}, {{record.route}}</p>
   {% else %}
     No data to show
   {% endif %}
@@ -45,9 +45,9 @@
 {# <p class="govuk-body">
   Application submitted on {{ record.applyData.applicationDate | govukDate }}
 </p> #}
-<p class="govuk-body">
+{#<p class="govuk-body">
   Met all conditions on {{ record.applyData.recruitedDate | govukDate }}
-</p>
+</p>#}
 
 {{ appTaskList({
   classes: "govuk-!-margin-bottom-8",
@@ -76,8 +76,7 @@
 
 <h2 class="govuk-heading-m">About their teacher training</h2>
 
-{# Conditional hint text #}
-{# Todo: remove this when making schools a separate section #}
+{# Conditional section label #}
 {% set includesSchools = record | requiresField(["leadSchool", "employingSchool"]) %}
 {% if includesSchools %}
   {% if record | requiresField(["leadSchool", "employingSchool"]) %}

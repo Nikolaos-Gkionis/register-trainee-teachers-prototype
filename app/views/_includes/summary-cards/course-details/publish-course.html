@@ -170,7 +170,7 @@
 
 {% set courseDetailsHtml %}
   {{ govukSummaryList({
-    rows: courseDetailsRows
+    rows: courseDetailsRows | highlightInvalidRows
   }) }}
 {% endset %}
 

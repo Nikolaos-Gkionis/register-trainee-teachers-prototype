@@ -23,6 +23,7 @@ module.exports = router => {
     const data = req.session.data
     utils.deleteTempData(data)
     _.set(data, 'record', { status: 'Draft' })
+    _.set(data, 'record', { source: 'Manual' })
     _.set(data, 'record.events.items', [])
     // If multiple providers, users must pick one as thier first action
     if (data.signedInProviders.length > 1){
@@ -199,10 +200,11 @@ module.exports = router => {
     }
     else {
       record.status = record.status || "Draft" // just in case
+      record.source = record.source || "Manual" // just in case
       utils.deleteTempData(data)
       utils.updateRecord(data, record)
       // req.flash('success', 'Record saved as draft')
-      res.redirect('/records')
+      res.redirect('/drafts')
     }
   })
 

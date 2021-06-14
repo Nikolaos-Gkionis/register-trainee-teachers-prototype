@@ -1,6 +1,7 @@
 const url = require('url')
 const _ = require('lodash')
 const utils = require('./../lib/utils')
+const objectFilters = require('./../filters/objects.js').filters
 
 // Work around a bug where occasionally _unchecked would appear
 // Also coerce to array to be easier to work with
@@ -31,6 +32,9 @@ const getFilters = req => {
   // And these values may contain '_unchecked'
   let filtersToClean = [
   'filterStatus',
+  'filterCompleteStatus',
+  'filterSource',
+  'filterLevel',
   'filterCycle',
   'filterUserProviders',
   'filterTrainingRoutes']
@@ -38,9 +42,12 @@ const getFilters = req => {
 
   // Remap to an object so we can pass it to the filterRecords function
   // that is shared by the
-  let filters = { 
+  let filters = {
     status: query.filterStatus,
+    source: query.filterSource,
+    completeStatus: query.filterCompleteStatus,
     cycle: query.filterCycle,
+    level: query.filterLevel,
     providers: query.filterUserProviders,
     trainingRoutes: query.filterTrainingRoutes,
     subject: query.filterSubject
@@ -51,7 +58,7 @@ const getFilters = req => {
 
 // Todo: this could probably be simpler
 const getHasFilters = (filters, searchQuery) => {
-  return !!(filters.status) || !!(searchQuery) || !!(filters.subject && filters.subject != 'All subjects') || !!(filters.cycle) || !!(filters.trainingRoutes) || !!(filters.providers)
+  return !!(filters.status) || !!(filters.completeStatus) || !!(filters.source) || !!(filters.level) || !!(searchQuery) || !!(filters.subject && filters.subject != 'All subjects') || !!(filters.cycle) || !!(filters.trainingRoutes) || !!(filters.providers)
 }
 
 // Make object to hold details of selected filters with appropriate links to clear each one
@@ -94,6 +101,60 @@ const getSelectedFilters = req => {
         newQuery.filterCycle = filters.cycle.filter(a => a != cycle)
         return {
           text: cycle,
+          href: url.format({
+            pathname,
+            query: newQuery,
+          })
+        }
+      })
+    })
+  }
+
+  if (filters.completeStatus) {
+    selectedFilters.categories.push({
+      heading: { text: 'Draft completion' },
+      items: filters.completeStatus.map((completeStatus) => {
+
+        let newQuery = Object.assign({}, query)
+        newQuery.filterCompleteStatus = filters.completeStatus.filter(a => a != completeStatus)
+        return {
+          text: completeStatus,
+          href: url.format({
+            pathname,
+            query: newQuery,
+          })
+        }
+      })
+    })
+  }
+
+  if (filters.source) {
+    selectedFilters.categories.push({
+      heading: { text: 'Record source' },
+      items: filters.source.map((source) => {
+
+        let newQuery = Object.assign({}, query)
+        newQuery.filterSource = filters.source.filter(a => a != source)
+        return {
+          text: source,
+          href: url.format({
+            pathname,
+            query: newQuery,
+          })
+        }
+      })
+    })
+  }
+
+  if (filters.level) {
+    selectedFilters.categories.push({
+      heading: { text: 'Course level' },
+      items: filters.level.map((level) => {
+
+        let newQuery = Object.assign({}, query)
+        newQuery.filterLevel = filters.level.filter(a => a != level)
+        return {
+          text: level,
           href: url.format({
             pathname,
             query: newQuery,
@@ -179,44 +240,9 @@ const getSelectedFilters = req => {
 }
 
 
-const handleRecordsFilters = (req, res) => {
-  const data = req.session.data
-  // We're not in a record, so make sure to flush record data
-  delete req.session?.data?.record
-  delete res.locals.data?.record
-
-  // Grab filters and clean them up
-  let filters = getFilters(req)
-  let searchQuery = getSearchQuery(req)
-
-  let hasFilters = getHasFilters(filters, searchQuery)
-
-  // Show selected filters as labels that can be individually removed
-  let selectedFilters = getSelectedFilters(req)
-
-  // Filter records using the filters provided
-  let filteredRecords = utils.filterRecords(data.records, data, filters)
-
-  // Search traineeId and full name
-  filteredRecords = utils.filterRecordsBySearchTerm(filteredRecords, searchQuery)
-
-  // Sort records by sortOrder, defaulting to updatedDate
-  filteredRecords = utils.sortRecordsBy(filteredRecords, (req?.query?.sortOrder || 'updatedDate'))
-  
-  return {
-    filteredRecords,
-    hasFilters,
-    selectedFilters,
-    linkSortByName: createSortLink(req, "lastName"),
-    linkSortByDateUpdated: createSortLink(req, "updatedDate")
-  }
-}
-
 module.exports = router => {
 
-  // Route for page
-  // Filters
-  router.get(['/records', '/drafts'], function (req, res) {
+  router.get(['/records'], function (req, res) {
     const data = req.session.data
 
     // We’re not in a record, so make sure to flush record data
@@ -235,6 +261,9 @@ module.exports = router => {
     // Filter records using the filters provided
     let filteredRecords = utils.filterRecords(data.records, data, filters)
 
+    // All records except drafts
+    filteredRecords = objectFilters.removeWhere(filteredRecords, 'status', ["Draft", "Apply draft"])
+
     // Search traineeId and full name
     filteredRecords = utils.filterRecordsBySearchTerm(filteredRecords, searchQuery)
 
@@ -244,6 +273,43 @@ module.exports = router => {
 
 
     res.render('records', {
+      filteredRecords,
+      hasFilters,
+      selectedFilters
+    })
+  })
+
+  router.get(['/drafts'], function (req, res) {
+    const data = req.session.data
+
+    // We’re not in a record, so make sure to flush record data
+    delete req.session?.data?.record
+    delete res.locals.data?.record
+
+    // Grab filters and clean them up
+    let filters = getFilters(req)
+    let searchQuery = getSearchQuery(req)
+
+    let hasFilters = getHasFilters(filters, searchQuery)
+
+    // Show selected filters as labels that can be individually removed
+    let selectedFilters = getSelectedFilters(req)
+
+    // Filter records using the filters provided
+    let filteredRecords = utils.filterRecords(data.records, data, filters)
+
+    // Only drafts
+    filteredRecords = utils.filterRecordsBy(filteredRecords, 'status', ["Draft", "Apply draft"])
+
+    // Search traineeId and full name
+    filteredRecords = utils.filterRecordsBySearchTerm(filteredRecords, searchQuery)
+
+    // Sort records by sortOrder, defaulting to updatedDate
+    filteredRecords = utils.sortRecordsBy(filteredRecords, (req?.query?.sortOrder || 'updatedDate'))
+
+
+
+    res.render('drafts', {
       filteredRecords,
       hasFilters,
       selectedFilters

@@ -44,6 +44,9 @@
 {% from "_components/timeline/macro.njk"   import appTimeline %}
 {% from "_components/invalid-answer/macro.njk"   import appInvalidAnswer with context %}
 
+{# Wrapper of moj’s filter stuff #}
+{% from "_components/filter-page/macro.njk"         import appFilterPage %}
+
 {# moj components #}
 {%- from "moj/components/filter/macro.njk" import mojFilter -%}
 {%- from "moj/components/button-menu/macro.njk" import mojButtonMenu -%}
@@ -86,13 +89,13 @@
 
       <nav class="moj-primary-navigation">
         <ul class="moj-primary-navigation__list">
-          
+
             <li class="moj-primary-navigation__item">
               <a class="moj-primary-navigation__link" {{ 'aria-current="page"' | safe if navActive == 'provider' }} href="/select-provider">
                 {{ data.settings.userActiveProvider }}
               </a>
             </li>
-          
+
         </ul>
 
       </nav>
@@ -105,7 +108,12 @@
       active: true if navActive == 'home'
     },
     {
-      text: 'Trainee records',
+      text: 'Draft records',
+      href: '/drafts',
+      active: true if navActive == 'drafts'
+    } if data.settings.draftsInPrimaryNav == 'true',
+    {
+      text: 'Registered trainees',
       href: '/records',
       active: true if navActive == 'records'
     },
@@ -120,6 +128,9 @@
       active: true if navActive == 'courses'
     } if false
     ] %}
+
+    {# MOJ primary nav does’t handle empty items well, so remove them here #}
+    {% set navItems = navItems | removeEmpty %}
 
   {% if not hidePrimaryNav %}
 

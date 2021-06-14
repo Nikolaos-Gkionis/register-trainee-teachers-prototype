@@ -1,0 +1,20 @@
+{{ govukCheckboxes({
+  classes: "govuk-checkboxes--small js-auto-submit",
+  fieldset: {
+    legend: {
+      text: "Course start",
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  items: [
+    {
+      text: "2020/21 (current)",
+      checked: checked(query.filterCycle, "2020/21 (current)") if query.filterCycle else filterCycleCurrentYearDefault
+    },
+    {
+      text: "2019/20",
+      checked: checked(query.filterCycle, "2019/20")
+    }
+  ]
+} | decorateAttributes(data, "data.filterCycle"))}}
