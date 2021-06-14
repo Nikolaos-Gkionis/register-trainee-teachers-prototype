@@ -146,7 +146,6 @@ module.exports = router => {
 
       // Coming from the filters page
       else if (bulk?.filters){
-        console.log(bulk.filters)
 
         // Create group of records using provided filters
         filteredRecords = utils.filterRecords(allRecords, data, bulk.filters)
