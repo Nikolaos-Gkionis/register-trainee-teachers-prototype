@@ -17,12 +17,11 @@ let applyRoutes = [
 
 // Not all these routes will be enabled
 let publishRoutes = [
-  'Apprenticeship (postgrad)',
+  'Teaching apprenticeship (postgrad)',
   'Provider-led (postgrad)',
   'Provider-led (undergrad)',
   'School direct (salaried)',
   'School direct (fee funded)',
-  'Teaching apprenticeship',
 ]
 
 let nonPublishRoutes = [
@@ -206,7 +205,27 @@ let baseRouteData = {
     ]
   },
   "Teach first (postgrad)": {},
-  "Apprenticeship (postgrad)": {
+  "Teaching apprenticeship (postgrad)": {
+    defaultEnabled: true,
+    sections: [
+      'trainingDetails',
+      'courseDetails',
+      'personalDetails',
+      'contactDetails',
+      'diversity',
+      'degree',
+      'schools',
+      // 'placement',
+      'funding'
+    ],
+    fields: [
+      "leadSchool",
+      'employingSchool'
+    ],
+    initiatives: [
+      "Now teach",
+      "Transition to teach"
+    ],
     bursariesAvailable: false
   },
   "Opt-in undergrad": {
