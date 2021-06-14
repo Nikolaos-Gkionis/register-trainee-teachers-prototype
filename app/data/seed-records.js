@@ -84,24 +84,57 @@ seedRecords.push({
 
 // Partially complete draft
 seedRecords.push({
-  status: 'Draft',
+  status: 'Apply draft',
   personalDetails: {
     givenName: "Samantha",
     familyName: "Koch",
-    sex: 'Female',
-    status: 'Completed'
+    sex: 'Female'
   },
-  route: 'Assessment only',
-  trainingDetails: {
-    status: 'Completed'
+  source: "Apply",
+  applyData: {
+    recruitedDate: "2021-05-23T18:24:34.886Z",
+    applicationDate: "2021-04-10T18:17:24.509Z"
   },
-  courseDetails: {
-    status: 'Completed',
-    isPublishCourse: false
+  "updatedDate": "2021-06-13T19:28:56.667Z",
+  route: 'Provider-led (postgrad)',
+  trainingDetails: null,
+  "courseDetails": {
+    "ageRange": "11 to 19",
+    "code": "P369",
+    "duration": 1,
+    "endDate": "2022-05-31T23:00:00.000Z",
+    "id": "f6f63798-910c-4174-8f72-3eed1c6cb2f9",
+    "isPublishCourse": true,
+    "level": "Secondary",
+    "qualifications": [
+      "QTS",
+      "PGCE"
+    ],
+    "qualificationsSummary": "PGCE with QTS full time",
+    "route": "Provider-led (postgrad)",
+    "startDate": "2021-08-31T23:00:00.000Z",
+    "studyMode": "Full time",
+    "subjects": [
+      "Mathematics"
+    ]
   },
-  contactDetails: null,
-  diversity: null,
-  degree: null
+  funding: null,
+  degree: {
+    "items": [
+      {
+        "type": "**invalid**Masters",
+        "subject": "Civil engineering",
+        "isInternational": "false",
+        "org": "Heythrop College",
+        "country": "United Kingdom",
+        "grade": "Distinction",
+        "predicted": false,
+        "startDate": "2012",
+        "endDate": "2016",
+        "id": "0c79cba8-cdc3-431d-96f2-62f59855cb97"
+      }
+    ]
+  }
 })
 
 // Fully complete draft - ready to submit
