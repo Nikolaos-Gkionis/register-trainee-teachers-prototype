@@ -12,13 +12,14 @@ module.exports = (params, application) => {
     const endDate = faker.helpers.randomize(['2020','2019','2018','2017','2016','2015'])
     const startDate = (parseInt(endDate) - 4).toString()
     const id = faker.random.uuid()
-    const sectionIsComplete = (params?.status == "Completed")
+    const sectionIsComplete = (params?.degree?.status == "Completed")
+    const invalidAllowed = (params?.invalidAllowed === false) ? false : true
 
     // Make 1/3rd of subjects be invalid responses for Apply applications
     // But don’t spit out invalid data if the section is marked as completed
-    if (isApplyDraft && !sectionIsComplete){
+    if (isApplyDraft && !sectionIsComplete && invalidAllowed){
       let invalidSubject = `**invalid**${faker.helpers.randomize(degreeData().invalidSubjects)}`
-      subject = faker.helpers.randomize([subject, subject, invalidSubject])
+      subject = weighted.select([subject, invalidSubject], [0.9, 0.1])
     }
 
     if (application.isInternationalTrainee) {
@@ -45,12 +46,12 @@ module.exports = (params, application) => {
 
       // Make 1/3rd of types and orgs be invalid responses
       // But don’t spit out invalid data if the section is marked as completed
-      if (isApplyDraft && !sectionIsComplete){
+      if (isApplyDraft && !sectionIsComplete  && invalidAllowed){
         let randomInvalidType = `**invalid**${faker.helpers.randomize(degreeData().invalidTypes)}`
-        type = faker.helpers.randomize([type, type, randomInvalidType])
+        type = weighted.select([type, randomInvalidType], [0.9, 0.1])
 
         let randomInvalidOrg = `**invalid**${faker.helpers.randomize(degreeData().invalidInstitutions)}`
-        org = faker.helpers.randomize([org, org, randomInvalidOrg])
+        org = weighted.select([org, randomInvalidOrg], [0.9, 0.1])
       }
 
       const level = type.level

@@ -82,7 +82,7 @@ seedRecords.push({
   placement: null
 })
 
-// Partially complete draft
+// Partially complete apply draft with one piece of invalid data, course is eligible for a bursary
 seedRecords.push({
   status: 'Apply draft',
   personalDetails: {
@@ -97,7 +97,6 @@ seedRecords.push({
   },
   "updatedDate": "2021-06-13T19:28:56.667Z",
   route: 'Provider-led (postgrad)',
-  trainingDetails: null,
   "courseDetails": {
     "ageRange": "11 to 19",
     "code": "P369",
@@ -118,9 +117,17 @@ seedRecords.push({
       "Mathematics"
     ]
   },
-  funding: null,
   degree: {
     "items": [
+      {
+        "isInternational": "false",
+        "org": "Brunel University London",
+        "subject": "Mathematics",
+        "endDate": "2014",
+        "id": "a24f59d5-7e0c-4ee5-b7db-f0d192c6fe05",
+        "type": "Bachelor of Science",
+        "grade": "First-class honours"
+      },
       {
         "type": "**invalid**Masters",
         "subject": "Civil engineering",
@@ -134,7 +141,10 @@ seedRecords.push({
         "id": "0c79cba8-cdc3-431d-96f2-62f59855cb97"
       }
     ]
-  }
+  },
+  trainingDetails: null,
+  funding: null,
+  invalidAllowed: false
 })
 
 // Fully complete draft - ready to submit
