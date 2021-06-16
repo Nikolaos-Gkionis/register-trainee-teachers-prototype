@@ -1,5 +1,16 @@
+<h1 class="govuk-heading-l">{{pageHeading}}</h1>
+
+<p class="govuk-body">
+  Training initiatives are sometimes referred to as programmes or schemes. They provide incentives and support for people training to teach. They’re separate from bursaries and scholarships.
+</p>
 
 {% set initiatives = data.trainingRoutes[record.route].initiatives %}
+
+{% if initiatives | length == 2 %}
+  {% set radioLegend = "Is the trainee on either of these training initiatives?" %}
+{% else %}
+  {% set radioLegend = "Is the trainee on any of these training initiatives?" %}
+{% endif %}
 
 {% set radioItems = [] %}
 
@@ -20,9 +31,9 @@
 {{ govukRadios({
   fieldset: {
     legend: {
-      text: pageHeading,
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
+      text: radioLegend,
+      isPageHeading: false,
+      classes: "govuk-fieldset__legend--m"
     }
   },
   hint: {
@@ -31,13 +42,6 @@
   items: radioItems
 } | decorateAttributes(record, "record.funding.initiative")) }}
 
-
 {{ govukButton({
   text: "Continue"
 }) }}
-
-
-
-
-
-
