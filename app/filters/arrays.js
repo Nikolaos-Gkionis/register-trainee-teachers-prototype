@@ -182,11 +182,19 @@ filters.andSeparate = (items)=> filters.joinArray(items, {delimiter: ' and '})
 // A B C D
 filters.spaceSeparate = (items) => filters.joinArray(items, {delimiter:' '})
 
-// A B C D
+// A with B, A with B and C, A with B and C and D
+// Todo: extend joinArray to support first delimiter
 filters.withSeparate = (items) => {
   if (items.length < 2) return items
   else if (items.length == 2) return filters.joinArray(items, {delimiter: ' with '})
-  else return filters.joinArray(items, {delimiter: ' with ', lastDelimiter: ' and '})
+  else {
+    // Grab first two items and join them
+    let firstTwoItems = items.splice(0, 2).join(' with ')
+    // Add to start of array
+    items.unshift(firstTwoItems)
+    // Join remaining
+    return filters.joinArray(items, {delimiter: ' and '})
+  }
 }
 
 // A. B. C. D.

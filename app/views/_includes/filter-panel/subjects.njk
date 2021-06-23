@@ -8,7 +8,7 @@
 }) %}
 
 {# Remaining subjects #}
-{% for subject in data.ittSubjects %}
+{% for subject in data.allSubjects %}
   {% set subjectItems = subjectItems | push({
     value: subject,
     text: subject,
