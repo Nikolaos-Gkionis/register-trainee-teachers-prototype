@@ -46,7 +46,7 @@ const generateFakeCourses = () => {
     
     // Hardcode lots courses our default providers
     // A separate setting limits this later so that we can quickly change the number of courses offered in the ui
-    if (provider == "Coventry University" || provider == "University of Buckingham") courseCount = 100
+    if (provider == "Coventry University" || provider == "University of Buckingham") courseCount = 30
 
     for (var i = 0; i < courseCount; i++){
       providerCourses.push(generateCourseDetails({isPublishCourse: true}))
@@ -69,8 +69,10 @@ const generateFakeCourses = () => {
  */
 const generateCoursesFile = (filePath) => {
   const courses = generateFakeCourses()
-  // console.log(courses)
+
   console.log(`Generated fake courses`)
+  console.log(`Now run "node scripts/generate-records.js"`)
+
   const filedata = JSON.stringify(courses, null, 2)
   fs.writeFile(
     filePath,
@@ -79,7 +81,7 @@ const generateCoursesFile = (filePath) => {
       if (error) {
         console.error(error)
       }
-      console.log(`Course data generated: ${filePath}`)
+      // console.log(`Course data generated: ${filePath}`)
     }
   )
 }
