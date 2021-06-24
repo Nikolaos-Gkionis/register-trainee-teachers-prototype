@@ -372,7 +372,7 @@ module.exports = router => {
         // Will only exist if js
         if (selectedCourseRawAutocomplete){
           selectedCourse = providerCourses.find(course => {
-            return utils.getCourseName(course) == req.body._autocompleteRawValue_publishCourse
+            return course.courseNameLong == req.body._autocompleteRawValue_publishCourse
           })?.id
         }
       }
@@ -456,6 +456,7 @@ module.exports = router => {
       // In production we’ll throw a validation error if more are picked
       let subjectsArray = courseDetails.subjectsArrayTemp.slice(0, 3)
 
+
       // If there are two Publish subjects, that means we can only have
       // two languages
       let publishSubjectsCount = Object.keys(courseDetails.publishSubjects).length
@@ -475,7 +476,7 @@ module.exports = router => {
       }
       // If there's a null entry that means we've got an unmapped Publish subject - add that to the 
       // end so we don’t forget about it
-      else if (courseDetails?.subjects?.second == null) {
+      else if (courseDetails?.subjects?.second === null) {
         subjectsArray.push(null)
       }
 
@@ -484,7 +485,6 @@ module.exports = router => {
       // Convert back to our object data structure
       courseDetails.subjects = utils.arrayToOrdinalObject(subjectsArray)
 
-      console.log("Subjects were", courseDetails.subjects)
     }
 
     if (utils.hasUnmappedPublishSubjects(record.courseDetails) || utils.subjectsAreIncomplete(record.courseDetails)){

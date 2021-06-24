@@ -66,12 +66,12 @@ exports.getOrdinalName = integer => {
   }
 }
 
-// ['Foo', 'Bar'] => { first: 'Foo', second: 'Bar' }
+// ['Foo', 'Bar', null] => { first: 'Foo', second: 'Bar', third: null }
 exports.arrayToOrdinalObject = array => {
   let output = {}
-  for (var i = 0; i < 3; i++){
-    output[exports.getOrdinalName(i + 1)] = array[i]
-  }
+  array.forEach( (item, index) =>{
+    output[exports.getOrdinalName(index + 1)] = item
+  })
   return output
 }
 
@@ -409,7 +409,7 @@ exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
 
   // If the first subject is a language, push 'Modern languages' in to the start - this way we'll
   // get names like 'Modern languages with French' which looks a bit neater.
-  if (isModernLanguagesCourse){
+  if ( (subjects.length > 1) && isModernLanguagesCourse){
     subjects = [...new Set(["Modern languages"].concat(subjects))]
   }
 
@@ -449,9 +449,9 @@ exports.prettifySubjects = (subjects, lowercaseFirst=false) => {
 
 // eg Biology (J482)
 // Todo: is this needed any more? should this come from publish?
-exports.getCourseName = (course) => {
-  return `${exports.prettifySubjects(course.subjects)} (${course.code})`
-}
+// exports.getCourseName = (course) => {
+//   return `${exports.prettifySubjects(course.subjects)} (${course.code})`
+// }
 
 // Get a specialism for a given Publish subject
 exports.publishSubjectToSpecialism = subject => {
@@ -773,17 +773,32 @@ exports.filterRecords = (records, data, filters = {}) => {
     })
   }
 
+  // Filter by the specialism or allocation subject
+  // Also searches publish subjects where the course’s subjects haven’t been completed
   if (filters.subject && filters.subject != "All subjects"){
     filteredRecords = filteredRecords.filter(record => {
       if (!record?.courseDetails?.subjects) return false
       let traineeSubjects = Object.values(record.courseDetails.subjects)
+      let publishSubjects = record?.courseDetails?.publishSubjects && Object.values(record?.courseDetails?.publishSubjects)
 
       // Support searching by specialism *and* allocation subject
-      let traineeAllocationSubject = traineeSubjects[0] && exports.getAllocationSubject(record)
-      console.log(traineeAllocationSubject)
-      let matchesAllocationSubject = (traineeAllocationSubject == filters.subject)
 
-      return traineeSubjects.includes(filters.subject) || matchesAllocationSubject
+      let allocationSubjects = traineeSubjects.map(subject => subject && exports.subjectToAllocationSubject(subject))
+      let specialismsMatch = traineeSubjects.includes(filters.subject)
+      let allocationSubjectsMatch = allocationSubjects.includes(filters.subject)
+
+      let publishSubjectsMatch = false
+      let publishAllocationSubjectsMatch = false
+
+      // Search across Publish subjects where specialisms aren't set
+      // This allows an apply draft to correctly filter
+      if (exports.subjectsAreIncomplete(record) && publishSubjects) {
+        publishSubjectsMatch =  publishSubjects.includes(filters.subject)
+        let publishAllocationSubjects = publishSubjects.map(subject => exports.subjectToAllocationSubject(subject))
+        publishAllocationSubjectsMatch = publishAllocationSubjects.includes(filters.subject)
+      }
+
+      return specialismsMatch || allocationSubjectsMatch || publishSubjectsMatch || publishAllocationSubjectsMatch
     })
   }
 

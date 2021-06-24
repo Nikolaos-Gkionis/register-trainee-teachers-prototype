@@ -89,7 +89,7 @@ defer to an id if one exists. #}
   {% set courseNamesAutocomplete = providerCourses | getCourseNamesForAutocomplete %}
 
   {% if record.courseDetails.isPublishCourse | falsify %}
-    {% set selectedCourseName = record.courseDetails | getCourseName %}
+    {% set selectedCourseName = record.courseDetails.courseNameLong %}
   {% endif %}
 
   {% set courseAutocompleteHtml %}
