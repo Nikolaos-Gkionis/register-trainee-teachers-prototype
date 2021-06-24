@@ -412,7 +412,7 @@ module.exports = router => {
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
 
-    if (utils.hasUnmappedPublishSubjects(record.courseDetails)){
+    if (utils.hasUnmappedPublishSubjects(record.courseDetails) || utils.subjectsAreIncomplete(record.courseDetails)){
       res.render(`${req.params.recordtype}/course-details/choose-specialisms`)
     }
     else res.redirect(`${recordPath}/course-details/confirm-publish-details${referrer}`)
@@ -451,16 +451,23 @@ module.exports = router => {
       // This means if the provider picked two languages, the existing second subject would get pushed 
       // to the third slot
       else if (courseDetails?.subjects?.second) {
-        subjectsArray = subjectsArray.concat(courseDetails.subjects.second)
+        subjectsArray.push(courseDetails.subjects.second)
+      }
+      // If there's a null entry that means we've got an unmapped Publish subject - add that to the 
+      // end so we don’t forget about it
+      else if (courseDetails?.subjects?.second == null) {
+        subjectsArray.push(null)
       }
 
-      delete courseDetails.subjectsarrayTemp // No longer needed
+      delete courseDetails.subjectsArrayTemp // No longer needed
 
       // Convert back to our object data structure
       courseDetails.subjects = utils.arrayToOrdinalObject(subjectsArray)
+
+      console.log("Subjects were", courseDetails.subjects)
     }
 
-    if (utils.hasUnmappedPublishSubjects(record.courseDetails)){
+    if (utils.hasUnmappedPublishSubjects(record.courseDetails) || utils.subjectsAreIncomplete(record.courseDetails)){
       console.log("Course has unmapped subjects")
       res.redirect(`${recordPath}/course-details/choose-specialisms${referrer}`)
     }

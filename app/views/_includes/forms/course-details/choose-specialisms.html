@@ -9,6 +9,18 @@ first umampped subject #}
   {# Publish subjects are stored against an ordinal `first` or `second` #}
   {% set ordinal = loop.index | getOrdinalName %}
 
+  {#
+  Hacky handling for case where a course is 2 languages and a non-language.
+  normally we check that for each publish subject we have a corresponding subject specialism in the
+  same ordinal slot - so if the first Publish subject is biology, is the first specialism set?.
+  However for languages, they might have picked 2 langauges - so the missing specialism for the
+  non-language is actually in the third slot.
+   #}
+  {% if ordinal == 'second' and record.courseDetails.publishSubjects.first == "Modern languages" and record.courseDetails.third == null %}
+    {# Swap to 'third' as this is where we should be storing the non-language subject specialism #}
+    {% set ordinal = 'third' %}
+  {% endif %}
+
   {# Does the publish subject map to a specialism? #}
   {% set subjectMappable = subject | publishSubjectMapsToSpecialism %}
 
@@ -60,7 +72,7 @@ first umampped subject #}
       with languages combined with a non language subject. #}
       {% set hintText %}
         {% if record.courseDetails.publishSubjects | length > 1 %}
-          You can choose up to two languages to be set as specialisms together with 
+          You can choose up to two languages as specialisms with 
           {% if ordinal == 'first' %}
             {{ (record.courseDetails.subjects.second or record.courseDetails.publishSubjects.second) | dynamicLowercase }}
           {% else %}
