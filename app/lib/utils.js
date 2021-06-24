@@ -784,21 +784,33 @@ exports.filterRecords = (records, data, filters = {}) => {
       // Support searching by specialism *and* allocation subject
 
       let allocationSubjects = traineeSubjects.map(subject => subject && exports.subjectToAllocationSubject(subject))
-      let specialismsMatch = traineeSubjects.includes(filters.subject)
-      let allocationSubjectsMatch = allocationSubjects.includes(filters.subject)
-
-      let publishSubjectsMatch = false
-      let publishAllocationSubjectsMatch = false
-
-      // Search across Publish subjects where specialisms aren't set
-      // This allows an apply draft to correctly filter
-      if (exports.subjectsAreIncomplete(record) && publishSubjects) {
-        publishSubjectsMatch =  publishSubjects.includes(filters.subject)
-        let publishAllocationSubjects = publishSubjects.map(subject => exports.subjectToAllocationSubject(subject))
-        publishAllocationSubjectsMatch = publishAllocationSubjects.includes(filters.subject)
+      let searchSubjects = [filters.subject]
+      if (filters.subjects = "Science subjects"){
+        // Expand this out to the three allocation subjects
+        searchSubjects = ['Biology', 'Chemistry', 'Physics']
       }
 
-      return specialismsMatch || allocationSubjectsMatch || publishSubjectsMatch || publishAllocationSubjectsMatch
+      // This would support us having an array of subjects in the future
+      return searchSubjects.some(searchSubject => {
+
+        let specialismsMatch = traineeSubjects.includes(searchSubject)
+        let allocationSubjectsMatch = allocationSubjects.includes(searchSubject)
+
+        let publishSubjectsMatch = false
+        let publishAllocationSubjectsMatch = false
+
+        // Search across Publish subjects where specialisms aren't set
+        // This allows an apply draft to correctly filter
+        if (exports.subjectsAreIncomplete(record) && publishSubjects) {
+          publishSubjectsMatch =  publishSubjects.includes(searchSubject)
+          let publishAllocationSubjects = publishSubjects.map(subject => exports.subjectToAllocationSubject(subject))
+          publishAllocationSubjectsMatch = publishAllocationSubjects.includes(searchSubject)
+        }
+
+        return specialismsMatch || allocationSubjectsMatch || publishSubjectsMatch || publishAllocationSubjectsMatch
+
+      })
+      
     })
   }
 

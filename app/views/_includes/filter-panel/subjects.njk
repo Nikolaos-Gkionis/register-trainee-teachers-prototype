@@ -7,8 +7,13 @@
   selected: true if (not query.filterSubject or query.filterSubject ==  "All subjects")
 }) %}
 
+{% set allSubjects = data.allSubjects %}
+
+{% set allSubjects = allSubjects | push("Science subjects") | sort %}
+
+
 {# Remaining subjects #}
-{% for subject in data.allSubjects %}
+{% for subject in allSubjects %}
   {% set subjectItems = subjectItems | push({
     value: subject,
     text: subject,

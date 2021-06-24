@@ -48,8 +48,9 @@ filters.uniq = arr => {
 */
 
 filters.push = (array, item) => {
-  array.push(item)
-  return array
+  let newArray = [...array]
+  newArray.push(item)
+  return newArray
 }
 
 filters.trimEach = input => {
