@@ -111,9 +111,12 @@ exports.render = (path, res, next, ...args) => {
 
 // Check if the course has allocated places
 exports.hasAllocatedPlaces = (record) => {
-  let routeHasAllocatedPlaces = (_.get(trainingRoutes, `[${record.route}]hasAllocatedPlaces`) == true)
-  let allocatedSubjects = trainingRouteData.allocatedSubjects
-  let subjectIsAllocated = allocatedSubjects.includes(_.get(record, 'courseDetails.subjects'))
+  let routeHasAllocatedPlaces = trainingRoutes[record.route]?.hasAllocatedPlaces || false
+  let allocatedSubjects = trainingRouteData.allocatedSubjects // Just PE right now
+
+  // Allocations are based off of the 'allocation subject' rather than the specialisms
+  let recordAllocationSubject = exports.getAllocationSubject(record)
+  let subjectIsAllocated = allocatedSubjects.includes(recordAllocationSubject)
   return (routeHasAllocatedPlaces && subjectIsAllocated)
 }
 
@@ -520,7 +523,8 @@ exports.mapMappablePublishSubjects = course => {
         subjects.first = "Specialist teaching (primary with mathematics)"
         break
       case "Primary with modern languages":
-        subjects.second = "Modern languages"
+        course.publishSubjects.second = "Modern languages"
+        subjects.second = null
         break
     }
   }

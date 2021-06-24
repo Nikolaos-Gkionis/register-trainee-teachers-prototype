@@ -46,7 +46,7 @@ const generateFakeCourses = () => {
     
     // Hardcode lots courses our default providers
     // A separate setting limits this later so that we can quickly change the number of courses offered in the ui
-    if (provider == "Coventry University" || provider == "University of Buckingham") courseCount = 30
+    if (provider == "Coventry University" || provider == "University of Buckingham") courseCount = 100
 
     for (var i = 0; i < courseCount; i++){
       providerCourses.push(generateCourseDetails({isPublishCourse: true}))

@@ -190,9 +190,10 @@ const getSecondaryPublishSubjects = (subjectCount) => {
       // through the ui
       // randomisedLanguages.slice(0,2),                        // Two languages
       // A subject with modern languages isn't likely, but is included as a test case
-      ["Biology", "Modern languages"],  //
+      // ["Modern languages", "Biology"],  //
       // [randomisedSecondarySubjects[0], randomisedLanguages[0]], // One subject and one language
       randomisedScienceSubjects.slice(0,2),                     // Two sciences
+      [randomisedScienceSubjects[0], randomisedSecondarySubjects[0]], // Science with another subject
       randomisedSecondarySubjects.slice(0,2),                   // Two subjects
       ["Physical education", randomisedScienceSubjects[0]]      // PE with EBacc-ish
     ])

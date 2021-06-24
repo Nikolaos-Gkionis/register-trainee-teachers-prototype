@@ -34,12 +34,18 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
       // First specialism is always primary teaching
       subjects.first = "Primary teaching"
 
+      let randomLanguage = faker.helpers.randomize(['French language', 'Spanish language', 'German language', 'Modern languages'])
+
       switch(theSubject){
         case "Primary with English":
           subjects.second = "English studies"
           break
         case "Primary with physical education":
-          subjects.second = (pickRandom) ? "Sport and exercise sciences" : null
+          if (pickRandom){
+            subjects.second = "Sport and exercise sciences"
+            courseDetails.publishSubjects.second = "Physical education"
+          }
+          else subjects.second = null
           break
         case "Primary with science":
           subjects.second = "General sciences"
@@ -49,11 +55,16 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
           subjects.third = "History"
           break
         case "Primary with mathematics":
-          // Primary with maths is treated specially - override the first subject to set this specific
+          // Primary with maths is treated specially - override the first subject to set this
+          // specific specialism
           subjects.first = "Specialist teaching (primary with mathematics)"
           break
         case "Primary with modern languages":
-          subjects.second = "Modern languages"
+          if (pickRandom) {
+            subjects.second = randomLanguage
+            courseDetails.publishSubjects.second = "Modern languages"
+          }
+          else subjects.second = null
           break
       }
       

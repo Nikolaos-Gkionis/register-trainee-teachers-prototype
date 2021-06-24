@@ -390,13 +390,26 @@ module.exports = router => {
         // Fill in specialisms that are mappable
         record.courseDetails = utils.mapMappablePublishSubjects(courseDetails)
 
+        // For apply records we let them pick a Publish course which 
+        // might have a different route.
+        if (record.route != record.courseDetails.route){
+          console.log(`The selected Publish course’s route does not match the draft’s route. Draft route changed to ${record.courseDetails.route}`)
+          record.route = record.courseDetails.route
+        }
+
+        let isAllocated = utils.hasAllocatedPlaces(record)
+
         // Not all specialisms are mappable, so for those, send the user to a followup page
         if (utils.hasUnmappedPublishSubjects(record.courseDetails)){
           console.log("Course has unmapped subjects")
           res.redirect(`${recordPath}/course-details/choose-specialisms${referrer}`)
         }
+        else if (isAllocated) {
+          // After /allocated-place the journey will match other course-details routes
+          res.redirect(`${recordPath}/course-details/allocated-place${referrer}`)
+        }
         else {
-          res.redirect(`${recordPath}/course-details/confirm-publish-details${referrer}`)
+          res.redirect(`${recordPath}/course-details/confirm${referrer}`)
         }
 
       }
@@ -411,11 +424,17 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
+    let isAllocated = utils.hasAllocatedPlaces(record)
 
     if (utils.hasUnmappedPublishSubjects(record.courseDetails) || utils.subjectsAreIncomplete(record.courseDetails)){
       res.render(`${req.params.recordtype}/course-details/choose-specialisms`)
     }
-    else res.redirect(`${recordPath}/course-details/confirm-publish-details${referrer}`)
+    else if (isAllocated) {
+      // After /allocated-place the journey will match other course-details routes
+      res.redirect(`${recordPath}/course-details/allocated-place${referrer}`)
+    }
+
+    else res.redirect(`${recordPath}/course-details/confirm${referrer}`)
   })
 
   // Deal with specialisms data as it comes in
@@ -426,6 +445,7 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
+    let isAllocated = utils.hasAllocatedPlaces(record)
 
     let courseDetails = record?.courseDetails
 
@@ -471,9 +491,13 @@ module.exports = router => {
       console.log("Course has unmapped subjects")
       res.redirect(`${recordPath}/course-details/choose-specialisms${referrer}`)
     }
+    else if (isAllocated) {
+      // After /allocated-place the journey will match other course-details routes
+      res.redirect(`${recordPath}/course-details/allocated-place${referrer}`)
+    }
     else {
       console.log("Course does not have unmapped subjects")
-      res.redirect(`${recordPath}/course-details/confirm-publish-details${referrer}`)
+      res.redirect(`${recordPath}/course-details/confirm${referrer}`)
     }
   })
 
@@ -482,56 +506,56 @@ module.exports = router => {
   // reviewing from a summary page, or after editing other details.
   // This route is needed because we need to conditionally pass on to /allocated-place if
   // the route and subject match certain conditions.
-  router.post(['/:recordtype/:uuid/course-details/confirm-publish-details','/:recordtype/course-details/confirm-publish-details'], function (req, res) {
-    const data = req.session.data
-    let record = data.record
-    let referrer = utils.getReferrer(req.query.referrer)
-    let recordPath = utils.getRecordPath(req)
-    // Copy route up to higher level
-    delete record.selectedCourseTemp
-    delete record.selectedCourseAutocompleteTemp
+  // router.post(['/:recordtype/:uuid/course-details/confirm-publish-details','/:recordtype/course-details/confirm-publish-details'], function (req, res) {
+  //   const data = req.session.data
+  //   let record = data.record
+  //   let referrer = utils.getReferrer(req.query.referrer)
+  //   let recordPath = utils.getRecordPath(req)
+  //   // Copy route up to higher level
+  //   delete record.selectedCourseTemp
+  //   delete record.selectedCourseAutocompleteTemp
 
-    // For apply records we let them pick a Publish course which 
-    // might have a different route
-    if (record.route != record.courseDetails.route){
-      console.log(`The selected Publish course’s route does not match the draft’s route. Draft route changed to ${record.courseDetails.route}`)
-      record.route = record.courseDetails.route
-    }
+  //   // For apply records we let them pick a Publish course which 
+  //   // might have a different route
+  //   if (record.route != record.courseDetails.route){
+  //     console.log(`The selected Publish course’s route does not match the draft’s route. Draft route changed to ${record.courseDetails.route}`)
+  //     record.route = record.courseDetails.route
+  //   }
 
-    let isAllocated = utils.hasAllocatedPlaces(record)
+  //   let isAllocated = utils.hasAllocatedPlaces(record)
 
-    if (isAllocated) {
-      // After /allocated-place the journey will match other course-details routes
-      res.redirect(`${recordPath}/course-details/allocated-place${referrer}`)
-    }
-    else {
-      if (req.params.recordtype == 'record'){
-        // This is basically the same as the /update route
-        utils.updateRecord(data, record)
-        utils.deleteTempData(data)
-        req.flash('success', 'Trainee record updated')
-        // Referrer or non-referrer probably goes to the same place
-        if (referrer){
-          res.redirect(utils.getReferrerDestination(req.query.referrer))
-        }
-        else {
-          res.redirect(`${recordPath}`)
-        }
-      }
-      else {
-        // Implicitly confirm the section by confirming it
-        record.courseDetails.status = "Completed"
-        if (referrer){
-          // Return to check-record page
-          res.redirect(utils.getReferrerDestination(req.query.referrer))
-        }
-        else {
-          res.redirect(`${recordPath}/overview`)
-        }
-      }
+  //   if (isAllocated) {
+  //     // After /allocated-place the journey will match other course-details routes
+  //     res.redirect(`${recordPath}/course-details/allocated-place${referrer}`)
+  //   }
+  //   else {
+  //     if (req.params.recordtype == 'record'){
+  //       // This is basically the same as the /update route
+  //       utils.updateRecord(data, record)
+  //       utils.deleteTempData(data)
+  //       req.flash('success', 'Trainee record updated')
+  //       // Referrer or non-referrer probably goes to the same place
+  //       if (referrer){
+  //         res.redirect(utils.getReferrerDestination(req.query.referrer))
+  //       }
+  //       else {
+  //         res.redirect(`${recordPath}`)
+  //       }
+  //     }
+  //     else {
+  //       // Implicitly confirm the section by confirming it
+  //       record.courseDetails.status = "Completed"
+  //       if (referrer){
+  //         // Return to check-record page
+  //         res.redirect(utils.getReferrerDestination(req.query.referrer))
+  //       }
+  //       else {
+  //         res.redirect(`${recordPath}/overview`)
+  //       }
+  //     }
 
-    }
-  })
+  //   }
+  // })
 
   // Picking a course
   router.post(['/:recordtype/:uuid/course-details/pick-route','/:recordtype/course-details/pick-route'], function (req, res) {
