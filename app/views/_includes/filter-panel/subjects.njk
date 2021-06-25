@@ -9,6 +9,8 @@
 
 {% set allSubjects = data.allSubjects %}
 
+{# Add in an extra option for core sciences - this will search across biology, chemistry and
+physics for either specialisms or allocation subjects #}
 {% set allSubjects = allSubjects | push("Science subjects") | sort %}
 
 

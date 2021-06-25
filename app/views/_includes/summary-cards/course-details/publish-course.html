@@ -6,23 +6,7 @@
 
 {# {% set canAmend = false %} #}
 
-{% set routeRow = {
-  key: {
-    text: "Route"
-  },
-  value: {
-    text: courseDetails.route | safe or 'Not provided'
-  },
-  actions: {
-    items: [
-      {
-        href: recordPath + "/course-details" | addReferrer(referrer),
-        text: "Change",
-        visuallyHiddenText: "route"
-      }
-    ]
-  } if canAmend and false
-} if record.status !="Draft" %}
+
 
 {% set courseNameRow = {
   key: {
@@ -40,6 +24,24 @@
     ]
   } if canAmend
 } %}
+
+{% set routeRow = {
+  key: {
+    text: "Route"
+  },
+  value: {
+    text: courseDetails.route | safe or 'Not provided'
+  },
+  actions: {
+    items: [
+      {
+        href: recordPath + "/course-details" | addReferrer(referrer),
+        text: "Change",
+        visuallyHiddenText: "route"
+      }
+    ]
+  } if canAmend and false
+} if record.status !="Draft" %}
 
 {% set subjectsRow = {
   key: {
@@ -100,7 +102,7 @@
     text: "Start date"
   },
   value: {
-    text: courseDetails.startDate | govukDate("MMMM YYYY") or 'Not provided'
+    text: courseDetails.startDate | govukDate or 'Not provided'
   },
   actions: {
     items: [
@@ -169,8 +171,8 @@
 
 
 {% set courseDetailsRows = [
-  routeRow,
   courseNameRow,
+  routeRow,
   subjectsRow,
   levelRow,
   ageRangeRow,
@@ -183,8 +185,8 @@
 {# For apply drafts only - show a very minimal card with details of course #}
 {% if minimalPublishSummary %}
   {% set courseDetailsRows = [
-    routeRow,
-    courseNameRow
+  courseNameRow,
+  routeRow
   ] %}
 {% endif %}
 
