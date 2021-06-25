@@ -63,7 +63,8 @@ first umampped subject #}
 
       {# TODO: could this be tense-less? #}
       {% set legendText %}
-        Which languages {{ 'will the trainee study?' if record | isDraft else "is the trainee studying?" }}
+        Which language specialisms has the trainee chosen to study?
+        {# Which languages {{ 'will the trainee study?' if record | isDraft else "is the trainee studying?" }} #}
       {% endset %}
 
       {# They can select as many languages as they like up to the specialisms limit. If the publish
@@ -71,16 +72,19 @@ first umampped subject #}
       If it also has another subject, they can pick 2. In practice courses don't seem to be listed
       with languages combined with a non language subject. #}
       {% set hintText %}
-        {% if record.courseDetails.publishSubjects | length > 1 %}
-          You can choose up to two languages as specialisms with 
-          {% if ordinal == 'first' %}
-            {{ (record.courseDetails.subjects.second or record.courseDetails.publishSubjects.second) | dynamicLowercase }}
+        <p class="govuk-body govuk-hint">These language specialisms are recorded on the trainee’s QTS award.</p>
+        <p class="govuk-body govuk-hint">
+          {% if record.courseDetails.publishSubjects | length > 1 %}
+            choose up to two as specialisms with 
+            {% if ordinal == 'first' %}
+              {{ (record.courseDetails.subjects.second or record.courseDetails.publishSubjects.second) | dynamicLowercase }}
+            {% else %}
+             {{ (record.courseDetails.subjects.first or record.courseDetails.publishSubjects.first) | dynamicLowercase }} 
+            {% endif %}
           {% else %}
-           {{ (record.courseDetails.subjects.first or record.courseDetails.publishSubjects.first) | dynamicLowercase }} 
+            Choose up to three
           {% endif %}
-        {% else %}
-          Choose up to three languages
-        {% endif %}
+        </p>
       {% endset %}
 
       {# This gets saved to a temp location, as we need to map the subjects to their ordinal
@@ -101,7 +105,7 @@ first umampped subject #}
           }
         },
         hint: {
-          text: hintText
+          html: hintText
         },
         idPrefix: 'record-courseDetails-subjects-' + loop.index0,
         items: items
@@ -117,7 +121,8 @@ first umampped subject #}
       {% endfor %}
 
       {% set legendText %}
-        What type of {{subject | dynamicLowercase }} {{ 'will the trainee study?' if record | isDraft else "is the trainee studying?" }}
+        Which {{subject | dynamicLowercase }} specialism has the trainee chosen to study?
+        {# {{ 'will the trainee study?' if record | isDraft else "is the trainee studying?" }} #}
       {% endset %}
 
       {{ govukRadios({
@@ -128,8 +133,8 @@ first umampped subject #}
             classes: "govuk-fieldset__legend--l"
           }
         },
-        _hint: {
-          text: "This will be their " + ordinal + " subject specialism"
+        hint: {
+          text: "This specialism is what is recorded on the trainee’s QTS award."
         },
         idPrefix: 'record-courseDetails-subjects-' + loop.index0,
         items: items
