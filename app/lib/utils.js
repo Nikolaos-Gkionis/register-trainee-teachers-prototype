@@ -776,36 +776,40 @@ exports.filterRecords = (records, data, filters = {}) => {
   // Filter by the specialism or allocation subject
   // Also searches publish subjects where the course’s subjects haven’t been completed
   if (filters.subject && filters.subject != "All subjects"){
+
+    // To array
+    let searchSubjects = [filters.subject]
+
+    // Expand out sciences to three allocation subjects
+    if (filters.subject == "Sciences - biology, chemistry, physics"){
+      searchSubjects = ['Biology', 'Chemistry', 'Physics']
+    }
+
     filteredRecords = filteredRecords.filter(record => {
-      if (!record?.courseDetails?.subjects) return false
-      let traineeSubjects = Object.values(record.courseDetails.subjects)
-      let publishSubjects = record?.courseDetails?.publishSubjects && Object.values(record?.courseDetails?.publishSubjects)
 
-      // Support searching by specialism *and* allocation subject
+      let traineeSubjects = record?.courseDetails?.subjects
+      let publishSubjects = record?.courseDetails?.publishSubjects
 
-      let allocationSubjects = traineeSubjects.map(subject => subject && exports.subjectToAllocationSubject(subject))
-      let searchSubjects = [filters.subject]
-      if (filters.subjects = "Science subjects"){
-        // Expand this out to the three allocation subjects
-        searchSubjects = ['Biology', 'Chemistry', 'Physics']
-      }
+      // If we don’t have any subjects, we can't filter by subject
+      if (!traineeSubjects && !publishSubjects) return false
 
-      // This would support us having an array of subjects in the future
+      // Read values from subject objects
+      traineeSubjects = traineeSubjects && Object.values(traineeSubjects) || []
+      let traineeAllocationSubjects = traineeSubjects.map(subject => subject && exports.subjectToAllocationSubject(subject))
+      publishSubjects = publishSubjects && Object.values(publishSubjects) || []
+      let publishAllocationSubjects = publishSubjects.map(subject => exports.subjectToAllocationSubject(subject))
+
+      // Loop through each search subject to find at least one match
       return searchSubjects.some(searchSubject => {
-
         let specialismsMatch = traineeSubjects.includes(searchSubject)
-        let allocationSubjectsMatch = allocationSubjects.includes(searchSubject)
+        let allocationSubjectsMatch = traineeAllocationSubjects.includes(searchSubject)
 
-        let publishSubjectsMatch = false
-        let publishAllocationSubjectsMatch = false
-
-        // Search across Publish subjects where specialisms aren't set
-        // This allows an apply draft to correctly filter
-        if (exports.subjectsAreIncomplete(record) && publishSubjects) {
-          publishSubjectsMatch =  publishSubjects.includes(searchSubject)
-          let publishAllocationSubjects = publishSubjects.map(subject => exports.subjectToAllocationSubject(subject))
-          publishAllocationSubjectsMatch = publishAllocationSubjects.includes(searchSubject)
-        }
+        // Search across Publish subjects only where specialisms aren’t set
+        // This should mean that Apply drafts where specialisms aren’t set can still be filtered,
+        // whilst registered trainees then prefer the actual specialisms set
+        let shouldSearchPublish = publishSubjects && exports.subjectsAreIncomplete(record)
+        let publishSubjectsMatch = shouldSearchPublish && publishSubjects.includes(searchSubject)
+        let publishAllocationSubjectsMatch = shouldSearchPublish && publishAllocationSubjects.includes(searchSubject)
 
         return specialismsMatch || allocationSubjectsMatch || publishSubjectsMatch || publishAllocationSubjectsMatch
 
