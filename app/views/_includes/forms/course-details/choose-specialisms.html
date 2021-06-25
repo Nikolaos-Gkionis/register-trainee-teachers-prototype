@@ -113,6 +113,16 @@ first umampped subject #}
       
     {% else %}
 
+      {# Sort the specialism to the top of the array #}
+      {% if possibleSpecialisms | includes(subject) %}
+        {% set possibleSpecialisms = possibleSpecialisms | removeArrayItem(subject) %}
+
+        {% set items = items | push({
+          text: subject
+        }) %}
+
+      {% endif %}
+
       {# All unmappable subjects except languages #}
       {% for specialism in possibleSpecialisms %}
         {% set items = items | push({
