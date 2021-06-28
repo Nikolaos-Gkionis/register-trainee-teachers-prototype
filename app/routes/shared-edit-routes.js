@@ -52,10 +52,13 @@ module.exports = router => {
     let record = data.record
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
+    let courseStartDate = record?.courseDetails?.startDate
 
     let traineeStarted = record?.trainingDetails?.traineeStarted
-
-    if (traineeStarted == "false"){ // If the answer was explicitly false.
+    if (courseStartDate && traineeStarted == "use-course-start-date"){
+      record.trainingDetails.commencementDate = courseStartDate
+    }
+    else if (traineeStarted == "false"){ // If the answer was explicitly false.
       delete record?.trainingDetails?.commencementDate
     }
     res.redirect(`${recordPath}/training-details/confirm${referrer}`)

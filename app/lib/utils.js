@@ -160,7 +160,7 @@ exports.getCourseLevel = record => {
   if (record?.courseDetails?.level) matchedLevel = record?.courseDetails?.level
 
   // Early years routes don’t have an age range - but they’re all implicitly 'Early years'
-  else if (record?.route && record?.route.includes("Early years")) matchedLevel = "Early years"
+  else if (exports.routeIsEarlyYears(record?.route)) matchedLevel = "Early years"
 
   // Age range can be used to derive the level
   else if (record?.courseDetails?.ageRange) {
@@ -217,7 +217,7 @@ exports.getBursaryByRouteAndSubject = (route, subject) => {
   if (!route) return false
   let routeData = trainingRoutes[route]
 
-  if (!subject || !routeData?.bursariesAvailable) return false
+  if (!routeData?.bursariesAvailable) return false
 
   let bursaryMatch = false
 
@@ -225,12 +225,26 @@ exports.getBursaryByRouteAndSubject = (route, subject) => {
 
   routeData.bursaries.forEach(bursaryLevel => {
 
+    // Build up an array of subjects that attract a bursary
     bursary.allSubjects = bursary.allSubjects.concat(bursaryLevel.subjects)
 
     if (subject && bursaryLevel.subjects.includes(subject)) {
       bursary.value = bursaryLevel.value
       bursary.subjects = bursaryLevel.subjects
       bursary.subject = subject
+      bursaryMatch = true
+      return
+    }
+    // Early years don’t really have subjects - but we can check the route instead
+    // Todo: should we just copy over the entire object?
+    else if (exports.routeIsEarlyYears(route) && bursaryLevel.subjects.includes("Early years")){
+      bursary.value = bursaryLevel.value
+      bursary.subjects = bursaryLevel.subjects
+      bursary.subject = "Early years"
+      bursary.tiersApply = bursaryLevel?.tiersApply || false
+      if (bursary.tiersApply){
+        bursary.tiers = bursaryLevel.tiers
+      }
       bursaryMatch = true
       return
     }
@@ -243,7 +257,10 @@ exports.getBursaryByRouteAndSubject = (route, subject) => {
 
 // Look up available bursary for the current record
 exports.getBursary = record => {
-  if (!record || !record?.courseDetails?.subjects) return false
+  if (!record) return false
+
+  // Allocation subject may be falsy. For some routes this will mean we can’t calulate the bursary
+  // for Early years, it doesn't matter
   let allocationSubject = exports.getAllocationSubject(record) 
   return exports.getBursaryByRouteAndSubject(record.route, allocationSubject)
 }
@@ -265,11 +282,11 @@ exports.bursariesApply = (record) => {
 
 exports.canStartFundingSection = record => {
   if (!exports.routeHasBursaries(record?.route)) return true
+  // Early years routes with bursaries need no extra info
+  else if (exports.isEarlyYears(record)) return true
+  // Other routes need course details to start bursaries
   else {
     let courseDetailsComplete = exports.sectionIsComplete(record.courseDetails)
-    // let degreeDetailsComplete = exports.sectionIsComplete(record.degree)
-    // let applyDataComplete = exports.sectionIsComplete(record.applyData)
-    // return (courseDetailsComplete && (applyDataComplete || degreeDetailsComplete))
     return courseDetailsComplete
   }
 }
@@ -354,6 +371,7 @@ exports.dynamicLowercase = input => {
   let ignoreSubjects = [
   "Arabic",
   "Chinese",
+  "Early years",
   "English",
   "French",
   "German",
@@ -613,6 +631,31 @@ exports.sourceIsApply = record => {
 
 exports.sourceIsManual = record => {
   return record?.source != "Apply"
+}
+
+// Levels
+
+// Unlike the other levels, this is probably reliable - as it checcks the route rather than the age
+// ranges of the course
+exports.isEarlyYears = record => {
+  return exports.getCourseLevel(record) == "Early years"
+}
+
+// Explicitly test the route only - as
+exports.routeIsEarlyYears = route => {
+  return route && route.includes("Early years")
+}
+
+// TODO: this might not be reliable - need to check all age ranges
+// map to one of the levels
+exports.isPrimary = record => {
+  return exports.getCourseLevel(record) == "Primary"
+}
+
+// TODO: this might not be reliable - need to check all age ranges
+// map to one of the levels
+exports.isSecondary = record => {
+  return exports.getCourseLevel(record) == "Secondary"
 }
 
 exports.sectionIsComplete = section => {
