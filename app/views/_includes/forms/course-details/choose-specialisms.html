@@ -61,29 +61,36 @@ first umampped subject #}
         }) %}
       {% endfor %}
 
-      {# TODO: could this be tense-less? #}
       {% set legendText %}
         Which language specialisms has the trainee chosen to study?
-        {# Which languages {{ 'will the trainee study?' if record | isDraft else "is the trainee studying?" }} #}
       {% endset %}
 
       {# They can select as many languages as they like up to the specialisms limit. If the publish
       subject only has languages, that means they can pick 3 languages. 
-      If it also has another subject, they can pick 2. In practice courses don't seem to be listed
-      with languages combined with a non language subject. #}
+      If it also has another subject, they can pick 2 languages. In practice courses don't seem to be listed
+      with languages combined with a non language subject. The exception is "Primary with modern languages" #}
       {% set hintText %}
+
         <p class="govuk-body govuk-hint">These language specialisms are recorded on the trainee’s QTS award.</p>
         <p class="govuk-body govuk-hint">
-          {% if record.courseDetails.publishSubjects | length > 1 %}
-            choose up to two as specialisms with 
-            {% if ordinal == 'first' %}
-              {{ (record.courseDetails.subjects.second or record.courseDetails.publishSubjects.second) | dynamicLowercase }}
-            {% else %}
-             {{ (record.courseDetails.subjects.first or record.courseDetails.publishSubjects.first) | dynamicLowercase }} 
-            {% endif %}
-          {% else %}
-            Choose up to three
-          {% endif %}
+
+          {# In nearly all cases modern languages is on its own #}
+          {% if record.courseDetails.publishSubjects | length == 1 -%}
+            Choose up to three.
+          {%- else %}
+            {# Get the opposite subject to the current one - if this one is first, the other is second
+            if this one is second, the other is first #}
+            {% set subjectName %}
+              {# Defer to specialism name (if set) otherwise publish name #}
+              {% if ordinal == 'first' %}
+                {{ (record.courseDetails.subjects.second or record.courseDetails.publishSubjects.second) }}
+              {% else %}
+                {{ (record.courseDetails.subjects.first or record.courseDetails.publishSubjects.first) }}
+              {% endif %}
+            {% endset %}
+            Choose up to two as specialisms with {{ subjectName | trim | dynamicLowercase}}.
+          {%- endif %}
+
         </p>
       {% endset %}
 
