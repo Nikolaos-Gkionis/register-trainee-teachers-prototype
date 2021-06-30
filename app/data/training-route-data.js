@@ -98,6 +98,33 @@ let baseRouteData = {
     ],
     bursariesAvailable: false
   },
+  "Provider-led (undergrad)": {
+    defaultEnabled: true,
+    sections: [
+      'trainingDetails',
+      'courseDetails',
+      'personalDetails',
+      'contactDetails',
+      'diversity',
+      'undergraduateQualification',
+      // 'placement',
+      'funding'
+    ],
+    initiatives: [
+      "Now teach",
+      "Transition to teach"
+    ],
+    bursariesAvailable: true,
+    bursaries: [
+      {
+        subjects: [
+          "Mathematics",
+          "Physics"
+          ],
+        value: "9000"
+      }
+    ]
+  },
   "Provider-led (postgrad)": {
     defaultEnabled: true,
     hasAllocatedPlaces: true,
@@ -228,7 +255,22 @@ let baseRouteData = {
     ],
     bursariesAvailable: false
   },
-  "Opt-in undergrad": {
+  "Opt-in (undergrad)": {
+    defaultEnabled: true,
+    sections: [
+      'trainingDetails',
+      'courseDetails',
+      'personalDetails',
+      'contactDetails',
+      'diversity',
+      'undergraduateQualification',
+      // 'placement',
+      'funding'
+    ],
+    initiatives: [
+      "Now teach",
+      "Transition to teach"
+    ],
     bursariesAvailable: true,
     bursaries: [
       {
