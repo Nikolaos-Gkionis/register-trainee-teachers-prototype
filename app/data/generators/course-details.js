@@ -106,7 +106,7 @@ module.exports = (params, application) => {
 
   const isNonDraft = utils.isNonDraft(application)
   const isApplyDraft = (application.source == 'Apply' && application.status == "Apply draft")
-  const isManualDraft = (application.source == 'Draft' && application.status == "Draft")
+  const isManualDraft = (application.source == 'Manual' && application.status == "Draft")
   
   const sectionIsComplete = (params?.courseDetails?.status == "Completed")
 

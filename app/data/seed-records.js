@@ -79,7 +79,8 @@ seedRecords.push({
       "Completed"
     ]
   },
-  placement: null
+  placement: null,
+  funding: null
 })
 
 // Partially complete apply draft with one piece of invalid data, course is eligible for a bursary

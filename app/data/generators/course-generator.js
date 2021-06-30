@@ -300,8 +300,10 @@ module.exports = (params) => {
       // Some Publish courses could be set as "Full time or part time - we mostly treat ast full time
       // but let's have some ambiguity here so the ui can clear it up
       if (isPublishCourse){
-        studyMode = weighted.select(['Full time','Full time or part time'], [0.7,0.3])
-        qualificationsSummary = qualificationsSummary.concat(" or part time") // totally hacky
+        studyMode = weighted.select(['Full time','Full time or part time'], [0.9,0.1])
+        if (studyMode == 'Full time or part time'){
+          qualificationsSummary = qualificationsSummary.concat(" or part time") // totally hacky
+        }
       }
     }
     
