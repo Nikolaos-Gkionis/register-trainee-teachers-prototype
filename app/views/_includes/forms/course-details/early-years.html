@@ -1,5 +1,27 @@
 <h1 class="govuk-heading-l">{{pageHeading}}</h1>
 
+<input name='record[courseDetails][subjects][first]' type="hidden" id="subject" value="Early years teaching">
+
+{{ govukRadios({
+  fieldset: {
+    legend: {
+      text: "Full time or part time?",
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  hint: {
+    text: ""
+  },
+  items: [
+    {
+      text: "Full time"
+    },
+    {
+      text: "Part time"
+    }
+  ]
+} | decorateAttributes(record, "record.courseDetails.studyMode")) }}
+
 {% set programmeStartDateArray = record.courseDetails.startDate | toDateArray %}
 
 {{ govukDateInput({

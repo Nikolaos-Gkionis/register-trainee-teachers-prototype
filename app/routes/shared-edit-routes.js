@@ -599,7 +599,7 @@ module.exports = router => {
     let subjectAutocomplete1 = req.body?._autocompleteRawValue_subject_1
 
     // Make an array of subjects data - easier to work with
-    let subjectsArray = Object.values(record.courseDetails.subjects).filter(Boolean)
+    let subjectsArray = record?.courseDetails?.subjects && Object.values(record.courseDetails.subjects).filter(Boolean) || []
 
     // Special handling to cope with users deleting values from autocompletes.
     // Autocompletes make it hard to clear a value when used as an enhanced select.
@@ -625,7 +625,7 @@ module.exports = router => {
     // Remove empty and force in to array
     subjectsArray = [].concat(subjectsArray.filter(Boolean))
     // Map back to cardinal object
-    record.courseDetails.subjects = utils.arrayToOrdinalObject(subjectsArray)
+    courseDetails.subjects = utils.arrayToOrdinalObject(subjectsArray)
 
     // Merge autocomplete and radio answers
     if (courseDetails.ageRange == 'Other age range'){
@@ -633,6 +633,7 @@ module.exports = router => {
       delete courseDetails.ageRangeOther
     }
 
+    // Save back to record
     record.courseDetails = courseDetails
 
     let isAllocated = utils.hasAllocatedPlaces(record)
