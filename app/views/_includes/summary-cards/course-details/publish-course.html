@@ -99,7 +99,7 @@
 
 {% set studyModeRow = {
   key: {
-    text: "Full or part time"
+    text: "Full time or part time"
   },
   value: {
     text: record.courseDetails.studyMode or 'Not provided'
@@ -109,7 +109,7 @@
       {
         href: recordPath + "/course-details/details" | addReferrer(referrer),
         text: "Change",
-        visuallyHiddenText: "full or part time"
+        visuallyHiddenText: "full time or part time"
       }
     ]
   } if canAmend

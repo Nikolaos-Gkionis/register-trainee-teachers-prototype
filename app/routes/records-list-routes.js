@@ -168,7 +168,7 @@ const getSelectedFilters = req => {
 
   if (filters.studyMode) {
     selectedFilters.categories.push({
-      heading: { text: 'Full or part time' },
+      heading: { text: 'Full time or part time' },
       items: filters.studyMode.map((studyMode) => {
 
         let newQuery = Object.assign({}, query)
