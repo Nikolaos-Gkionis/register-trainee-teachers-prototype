@@ -1,14 +1,7 @@
 // Additional styles to ensure all status boxes are equal height when text wraps over multiple lines
-.home-statuses__flex-row {
-  @include govuk-media-query($from: tablet) {
-    display: flex;
-  
-    & > div {
-      display: flex;
-    }
-  
-    a {
-      width: 100%;
-    }
+.app-home-statuses {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    grid-auto-rows: 1fr;
   }
-}

@@ -1,7 +1,6 @@
 
 .status-card {
   background-color: govuk-colour("light-grey");
-  display: block;
   padding: govuk-spacing(2);
   text-decoration: none;
 
@@ -98,13 +97,13 @@ $statuses: (
 .status-card__count {
   &, &:link, &:visited {
     @include govuk-font($size: 36, $weight: bold, $tabular: true);
-    display: block;
   }
+  display: block;
 }
 
 .status-card__status {
   text-decoration: underline;
   overflow-wrap: break-word;
   word-wrap: break-word;
-  hyphens: auto;
+  hyphens: none;
 }
