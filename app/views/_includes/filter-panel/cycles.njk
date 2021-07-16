@@ -1,20 +1,29 @@
+{% set years = [] %}
+
+{% for year in data.years.academicYears %}
+
+  {% if showDefaultVisibleYears and year in data.years.defaultVisibleYears %}
+    {% set isChecked = checked(query.filterCycle, year) if query.filterCycle else 'checked' %}
+  {% else %}
+    {% set isChecked = checked(query.filterCycle, year) %}
+  {% endif %}
+
+  {% set years = years | push({
+    text: year,
+    checked: isChecked
+  }) %}
+
+{% endfor %}
+
+
 {{ govukCheckboxes({
   classes: "govuk-checkboxes--small js-auto-submit",
   fieldset: {
     legend: {
-      text: "Course start",
+      text: "Start year",
       isPageHeading: false,
       classes: "govuk-fieldset__legend--s"
     }
   },
-  items: [
-    {
-      text: "2020/21 (current)",
-      checked: checked(query.filterCycle, "2020/21 (current)") if query.filterCycle else filterCycleCurrentYearDefault
-    },
-    {
-      text: "2019/20",
-      checked: checked(query.filterCycle, "2019/20")
-    }
-  ]
+  items: years
 } | decorateAttributes(data, "data.filterCycle"))}}

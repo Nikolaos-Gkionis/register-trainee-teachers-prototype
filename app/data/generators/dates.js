@@ -12,10 +12,15 @@ module.exports = ({updatedDate, submittedDate, deferredDate, withdrawalDate, qua
   // console.log(application.academicYear)
   // let updatedDate, submittedDate, deferredDate, withdrawalDate, qtsAwarded
 
-  const yearStartDate = moment(`${application.academicYear}-08-01`).toDate()
+  // Extract the start year from the string
+  let academicYearSimple = parseInt(application.academicYear.substring(0, 4))
+
+  // Academic years start on 1 August
+  const yearStartDate = moment(`${academicYearSimple}-08-01`).toDate()
 
   let yearEndDate = moment(yearStartDate).add(1, 'years').toDate()
 
+  // Check if the end date is before today’s date
   const isCurrentYear = ( moment(yearEndDate).isBefore()) ? false : true
 
   // Randomise end dates for AO

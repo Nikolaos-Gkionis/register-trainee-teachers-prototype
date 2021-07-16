@@ -336,6 +336,9 @@ module.exports = (params) => {
   let startYear = params.startYear || new Date().getFullYear() // Current year
   let startDate = moment(`${startYear}-${startMonth}-01`, "YYYY-MM-DD").toDate()
 
+
+  let academicYear = `${startYear} to ${startYear + 1}`
+
   // Start dates for Publish teaching apprenticeships refer to when the apprenticeship starts, not
   // when the ITT training starts
   let apprenticeshipStartDate
@@ -372,6 +375,7 @@ module.exports = (params) => {
       qualificationsSummary,
       route,
       startDate,
+      academicYear,
       ...(apprenticeshipStartDate ? { apprenticeshipStartDate } : {}), // conditionally return
       studyMode,
       publishSubjects: utils.arrayToOrdinalObject(publishCourseSubjects),
@@ -392,6 +396,7 @@ module.exports = (params) => {
       qualificationsSummary,
       route,
       startDate,
+      academicYear,
       studyMode,
       subjects: utils.arrayToOrdinalObject(subjects),
     }

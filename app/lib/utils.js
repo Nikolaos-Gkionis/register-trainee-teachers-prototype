@@ -171,6 +171,27 @@ exports.getCourseLevel = record => {
   return matchedLevel
 }
 
+// Used to set the right qualification on a record
+exports.setCourseDefaults = record => {
+  let route = record?.route
+
+  if (!route || !record?.courseDetails) return record
+
+  let routeData = trainingRoutes[route]
+  let routeDefaults = {
+    qualifications: routeData.qualifications,
+    qualificationsSummary: routeData.qualificationsSummary,
+    duration: routeData.duration
+  }
+
+  record.courseDetails = {
+    ...routeDefaults,
+    ...record.courseDetails
+  }
+
+  return record
+}
+
 // -------------------------------------------------------------------
 // Funding - initiatives and bursaries
 // -------------------------------------------------------------------
@@ -775,10 +796,9 @@ exports.filterRecords = (records, data, filters = {}) => {
     filteredRecords = filteredRecords.filter(record => exports.sourceIsManual(record))
   }
 
-  // Cycle not implimented yet
-  // if (filter.cycle){
-  //   filteredRecords = filteredRecords.filter(record => filter.cycle.includes(record.cycle))
-  // }
+  if (filters.cycle){
+    filteredRecords = filteredRecords.filter(record => filters.cycle.includes(record.academicYear))
+  }
 
   if (filters.completeStatus){
     filteredRecords = filteredRecords.filter(record => {
@@ -902,10 +922,16 @@ exports.filterRecordsBySearchTerm = (records, searchQuery=false) => {
 
 // Utility function to filter by a key
 // Basically identical to the ‘where’ filter
-exports.filterRecordsBy = (records, key, array) => {
+exports.filterRecordsBy = (records, key, array, invert=false) => {
   array = [].concat(array) // force to array
   let filtered = records.filter(record => {
-    return array.includes(_.get(record, key))
+    let isIncluded = array.includes(_.get(record, key))
+    if (invert) {
+      return !isIncluded
+    }
+    else {
+      return isIncluded
+    }
   })
   return filtered
 }
@@ -935,6 +961,15 @@ exports.filterByYear = (records, array) => {
   return exports.filterRecordsBy(records, 'academicYear', array)
 }
 
+// Only records from a specific academic year or years
+exports.filterByStatus = (records, array, invert) => {
+  array = [].concat(array)
+  if (array.includes('Draft')){
+    array.push("Apply draft")
+  }
+  return exports.filterRecordsBy(records, 'status', array, invert)
+}
+
 // For use on drafts only?
 exports.filterByComplete = records => {
   return records.filter(record => exports.recordIsComplete(record))
@@ -943,6 +978,14 @@ exports.filterByComplete = records => {
 // For use on drafts only?
 exports.filterByIncomplete = records => {
   return records.filter(record => !exports.recordIsComplete(record))
+}
+
+exports.filterByQualification = (records, qualification) => {
+ return records.filter(record => {
+    let courseQualifications = record?.courseDetails?.qualifications
+    let courseQualificationMatches = courseQualifications && courseQualifications.includes(qualification)
+    return courseQualificationMatches
+ })
 }
 
 // -------------------------------------------------------------------
@@ -1118,15 +1161,6 @@ exports.doBulkAction = (action, record, params) => {
 // Advance a record to 'QTS recommended' status
 exports.registerForTRN = (record) => {
 
-  // Set default qualifcation, duration, etc
-  // Publish course data may override this
-  let routeData = trainingRoutes[record.route]
-  let routeDefaults = {
-    qualifications: routeData.qualifications,
-    qualificationsSummary: routeData.qualificationsSummary,
-    duration: routeData.duration
-  }
-
   if (!record) return false
 
   // Only draft records can be submitted for TRN
@@ -1147,6 +1181,10 @@ exports.registerForTRN = (record) => {
     delete record?.placement?.status
     record.submittedDate = new Date()
     record.updatedDate = new Date()
+
+    // Set default qualifcation, duration, etc
+    // Just in case - this shoudl already be set
+    record = exports.setCourseDefaults(record)
     record.courseDetails = {
       ...routeDefaults,
       ...record.courseDetails

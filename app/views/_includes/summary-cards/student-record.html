@@ -40,6 +40,24 @@
   }
   ] %}
 
+{% set studentRecordRows = studentRecordRows | push({
+    key: {
+      text: "Start year"
+    },
+    value: {
+      text: record.academicYear or 'Not provided'
+    },
+    actions: {
+      items: [
+        {
+          href: recordPath + "/training-year" | addReferrer(referrer),
+          text: "Change",
+          visuallyHiddenText: "start year"
+        }
+      ]
+    } if canAmend and false
+  }) %}
+
 {% if record.status == "Pending TRN" %}
   {% set submittedAge = record.submittedDate | formatDate('relative') %}
 
