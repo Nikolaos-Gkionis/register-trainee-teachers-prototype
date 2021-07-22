@@ -1,7 +1,10 @@
 // Additional styles to ensure all status boxes are equal height when text wraps over multiple lines
 .app-home-statuses {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    @include govuk-media-query($from: tablet) {
+      grid-template-columns: 1fr 1fr 1fr 1fr
+    }
+    gap: govuk-spacing(4);
     grid-auto-rows: 1fr;
   }

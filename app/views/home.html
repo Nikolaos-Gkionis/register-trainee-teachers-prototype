@@ -3,8 +3,7 @@
 {% set navActive = "home" %}
 {% set totalDraftCount = data.filteredRecords | where("status", ["Draft", "Apply draft"] ) | length %}
 {% set applyDraftCount = data.filteredRecords | where('status', 'Apply draft') | length %}
-{% set recordsToBeReviewedCount = 0 %}
-{% set combinedAlertCount = applyDraftCount + recordsToBeReviewedCount %}
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
 {% set pageHeading = "Your trainee teachers" %}
 
 {% set records = data.filteredRecords | filterByYear(data.years.currentAcademicYear) %}
@@ -23,35 +22,43 @@
         {% if applyDraftCount > 0 %}
           <li><a class="govuk-link" href="/drafts?filterSource=Apply">See draft trainees imported from Apply ({{applyDraftCount}})</a></li>
         {% endif %}
-        <li class="govuk-!-margin-bottom-0"><a class="govuk-link" href="/new-record/new">Add a trainee</a></li>
+        <li class="govuk-!-margin-bottom-0"><a class="govuk-link" href="/new-record/new">Create a trainee record</a></li>
       </ul>
     </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h2 class="govuk-heading-l">Registered trainees</h2>
       <p class="govuk-body">
-        <a class="govuk-link" href="/records?filterCycle=_unchecked">See all registered trainees ({{ data.filteredRecords | filterByStatus("Draft", true)  | length}})</a>
+        <a class="govuk-link" href="/records?filterCycle=_unchecked">See all registered trainees ({{ registeredTrainees | length }})</a>
       </p>
       <h3 class="govuk-heading-m">
         2020 to 2021 trainees
         <span class="govuk-body">
-        {# TO DO – add number of records here #}
-           –  <a class="govuk-link" href="/records?filterCycle=2020+to+2021">see all<span class="govuk-visually-hidden">
-            2020 to 2021 trainees</span> ({{ data.filteredRecords | filterByYear(["2020 to 2021"]) | filterByStatus("Draft", true)  | length}})
+           —  <a class="govuk-link" href="/records?filterCycle=2020+to+2021">see all 
+            <span class="govuk-visually-hidden">
+              2020 to 2021 trainees
+            </span> 
+            ({{ registeredTrainees | filterByYear(["2020 to 2021"]) | length }})
             </a>
         </span>
       </h3>
     </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="app-home-statuses">
 
-          {% set statuses = ['Pending TRN', 'TRN received', 'Deferred', 'Recommended', 'Awarded', 'Withdrawn'] %}
+          {% set statuses = ['Pending TRN', 'TRN received', 'Recommended', 'Awarded', 'Deferred', 'Withdrawn'] %}
           {% for status in statuses  %}
-          {% set statusString = status %}
+            {% set statusString = status %}
             {% if status == 'Recommended' %}
-                {% set searchStatus = ['EYTS recommended', 'QTS recommended'] %}
+                {% set searchStatus = "EYTS recommended&filterStatus=QTS recommended" %}
                 {% set recordCount = records | where("status", ['EYTS recommended', 'QTS recommended']) | length %}
                 {% set statusString = "Qualification recommended" %}
               {% elif status == 'Awarded' %}
@@ -61,22 +68,22 @@
               {% else %}
                 {% set recordCount = records | where("status", status) | length %}
             {% endif %}
-            {# {% if recordCount > 0 %} #}
-                <a class="govuk-link" href="/records?filterStatus={{searchStatus or status}}" class="status-card status-card--{{ status | lower | kebabCase }}">
-                  <span class="status-card__count">{{recordCount}}</span>
-                  <span class="status-card__status">{{statusString}}</span><span class="govuk-visually-hidden"> records. View these records.</span>
-                </a>
-              {# {% endif %} #}
+              <a href="/records?filterStatus={{searchStatus or status}}" class="status-card status-card--{{ status | lower | kebabCase }}">
+                <span class="status-card__count">{{recordCount}}</span>
+                <span class="status-card__status">{{statusString}}</span><span class="govuk-visually-hidden"> records. View these records.</span>
+              </a>
           {% endfor %}
       </div>
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     </div>
+  </div>
+  <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h2 class="govuk-heading-l">Guidance</h2>
       {# We need to split these pages #}
       <ul class="govuk-list govuk-list--spaced">
-        <li><a class="govuk-link" href="/guidance#section-check-data">Find out about Register trainee teachers</a></li>
-        <li><a class="govuk-link" href="/guidance#section-about-register">Check what data you need</a></li>
+        <li><a class="govuk-link" href="/guidance#section-about-register">Find out about Register trainee teachers</a></li>
+        <li><a class="govuk-link" href="/guidance#section-check-data">Check what data you need to provide</a></li>
       </ul>
     </div>
   </div>
