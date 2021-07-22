@@ -2,7 +2,7 @@
 
 {% set navActive = "home" %}
 {% set totalDraftCount = data.filteredRecords | where("status", ["Draft", "Apply draft"] ) | length %}
-{% set applyDraftCount = data.filteredRecords | where('status', 'Apply draft') | length %}
+{% set applyDraftCount = data.filteredRecords | where("status", "Apply draft") | length %}
 {% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
 {% set pageHeading = "Your trainee teachers" %}
 
@@ -54,23 +54,25 @@
     <div class="govuk-grid-column-full">
       <div class="app-home-statuses">
 
-          {% set statuses = ['Pending TRN', 'TRN received', 'Recommended', 'Awarded', 'Deferred', 'Withdrawn'] %}
+          {% set statuses = ["Pending TRN", "TRN received", "Recommended", "Awarded", "Deferred", "Withdrawn"] %}
+          {% set year = "2020 to 2021" %}
           {% for status in statuses  %}
             {% set statusString = status %}
-            {% if status == 'Recommended' %}
+            {% set searchStatus = status %}
+            {% if status == "Recommended" %}
                 {% set searchStatus = "EYTS recommended&filterStatus=QTS recommended" %}
-                {% set recordCount = records | where("status", ['EYTS recommended', 'QTS recommended']) | length %}
+                {% set recordCount = records | where("status", ["EYTS recommended", "QTS recommended"]) | length %}
                 {% set statusString = "Qualification recommended" %}
-              {% elif status == 'Awarded' %}
-                {% set searchStatus = ['EYTS awarded', 'QTS awarded'] %}
-                {% set recordCount = records | where("status", ['EYTS awarded', 'QTS awarded']) | length %}
+              {% elif status == "Awarded" %}
+                {% set searchStatus = "EYTS awarded&filterStatus=QTS awarded" %}
+                {% set recordCount = records | where("status", ["EYTS awarded", "QTS awarded"]) | length %}
                 {% set statusString = "Qualification awarded" %}
               {% else %}
                 {% set recordCount = records | where("status", status) | length %}
             {% endif %}
-              <a href="/records?filterStatus={{searchStatus or status}}" class="status-card status-card--{{ status | lower | kebabCase }}">
-                <span class="status-card__count">{{recordCount}}</span>
-                <span class="status-card__status">{{statusString}}</span><span class="govuk-visually-hidden"> records. View these records.</span>
+              <a href="/records?filterStatus={{ searchStatus }}&filterCycle={{ year }}" class="status-card status-card--{{ status | lower | kebabCase }}">
+                <span class="status-card__count">{{ recordCount }}</span>
+                <span class="status-card__status">{{ statusString }}</span><span class="govuk-visually-hidden"> records. View these records.</span>
               </a>
           {% endfor %}
       </div>
