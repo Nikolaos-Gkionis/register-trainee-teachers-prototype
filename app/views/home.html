@@ -37,14 +37,15 @@
       <p class="govuk-body">
         <a class="govuk-link" href="/records?filterCycle=_unchecked">See all registered trainees ({{ registeredTrainees | length }})</a>
       </p>
+      {% set year = "2020 to 2021" %}
       <h3 class="govuk-heading-m">
-        2020 to 2021 trainees
+        {{ year }} trainees
         <span class="govuk-body">
-           —  <a class="govuk-link" href="/records?filterCycle=2020+to+2021">see all 
+           —  <a class="govuk-link" href="/records?filterCycle={{ year }}">see all 
             <span class="govuk-visually-hidden">
               2020 to 2021 trainees
             </span> 
-            ({{ registeredTrainees | filterByYear(["2020 to 2021"]) | length }})
+            ({{ registeredTrainees | filterByYear([ year ]) | length }})
             </a>
         </span>
       </h3>
@@ -55,7 +56,6 @@
       <div class="app-home-statuses">
 
           {% set statuses = ["Pending TRN", "TRN received", "Recommended", "Awarded", "Deferred", "Withdrawn"] %}
-          {% set year = "2020 to 2021" %}
           {% for status in statuses  %}
             {% set statusString = status %}
             {% set searchStatus = status %}
