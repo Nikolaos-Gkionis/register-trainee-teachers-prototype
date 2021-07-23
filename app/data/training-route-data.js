@@ -110,6 +110,9 @@ let baseRouteData = {
       // 'placement',
       'funding'
     ],
+    fields: [
+      "studyMode",
+    ],
     initiatives: [
       "Now teach",
       "Transition to teach"
@@ -129,6 +132,9 @@ let baseRouteData = {
   "Provider-led (postgrad)": {
     defaultEnabled: true,
     hasAllocatedPlaces: true,
+    fields: [
+      "studyMode",
+    ],
     initiatives: [
       "Maths and physics chairs programme / Researchers in schools",
       "Now teach",
@@ -175,7 +181,8 @@ let baseRouteData = {
     ],
     fields: [
       "leadSchool",
-      "employingSchool"
+      "employingSchool",
+      "studyMode"
     ],
     initiatives: [
       "Future Teaching Scholars",
@@ -200,6 +207,7 @@ let baseRouteData = {
     ],
     fields: [
       "leadSchool",
+      "studyMode"
     ],
     initiatives: [
       "Maths and physics chairs programme / Researchers in schools",
@@ -249,6 +257,7 @@ let baseRouteData = {
     fields: [
       "leadSchool",
       'employingSchool',
+      "studyMode"
       // "apprenticeshipStartDate"
     ],
     initiatives: [
@@ -269,6 +278,9 @@ let baseRouteData = {
       'undergraduateQualification',
       // 'placement',
       'funding'
+    ],
+    fields: [
+      "studyMode"
     ],
     initiatives: [
       "Now teach",
@@ -301,7 +313,8 @@ let baseRouteData = {
       'funding'
     ],
     fields: [
-      "employingSchool"
+      "employingSchool",
+      "studyMode"
     ],
     qualifications: [
       "EYTS"
@@ -328,6 +341,9 @@ let baseRouteData = {
       'degree',
       // 'placement',
       'funding'
+    ],
+    fields: [
+      "studyMode",
     ],
     qualifications: [
       "EYTS"
@@ -389,6 +405,9 @@ let baseRouteData = {
       'undergraduateQualification',
       // 'placement',
       'funding'
+    ],
+    fields: [
+      "studyMode",
     ],
     qualifications: [
       "EYTS"

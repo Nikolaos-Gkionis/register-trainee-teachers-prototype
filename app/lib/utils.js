@@ -768,6 +768,10 @@ exports.hasOutstandingActions = function(record, data = false) {
 // study mode
 exports.needsStudyMode = record => {
 
+  let routeRequiresStudyMode = exports.requiresField(record, "studyMode")
+
+  if (!routeRequiresStudyMode) return false
+
   let allowedStudyModes = [
     "Full time",
     "Part time"
