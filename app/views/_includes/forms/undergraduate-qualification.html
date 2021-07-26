@@ -1,8 +1,8 @@
 {% set customUndergraduateQualification %}
   {{ govukInput({
     label: {
-        text: "Add the qualification",
-        classes: "govuk-label govuk-label--s"
+        text: "Qualification",
+        classes: "govuk-label"
     },
     classes: "govuk-!-width-two-thirds"
   } | decorateAttributes(record, "record.undergraduateQualification.typeOther")) }}
@@ -10,30 +10,32 @@
 
 {% set undergraduateQualifications = []  %}
 
-{% for undergraduateQualification in data.ugEntryQualifications %}
+{# {% for undergraduateQualification in data.ugEntryQualifications %}
   {% set undergraduateQualifications = undergraduateQualifications | push ({ 
     text: undergraduateQualification
   }) %}
-{% endfor %}
+{% endfor %} #}
 
 {% set undergraduateQualifications = undergraduateQualifications | push ({ 
-  divider: "or"
-}) %}
-
-{% set undergraduateQualifications = undergraduateQualifications | push ({ 
-  text: "Another qualification not listed",
-  checked: storeQualificationOther,
-  conditional: {
-    html: customUndergraduateQualification
+  text: "Level 3",
+  hint: {
+    text: "For example, A levels, Scottish Highers, Access to Higher Education, or an international Baccalaureate diploma."
   }
 }) %}
 
 {% set undergraduateQualifications = undergraduateQualifications | push ({ 
-  text: "No formal qualification"
+  text: "Level 4 and above",
+  hint: {
+    text: "For example, a foundation diploma, an undergraduate degree, or a postgraduate degree."
+  }
 }) %}
 
 {% set undergraduateQualifications = undergraduateQualifications | push ({ 
-  text: "Unknown"
+  text: "Other qualification",
+  checked: storeQualificationOther,
+  conditional: {
+    html: customUndergraduateQualification
+  }
 }) %}
 
 {{ govukRadios({
@@ -43,6 +45,9 @@
       isPageHeading: true,
       classes: "govuk-fieldset__legend--l"
     }
+  },
+  hint: {
+    text: "Give the qualification they’ll have when they start teacher training."
   },
   items: undergraduateQualifications
 } | decorateAttributes(record, "record.undergraduateQualification.type")) }}
