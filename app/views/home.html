@@ -1,156 +1,93 @@
 {% extends "layout.html" %}
 
 {% set navActive = "home" %}
-{% set applyDraftCount = data.filteredRecords | where('status', 'Apply draft') | length %}
-{% set recordsToBeReviewedCount = 0 %}
-{% set combinedAlertCount = applyDraftCount + recordsToBeReviewedCount %}
+{% set totalDraftCount = data.filteredRecords | where("status", ["Draft", "Apply draft"] ) | length %}
+{% set applyDraftCount = data.filteredRecords | where("status", "Apply draft") | length %}
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set pageHeading = "Your trainee teachers" %}
+
+{% set records = data.filteredRecords | filterByYear(data.years.currentAcademicYear) %}
 
 {% block content %}
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds-from-desktop">
-        <h1 class="govuk-heading-l">{{serviceName}}</h1>
-        <p class="govuk-body-l">Register trainees with the Department for Education and record the outcome of their training.</p>
-        {{ govukButton({
-          text: "Add a trainee",
-          href: "./new-record/new",
-          isStartButton: true
-        }) }}
-      </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+      <h1 class="govuk-heading-xl">{{ pageHeading }}</h1>
+      <h2 class="govuk-heading-l">Draft trainees</h2>
+      <ul class="govuk-list govuk-list--spaced govuk-!-margin-bottom-0">
+        {% if totalDraftCount != applyDraftCount %}
+          <li><a class="govuk-link" href="/drafts">See all draft trainees ({{ totalDraftCount }})</a></li>
+        {%  endif %}
+        {% if applyDraftCount > 0 %}
+          <li><a class="govuk-link" href="/drafts?filterSource=Apply">See draft trainees imported from Apply ({{applyDraftCount}})</a></li>
+        {% endif %}
+        <li class="govuk-!-margin-bottom-0"><a class="govuk-link" href="/new-record/new">Create a trainee record</a></li>
+      </ul>
     </div>
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-    <div class="govuk-grid-row">
-
-      <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-heading-m"><a href="/records" class="govuk-link govuk-link--no-visited-state">Registered trainees</a></h2>
-        <p class="govuk-body">Review and manage your trainee records.</p>
-      </div>
-
-      <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-heading-m"><a href="#" class="govuk-link govuk-link--no-visited-state">Give feedback</a></h2>
-        <p class="govuk-body">This is a new service. Your views will help us improve it.</p>
-      </div>
-      <div class="govuk-grid-column-one-third">
-        <h2 class="govuk-heading-m"><a href="/guidance" class="govuk-link govuk-link--no-visited-state">Guidance</a></h2>
-        <p class="govuk-body">Find out about Register and the data you need to provide.</p>
-      </div>
-
-    </div>
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-    {% if data.settings.showRequiresAttentionSection and combinedAlertCount > 0 %}
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds-from-desktop">
-          <h2 class="govuk-heading-m">Requires your attention</h2>
-          {% if applyDraftCount > 0 %}
-            <div class="app-action-required-item">
-              <span class="app-action-required-item__count">{{applyDraftCount}}</span>
-              <div class="app-action-required-item__content">
-                <a href="/drafts?filterSource=Apply" class="govuk-link app-action-required-item__text">New records imported from Apply</a>
-                <span class="app-action-required-item__hint-text govuk-hint govuk-!-font-size-16">Candidates recruited from Apply who have met all their conditions</span>
-              </div>
-            </div>
-          {% endif %}
-          {% if recordsToBeReviewedCount > 0 %}
-            <div class="app-action-required-item">
-              <span class="app-action-required-item__count">{{recordsToBeReviewedCount}}</span>
-              <div class="app-action-required-item__content">
-                <a href="#" class="govuk-link app-action-required-item__text">Records for review before cycle ends</a>
-                <span class="app-action-required-item__hint-text govuk-hint govuk-!-font-size-16">The cycle ends on August 27 2021</span>
-              </div>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    {% endif %}
-
-    <h2 class="govuk-heading-m">Your 2020 to 2021 trainees</h2>
-
-    {% set records = data.filteredRecords | filterByYear(data.years.currentAcademicYear)  %}
-
-    {% macro statusCard(records, status) %}
-      {# Special handling for drafts which have two string names #}
-      {% if status == "Draft" %}
-        {% set searchStatus = ["Draft", "Apply draft"] %}
-        <a href="/drafts" class="status-card status-card--{{ status | lower | kebabCase }}">
-      {% else %}
-        {% set searchStatus = status %}
-        <a href="/records?filterStatus={{status}}" class="status-card status-card--{{ status | lower | kebabCase }}">
-      {% endif %}
-
-
-        {% set recordCount = records | where("status", searchStatus) | length %}
-        <span class="status-card__count">{{recordCount}}</span>
-        <span class="status-card__status">{{status}}</span><span class="govuk-visually-hidden"> records. View these records.</span>
-      </a>
-    {% endmacro %}
-
-    <div class="home-statuses">
-      <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        {% set statuses = ['Draft', 'Pending TRN', 'TRN received'] %}
-        {% for status in statuses %}
-          <div class="govuk-grid-column-one-third">
-            {{ statusCard(records, status) }}
-          </div>
-        {% endfor %}
-      </div>
-
-      {% set eytsCount = records | where("status", ['EYTS recommended', 'EYTS awarded']) | length %}
-      {% set qtsCount = records | where("status", ['QTS recommended', 'QTS awarded']) | length %}
-
-      {% if eytsCount == 0 %}
-        <div class="govuk-grid-row govuk-!-margin-bottom-6 home-statuses__flex-row">
-          {% set statuses = ['QTS recommended', 'QTS awarded', 'Deferred', 'Withdrawn'] %}
-          {% for status in statuses %}
-            <div class="govuk-grid-column-one-quarter">
-              {{ statusCard(records, status) }}
-            </div>
-          {% endfor %}
-        </div>
-      {% elseif qtsCount == 0 %}
-        <div class="govuk-grid-row govuk-!-margin-bottom-6 home-statuses__flex-row">
-          {% set statuses = ['EYTS recommended', 'EYTS awarded', 'Deferred', 'Withdrawn'] %}
-          {% for status in statuses %}
-            <div class="govuk-grid-column-one-quarter">
-              {{ statusCard(records, status) }}
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="govuk-grid-row govuk-!-margin-bottom-6 home-statuses__flex-row">
-          <div class="govuk-grid-column-one-quarter">
-            <a href="/records?filterStatus=EYTS recommended&filterStatus=QTS recommended" class="status-card status-card--recommended">
-              {% set recordCount = records | where("status", ['EYTS recommended','QTS recommended']) | length %}
-              <span class="status-card__count">{{recordCount}}</span>
-              <span class="status-card__status">Qualification recommended</span> <span class="govuk-visually-hidden"> records. View these records.</span>
-            </a>
-          </div>
-          <div class="govuk-grid-column-one-quarter">
-            <a href="/records?filterStatus=EYTS awarded&filterStatus=QTS awarded" class="status-card status-card--awarded">
-              {% set recordCount = records | where("status", ['EYTS awarded','QTS awarded']) | length %}
-              <span class="status-card__count">{{recordCount}}</span>
-              <span class="status-card__status">Qualification awarded</span><span class="govuk-visually-hidden"> records. View these records.</span>
-            </a>
-          </div>
-          {% set statuses = ['Deferred', 'Withdrawn'] %}
-          {% for status in statuses %}
-            <div class="govuk-grid-column-one-quarter">
-              {{ statusCard(records, status) }}
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-
-    </div>
-
   </div>
-</div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h2 class="govuk-heading-l">Registered trainees</h2>
+      <p class="govuk-body">
+        <a class="govuk-link" href="/records?filterCycle=_unchecked">See all registered trainees ({{ registeredTrainees | length }})</a>
+      </p>
+      {% set year = "2020 to 2021" %}
+      <h3 class="govuk-heading-m">
+        {{ year }} trainees
+        <span class="govuk-body">
+           —  <a class="govuk-link" href="/records?filterCycle={{ year }}">see all 
+            <span class="govuk-visually-hidden">
+              2020 to 2021 trainees
+            </span> 
+            ({{ registeredTrainees | filterByYear([ year ]) | length }})
+            </a>
+        </span>
+      </h3>
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="app-home-statuses">
 
-
+          {% set statuses = ["Pending TRN", "TRN received", "Recommended", "Awarded", "Deferred", "Withdrawn"] %}
+          {% for status in statuses  %}
+            {% set statusString = status %}
+            {% set searchStatus = status %}
+            {% if status == "Recommended" %}
+                {% set searchStatus = "EYTS recommended&filterStatus=QTS recommended" %}
+                {% set recordCount = records | where("status", ["EYTS recommended", "QTS recommended"]) | length %}
+                {% set statusString = "Qualification recommended" %}
+              {% elif status == "Awarded" %}
+                {% set searchStatus = "EYTS awarded&filterStatus=QTS awarded" %}
+                {% set recordCount = records | where("status", ["EYTS awarded", "QTS awarded"]) | length %}
+                {% set statusString = "Qualification awarded" %}
+              {% else %}
+                {% set recordCount = records | where("status", status) | length %}
+            {% endif %}
+              <a href="/records?filterStatus={{ searchStatus }}&filterCycle={{ year }}" class="status-card status-card--{{ status | lower | kebabCase }}">
+                <span class="status-card__count">{{ recordCount }}</span>
+                <span class="status-card__status">{{ statusString }}</span><span class="govuk-visually-hidden"> records. View these records.</span>
+              </a>
+          {% endfor %}
+      </div>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    </div>
+  </div>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h2 class="govuk-heading-l">Guidance</h2>
+      {# We need to split these pages #}
+      <ul class="govuk-list govuk-list--spaced">
+        <li><a class="govuk-link" href="/guidance#section-about-register">Find out about Register trainee teachers</a></li>
+        <li><a class="govuk-link" href="/guidance#section-check-data">Check what data you need to provide</a></li>
+      </ul>
+    </div>
+  </div>
 
 {% endblock %}
