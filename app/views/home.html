@@ -17,10 +17,10 @@
       <h2 class="govuk-heading-l">Draft trainees</h2>
       <ul class="govuk-list govuk-list--spaced govuk-!-margin-bottom-0">
         {% if totalDraftCount != applyDraftCount %}
-          <li><a class="govuk-link" href="/drafts">See all draft trainees ({{ totalDraftCount }})</a></li>
+          <li><a class="govuk-link" href="/drafts">View all draft trainees ({{ totalDraftCount }})</a></li>
         {%  endif %}
         {% if applyDraftCount > 0 %}
-          <li><a class="govuk-link" href="/drafts?filterSource=Apply">See draft trainees imported from Apply ({{applyDraftCount}})</a></li>
+          <li><a class="govuk-link" href="/drafts?filterSource=Apply">View draft trainees imported from Apply ({{applyDraftCount}})</a></li>
         {% endif %}
         <li class="govuk-!-margin-bottom-0"><a class="govuk-link" href="/new-record/new">Create a trainee record</a></li>
       </ul>
@@ -35,17 +35,13 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h2 class="govuk-heading-l">Registered trainees</h2>
       <p class="govuk-body">
-        <a class="govuk-link" href="/records?filterCycle=_unchecked">See all registered trainees ({{ registeredTrainees | length }})</a>
+        <a class="govuk-link" href="/records?filterCycle=_unchecked">View all registered trainees ({{ registeredTrainees | length }})</a>
       </p>
       {% set year = "2020 to 2021" %}
       <h3 class="govuk-heading-m">
         {{ year }} trainees
         <span class="govuk-body">
-           —  <a class="govuk-link" href="/records?filterCycle={{ year }}">see all 
-            <span class="govuk-visually-hidden">
-              2020 to 2021 trainees
-            </span> 
-            ({{ registeredTrainees | filterByYear([ year ]) | length }})
+           —  <a class="govuk-link" href="/records?filterCycle={{ year }}">view all <span class="govuk-visually-hidden">2020 to 2021 trainees</span> ({{ registeredTrainees | filterByYear([ year ]) | length }})
             </a>
         </span>
       </h3>
@@ -81,11 +77,12 @@
   </div>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h2 class="govuk-heading-l">Guidance</h2>
+      <h2 class="govuk-heading-l">Guidance and feedback</h2>
       {# We need to split these pages #}
       <ul class="govuk-list govuk-list--spaced">
         <li><a class="govuk-link" href="/guidance#section-about-register">Find out about Register trainee teachers</a></li>
         <li><a class="govuk-link" href="/guidance#section-check-data">Check what data you need to provide</a></li>
+        <li><a class="govuk-link" href="#">Give feedback to help us improve Register trainee teacher</a></li>
       </ul>
     </div>
   </div>
