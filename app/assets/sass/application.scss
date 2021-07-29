@@ -26,6 +26,7 @@ $govuk-assets-path: '/govuk/assets/';
 @import "helpers";
 @import "helpers/field-widths";
 @import "helpers/width-container";
+@import "utils";
 
 // Components that aren't in Frontend
 @import "components/application-card";
@@ -199,8 +200,4 @@ span.summary-validation-symbol {
 .align-right {
   text-align: right;
   float: right;
-}
-
-app-nowrap {
-  white-space: nowrap;
 }
