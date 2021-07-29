@@ -1,0 +1,7 @@
+.app-nowrap {
+  white-space: nowrap;
+}
+
+p.govuk-body + ul.govuk-list--bullet {
+  margin-top: govuk-spacing(3) * -1;
+}
