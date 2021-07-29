@@ -22,7 +22,7 @@ module.exports = [
   // 'Certificate at level M',
   // 'Certificate in Education (CertEd) or Diploma in Education (DipEd) (i.e. non-graduate initial teacher training qualification)',
   // 'Certificate of Higher Education (CertHE)',
-  'Certificate (CertEd) or Diploma (DipEd) in Education  ',
+  'Certificate (CertEd) or Diploma (DipEd) in Education',
   'Certificate (CertHE) or Diploma (DipHE) of Higher Education',
   'Diploma at level 3',
   'Diploma at level 2',

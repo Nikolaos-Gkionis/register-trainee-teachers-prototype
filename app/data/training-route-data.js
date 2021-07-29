@@ -106,7 +106,7 @@ let baseRouteData = {
       'personalDetails',
       'contactDetails',
       'diversity',
-      'undergraduateQualification',
+      // 'undergraduateQualification',
       // 'placement',
       'funding'
     ],
@@ -275,7 +275,7 @@ let baseRouteData = {
       'personalDetails',
       'contactDetails',
       'diversity',
-      'undergraduateQualification',
+      // 'undergraduateQualification',
       // 'placement',
       'funding'
     ],
@@ -402,7 +402,7 @@ let baseRouteData = {
       'personalDetails',
       'contactDetails',
       'diversity',
-      'undergraduateQualification',
+      // 'undergraduateQualification',
       // 'placement',
       'funding'
     ],
