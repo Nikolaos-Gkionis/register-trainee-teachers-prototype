@@ -217,6 +217,7 @@ module.exports = router => {
     const data = req.session.data
     let record = _.get(data, 'record') // copy record
     let referrer = utils.getReferrer(req.query.referrer)
+    let ittStartDate = moment(data.record.courseDetails.startDate)
 
     if (!utils.recordIsComplete(record)){
       console.log('Record is incomplete, returning to check record')
@@ -226,6 +227,9 @@ module.exports = router => {
       }
       else returnQuery = "?errors=true"
       res.redirect(`/new-record/check-record${returnQuery}`)
+    }
+    else if (ittStartDate.isBefore()){
+      res.redirect('/new-record/trainee-start-date')
     }
     else {
       utils.registerForTRN(record)
