@@ -312,22 +312,6 @@ exports.canStartFundingSection = record => {
   }
 }
 
-
-// This whole filter is poor and should probably be removed later.
-exports.getSectionName = (record, section) => {
-  if (section == 'trainingDetails'){
-    if (record.status && !exports.isDraft(record)){
-      return "Schools"
-    }
-    else {
-      if (exports.requiresField(record, ['leadSchool', 'employingSchool', 'region'])){
-        return "Training details"
-      }
-      else return "Trainee start date and ID"
-    }
-  }
-}
-
 // Check if qualifications array contains an item
 exports.qualificationIs = (record, qualification) => {
   return (record?.courseDetails?.qualifications) ? record.courseDetails.qualifications.includes(qualification) : false
