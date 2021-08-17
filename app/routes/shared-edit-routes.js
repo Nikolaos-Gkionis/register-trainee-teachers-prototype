@@ -56,6 +56,7 @@ module.exports = router => {
 
     let traineeStarted = record?.trainingDetails?.traineeStarted
     if (courseStartDate && traineeStarted == "use-course-start-date"){
+      record.trainingDetails.traineeStarted = "true"
       record.trainingDetails.commencementDate = courseStartDate
     }
     else if (traineeStarted == "false"){ // If the answer was explicitly false.
@@ -839,7 +840,7 @@ module.exports = router => {
     delete data.degreeTemp
     let referrer = utils.getReferrer(req.query.referrer)
 
-    newDegree.id = faker.random.uuid()
+    newDegree.id = faker.datatype.uuid()
 
     let existingDegrees = _.get(data, "record.degree.items") || []
     let degreeIndex = req.params.index
@@ -970,7 +971,7 @@ module.exports = router => {
     const data = req.session.data
     let recordPath = utils.getRecordPath(req)
     let referrer = utils.getReferrer(req.query.referrer)
-    let placementUuid = faker.random.uuid()
+    let placementUuid = faker.datatype.uuid()
     
     // delete data.placementTemp
     

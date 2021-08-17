@@ -1194,7 +1194,7 @@ exports.updateRecord = (data, newRecord, timelineMessage) => {
 
   // Must be a new record
   if (!newRecord.id){
-    newRecord.id = faker.random.uuid()
+    newRecord.id = faker.datatype.uuid()
     records.push(newRecord)
   }
   // Is an existing record
@@ -1436,7 +1436,7 @@ exports.markSummaryRow = function(row, type) {
   row.value.html = exports.stripPlaceholders(value) // strip any placeholder tags
 
   // Generate an id so we can anchor to this row
-  let id = `summary-list--row-invalid--${faker.random.uuid()}`
+  let id = `summary-list--row-invalid--${faker.datatype.uuid()}`
 
   let message, linkText, linkTextAppendHidden
 
@@ -1488,7 +1488,7 @@ exports.markInput = function(data, params){
   let valueCleaned = exports.stripPlaceholders(data.value) // strip any placeholder tags
 
   // Generate an id so we can anchor to this row
-  let id = data?.id || `app-input-invalid--${faker.random.uuid()}`
+  let id = data?.id || `app-input-invalid--${faker.datatype.uuid()}`
 
   let message
 

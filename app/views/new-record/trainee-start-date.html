@@ -1,9 +1,9 @@
 {% extends "_templates/_new-record.html" %}
 
-{% set pageHeading = "Trainee start date" %}
+{% set pageHeading = "Did the trainee start their ITT on time?" %}
 
-{% set formAction = "./details" | addReferrer(referrer) %}
+{% set formAction = "./submitted" | addReferrer(referrer) %}
 
 {% block formContent %}
-  {% include "_includes/forms/degree/type.html" %}
+  {% include "_includes/forms/training-details/trainee-start-date.html" %}
 {% endblock %}

@@ -228,7 +228,13 @@ module.exports = router => {
       else returnQuery = "?errors=true"
       res.redirect(`/new-record/check-record${returnQuery}`)
     }
+    // if the ITT start date is in the past ask for the trainee’s start date
     else if (ittStartDate.isBefore()){
+      utils.registerForTRN(record)
+      utils.deleteTempData(data)
+      utils.updateRecord(data, record, false)
+      // Temporarily store the id so that we can look it up on the submitted page
+      req.session.data.submittedRecordId = record.id
       res.redirect('/new-record/trainee-start-date')
     }
     else {
@@ -236,7 +242,7 @@ module.exports = router => {
       utils.deleteTempData(data)
       utils.updateRecord(data, record, false)
       // Temporarily store the id so that we can look it up on the submitted page
-      req.session.data.submittedRecordId = record.id 
+      req.session.data.submittedRecordId = record.id
       res.redirect('/new-record/submitted')
     }
   })

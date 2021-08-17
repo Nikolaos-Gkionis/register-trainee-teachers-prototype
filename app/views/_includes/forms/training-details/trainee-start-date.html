@@ -1,10 +1,37 @@
 {% set commencementStartDateArray = record.trainingDetails.commencementDate | toDateArray %}
 
-{% set commencementDateHint = "This is the date the trainee starts on the course. This can be different from the course start date." %}
+{% set lateTraineeStartDateHTML %}
+  {{ govukDateInput({
+    id: "commencement-start-date",
+    namePrefix: "record[trainingDetails][commencementDate]",
+    fieldset: {
+      legend: {
+        text: "Trainee start date"
+      }
+    },
+    items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: commencementStartDateArray["0"]
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: commencementStartDateArray["1"]
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: commencementStartDateArray["2"]
+        }
+      ]
+  }) }}
+{% endset -%}
 
-{{ govukDateInput({
-  id: "commencement-start-date",
-  namePrefix: "record[trainingDetails][commencementDate]",
+{{ govukRadios({
+  idPrefix: "trainee-started",
+  name: "record[trainingDetails][traineeStarted]",
   fieldset: {
     legend: {
       text: pageHeading,
@@ -13,28 +40,29 @@
     }
   },
   hint: {
-    html: commencementDateHint
+    text: "The ITT started " + record.courseDetails.startDate | dateToGovukDate
   },
   items: [
-      {
-        name: "day",
-        classes: "govuk-input--width-2",
-        value: commencementStartDateArray["0"]
-      },
-      {
-        name: "month",
-        classes: "govuk-input--width-2",
-        value: commencementStartDateArray["1"]
-      },
-      {
-        name: "year",
-        classes: "govuk-input--width-4",
-        value: commencementStartDateArray["2"]
+    {
+      value: "true",
+      text: "Yes"
+    },
+    {
+      value: "true",
+      text: "No, they started later",
+      conditional: {
+        html: lateTraineeStartDateHTML
       }
-    ]
+    },
+    {
+      divider: "or"
+    },
+    {
+      value: "false",
+      text: "They have not started yet"
+    }
+  ]
 }) }}
-
-<input type="hidden" name="record[trainingDetails][traineeStarted]" value="true">
 
 {{ govukButton({
   text: "Continue"
