@@ -25,7 +25,6 @@ const _ = require('lodash')
 
 filters.getStatusText = function(data, defaultNotStarted=false, defaultInProgress=false) {
   if (!data) return defaultNotStarted || "Incomplete"
-  if (data?.status == "Apply draft") return "Draft"
   if (data?.status) return data.status
   else return defaultInProgress || "In progress"
 }
@@ -51,8 +50,6 @@ filters.getStatusClass = (status) => {
 
     // Record statuses
     case 'Draft':
-      return 'govuk-tag--grey'
-    case 'Apply draft': // same as draft
       return 'govuk-tag--grey'
     case 'Pending TRN':
       return 'govuk-tag--turquoise'
@@ -97,7 +94,6 @@ filters.reviewIfInProgress = (url, data, path) => {
 filters.canBeAmended = status => {
   let statusesThatCanAmend = [
     'Draft',
-    'Apply draft',
     'Pending TRN',
     'TRN received',
     'Deferred'

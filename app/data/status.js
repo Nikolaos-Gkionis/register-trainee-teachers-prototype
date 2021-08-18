@@ -1,6 +1,5 @@
 module.exports = [
   'Draft',
-  'Apply draft',
   'Pending TRN',
   'TRN received',
   'EYTS recommended',

@@ -305,7 +305,7 @@ module.exports = router => {
     // if (!hasFilters) filteredRecords = filteredRecords.filter(record => record.academicYear == "2021 to 2022")
 
     // All records except drafts
-    filteredRecords = objectFilters.removeWhere(filteredRecords, 'status', ["Draft", "Apply draft"])
+    filteredRecords = objectFilters.removeWhere(filteredRecords, 'status', "Draft")
 
     // Search traineeId and full name
     filteredRecords = utils.filterRecordsBySearchTerm(filteredRecords, searchQuery)
@@ -340,7 +340,7 @@ module.exports = router => {
     let filteredRecords = utils.filterRecords(data.records, data, filters)
 
     // Only drafts
-    filteredRecords = utils.filterRecordsBy(filteredRecords, 'status', ["Draft", "Apply draft"])
+    filteredRecords = utils.filterRecordsBy(filteredRecords, 'status', "Draft")
 
     // Search traineeId and full name
     filteredRecords = utils.filterRecordsBySearchTerm(filteredRecords, searchQuery)

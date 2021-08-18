@@ -666,11 +666,11 @@ exports.subjectsAreIncomplete = courseDetails => {
 
 // Statuses
 exports.isDraft = record => {
-  return record.status == "Draft" || record.status == "Apply draft"
+  return record.status == "Draft"
 }
 
 exports.isNonDraft = record => {
-  return record.status != "Draft" && record.status != "Apply draft"
+  return record.status != "Draft"
 }
 
 exports.isPendingTrn = record => {
@@ -910,16 +910,7 @@ exports.filterRecords = (records, data, filters = {}) => {
   }
 
   if (filters.status){
-    filteredRecords = filteredRecords.filter(record => {
-
-      // Special handling of Apply drafts so they get caught by the 'draft' filter
-      // Avoiding using the 'isDraft' filter here so that 'Apply draft' can also be 
-      // manually searched for
-      if (record.status == "Apply draft" && filters.status.includes("Draft")){
-        return true
-      }
-      else return filters.status.includes(record.status)
-    })
+    filteredRecords = filteredRecords.filter(record =>  exports.isDraft(record))
   }
 
   // Filter by the specialism or allocation subject
@@ -1037,9 +1028,6 @@ exports.filterByYear = (records, array) => {
 // Only records from a specific academic year or years
 exports.filterByStatus = (records, array, invert) => {
   array = [].concat(array)
-  if (array.includes('Draft')){
-    array.push("Apply draft")
-  }
   return exports.filterRecordsBy(records, 'status', array, invert)
 }
 

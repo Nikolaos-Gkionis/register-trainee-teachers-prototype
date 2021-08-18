@@ -2,7 +2,6 @@ const faker = require('faker')
 
 const statusesWithoutTRNs = [
   "Draft",
-  "Apply draft",
   "Pending TRN",
   ]
 

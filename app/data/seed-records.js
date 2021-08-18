@@ -85,7 +85,7 @@ seedRecords.push({
 
 // Partially complete apply draft with one piece of invalid data, course is eligible for a bursary
 seedRecords.push({
-  status: 'Apply draft',
+  status: 'Draft',
   personalDetails: {
     givenName: "Samantha",
     familyName: "Koch",
@@ -195,7 +195,7 @@ seedRecords.push({
 })
 
 seedRecords.push({
-  status: 'Apply draft',
+  status: 'Draft',
   personalDetails: {
     givenName: "Rachel",
     familyName: "Laverty",
