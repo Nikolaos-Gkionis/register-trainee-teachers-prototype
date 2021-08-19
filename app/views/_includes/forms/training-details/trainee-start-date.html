@@ -1,13 +1,27 @@
 {% set commencementStartDateArray = record.trainingDetails.commencementDate | toDateArray %}
 
-{% set lateTraineeStartDateHTML %}
+{% set traineeStartDate = record.trainingDetails.commencementDate or false %}
+{% set commencementDateHint = "The ITT started " + record.courseDetails.startDate | dateToGovukDate %}
+
+{# TO DO — throw error if no course start date #}
+{# TO DO — if withdrawing/deferring give different option – "They did not start the course" #}
+
+{% set legendText = "Trainee start date" %}
+{% set hintHtml = "For example, " + today() | toDateArray | spaceSeparate %}
+
+{{ traineeStartDate }}
+
+{% set commencementDateInputHtml %}
   {{ govukDateInput({
-    id: "commencement-start-date",
+    id: commencementDateID,
     namePrefix: "record[trainingDetails][commencementDate]",
     fieldset: {
       legend: {
-        text: "Trainee start date"
+        text: legendText
       }
+    },
+    hint: {
+      html: hintHtml
     },
     items: [
         {
@@ -27,45 +41,76 @@
         }
       ]
   }) }}
-{% endset -%}
+{% endset %}
 
-{{ govukRadios({
-  idPrefix: "trainee-started",
-  name: "record[trainingDetails][traineeStarted]",
-  fieldset: {
-    legend: {
-      text: pageHeading,
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "The ITT started " + record.courseDetails.startDate | dateToGovukDate
-  },
-  items: [
-    {
-      value: "true",
-      text: "Yes"
-    },
-    {
-      value: "true",
-      text: "No, they started later",
-      conditional: {
-        html: lateTraineeStartDateHTML
+{% if not traineeStartDate %}
+
+  {{ govukRadios({
+    fieldset: {
+      legend: {
+        text: pageHeading,
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
       }
     },
-    {
-      divider: "or"
+    hint: {
+      text: commencementDateHint
     },
-    {
-      value: "false",
-      text: "They have not started yet"
-    }
-  ]
-}) }}
+    items: [
+      {
+        value: "use-course-start-date",
+        text: "Yes"
+      },
+      {
+        value: "true",
+        text: "No, they started later",
+        conditional: {
+          html: commencementDateInputHtml
+        }
+      },
+      {
+        divider: "or"
+      },
+      {
+        value: "trainee-not-started",
+        text: "They have not started yet"
+      }
+    ]
+  } | decorateAttributes(record, "record.trainingDetails.traineeStarted")) }}
+
+{% else %}
+
+  {{ govukDateInput({
+    fieldset: {
+      legend: {
+        text: legendText, 
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    hint: {
+      html: hintHtml
+    },
+    items: [
+        {
+          name: "day",
+          classes: "govuk-input--width-2",
+          value: commencementStartDateArray["0"]
+        },
+        {
+          name: "month",
+          classes: "govuk-input--width-2",
+          value: commencementStartDateArray["1"]
+        },
+        {
+          name: "year",
+          classes: "govuk-input--width-4",
+          value: commencementStartDateArray["2"]
+        }
+      ]
+  } | decorateAttributes(record, "record.trainingDetails.commencementDate")) }}
+
+{% endif %}
 
 {{ govukButton({
   text: "Continue"
 }) }}
-
-
