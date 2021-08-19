@@ -1,7 +1,7 @@
 {% set commencementStartDateArray = record.trainingDetails.commencementDate | toDateArray %}
 
 {% set traineeStartDate = record.trainingDetails.commencementDate or false %}
-{% set commencementDateHint = "The ITT started " + record.courseDetails.startDate | dateToGovukDate %}
+{% set commencementDateHint = "Their ITT started " + record.courseDetails.startDate | dateToGovukDate %}
 
 {# TO DO — throw error if no course start date #}
 {# TO DO — if withdrawing/deferring give different option – "They did not start the course" #}
@@ -9,7 +9,9 @@
 {% set legendText = "Trainee start date" %}
 {% set hintHtml = "For example, " + today() | toDateArray | spaceSeparate %}
 
-{{ traineeStartDate }}
+{{ record.personalDetails.givenName }} has start date — {{ traineeStartDate }}.
+{{ record.personalDetails.givenName }} has started — {{ record.trainingDetails.traineeStarted }}.
+{{ record | log }}
 
 {% set commencementDateInputHtml %}
   {{ govukDateInput({
@@ -80,10 +82,12 @@
 
 {% else %}
 
+  {# If the trainee start exists, use date input for editing #}
+
   {{ govukDateInput({
     fieldset: {
       legend: {
-        text: legendText, 
+        text: "When did the trainee start their ITT?",
         classes: "govuk-fieldset__legend--s"
       }
     },
@@ -114,3 +118,4 @@
 {{ govukButton({
   text: "Continue"
 }) }}
+
