@@ -89,7 +89,7 @@
 
     <div class="app-application-cards">
 
-      {% set draftRecords = filteredRecords | where("status", ["Draft", "Apply draft"]) %}
+      {% set draftRecords = filteredRecords | where("status", "Draft") %}
 
       {% if draftRecords | length %}
 
@@ -121,7 +121,7 @@
 
       {% endif %}
 
-      {% set nonDraftRecords = filteredRecords | removeWhere("status", ["Draft", "Apply draft"]) %}
+      {% set nonDraftRecords = filteredRecords | removeWhere("status", "Draft") %}
 
       {% if nonDraftRecords | length %}
 

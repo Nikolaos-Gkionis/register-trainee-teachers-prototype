@@ -4,7 +4,7 @@ const degreeData = require('../degree')
 
 module.exports = (params, application) => {
 
-  const isApplyDraft = (application.source == 'Apply' && application.status == "Apply draft")
+  const isApplyDraft = (application.source == 'Apply' && application.status == "Draft")
   
   const item = (faker) => {
     let subject = faker.helpers.randomize(degreeData().subjects)

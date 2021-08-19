@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 
 {% set navActive = "home" %}
-{% set totalDraftCount = data.filteredRecords | where("status", ["Draft", "Apply draft"] ) | length %}
-{% set applyDraftCount = data.filteredRecords | where("status", "Apply draft") | length %}
+
+{% set draftRecords = data.filteredRecords | filterByStatus("Draft") %}
+{% set totalDraftCount = draftRecords | length %}
+{% set applyDraftCount = draftRecords | where("source", "Apply") | length %}
 {% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
 {% set pageHeading = "Your trainee teachers" %}
 

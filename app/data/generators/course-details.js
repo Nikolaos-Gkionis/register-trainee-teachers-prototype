@@ -105,7 +105,7 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
 module.exports = (params, application) => {
 
   const isNonDraft = utils.isNonDraft(application)
-  const isApplyDraft = (application.source == 'Apply' && application.status == "Apply draft")
+  const isApplyDraft = (application.source == 'Apply' && application.status == "Draft")
   const isManualDraft = (application.source == 'Manual' && application.status == "Draft")
   
   const sectionIsComplete = (params?.courseDetails?.status == "Completed")
