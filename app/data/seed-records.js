@@ -204,7 +204,7 @@ seedRecords.push({
   },
   route: 'Provider-led (postgrad)',
   trainingDetails: {
-    "traineeStarted": "true",
+    "traineeStarted": false,
     "traineeId": "2020/21-085",
     status: [
       "Completed"
