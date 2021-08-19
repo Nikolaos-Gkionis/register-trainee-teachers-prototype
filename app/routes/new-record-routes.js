@@ -247,5 +247,26 @@ module.exports = router => {
     }
   })
 
+  // Submit for TRN after setting start date
+
+  router.post('/new-record/trainee-start-date', (req, res) => {
+    let data = req.session.data
+    let record = data.record
+    let recordPath = utils.getRecordPath(req)
+    let referrer = utils.getReferrer(req.query.referrer)
+    let courseStartDate = record?.courseDetails?.startDate
+    let traineeStartStatus = record?.trainingDetails?.traineeStarted
+    
+    if (traineeStartStatus == 'use-course-start-date') {
+      traineeStartStatus  = true
+      record.trainingDetails.commencementDate  = courseStartDate
+    } else if (traineeStartStatus == 'trainee-not-started') {
+      traineeStartStatus = false
+      delete record?.trainingDetails?.commencementDate
+    } else {
+      // set record to what the users enters for record.trainingDetails.commencementDate
+    }
+    res.redirect(`/new-record/submitted`)
+  })
 
 }

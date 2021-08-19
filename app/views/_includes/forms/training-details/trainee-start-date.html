@@ -9,10 +9,6 @@
 {% set legendText = "Trainee start date" %}
 {% set hintHtml = "For example, " + today() | toDateArray | spaceSeparate %}
 
-{{ record.personalDetails.givenName }} has start date — {{ traineeStartDate }}.
-{{ record.personalDetails.givenName }} has started — {{ record.trainingDetails.traineeStarted }}.
-{{ record | log }}
-
 {% set commencementDateInputHtml %}
   {{ govukDateInput({
     id: commencementDateID,
@@ -88,7 +84,8 @@
     fieldset: {
       legend: {
         text: "When did the trainee start their ITT?",
-        classes: "govuk-fieldset__legend--s"
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
       }
     },
     hint: {
