@@ -164,7 +164,8 @@ seedRecords.push({
   },
   route: 'School direct (salaried)',
   "trainingDetails": {
-    // "traineeStarted": "true",
+    "traineeStarted": false,
+    "commencementDate": false,
     "traineeId": "2020/21-053",
     "status": [
       "Completed"
@@ -205,6 +206,7 @@ seedRecords.push({
   route: 'Provider-led (postgrad)',
   trainingDetails: {
     "traineeStarted": false,
+    "commencementDate": false,
     "traineeId": "2020/21-085",
     status: [
       "Completed"
@@ -247,6 +249,7 @@ seedRecords.push({
   route: 'Provider-led (postgrad)',
   trainingDetails: {
     "traineeStarted": false,
+    "commencementDate": false,
     "traineeId": "2020/21-102",
     status: [
       "Completed"
