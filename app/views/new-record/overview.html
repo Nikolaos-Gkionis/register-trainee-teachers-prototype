@@ -1,11 +1,5 @@
 {% extends "_templates/_new-record.html" %}
 
-{% if data.record.personalDetails.shortName %}
-  {% set pageHeading = data.record.personalDetails.shortName | safe %}
-{% else %}
-  {% set pageHeading = "Add a trainee" %}
-{% endif %}
-
 {% set hideReturnLink = true %}
 {% set backLink = '/drafts' %}
 {% set backText = "All drafts" %}
@@ -13,20 +7,101 @@
 
 {% block formContent %}
 
-{% set referrer = recordPath + "/overview" %}
+{% set traineeFullName %}
+  {{ record.personalDetails.givenName }}
+  {% if record.personalDetails.middleNames %}
+    {{ record.personalDetails.middleNames }}
+  {% endif %}
+  {{ record.personalDetails.familyName }}
+{% endset %}
 
+{% set traineeShortName %}
+  {{ record.personalDetails.givenName }}
+  {{ record.personalDetails.familyName }}
+{% endset %}
+
+{% if data.record.personalDetails.shortName %}
+  {% set pageHeading = data.record.personalDetails.shortName | safe %}
+{% else %}
+  {% set pageHeading = traineeShortName %}
+{% endif %}
+
+{% set referrer = recordPath + "/overview" %}
 
 {% set draftRecordName %}
   {% if record.personalDetails.shortName %}
-   for {{record.personalDetails.shortName}}
+    for {{record.personalDetails.shortName}}
   {% endif %}
 {% endset %}
 
 <span class="govuk-caption-l">Draft</span>
-<h1 class="govuk-heading-l govuk-!-margin-bottom-8">{{pageHeading}}</h1>
+<h1 class="govuk-heading-xl govuk-!-margin-bottom-8">{{pageHeading}}</h1>
+
+{% set routeText %}
+  {{ record.route or "route not set" }}
+{% endset %}
+
+{{ govukSummaryList({
+      classes: 'govuk-!-margin-bottom-8',
+      rows: [
+        {
+          key: {
+            text: "Full name"
+          },
+          value: {
+            text: traineeFullName
+          },
+          actions: {
+            items: [
+              {
+                href: "/new-record/trainee-name-and-id",
+                text: "Change",
+                visuallyHiddenText: "trainee name"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "ID"
+          },
+          value: {
+            text: record.trainingDetails.traineeId if record.trainingDetails.traineeId else " – "
+          },
+          actions: {
+            items: [
+              {
+                href: "#",
+                text: "Change",
+                visuallyHiddenText: "trainee ID"
+              }
+            ]
+          }
+        },
+        {
+          key: {
+            text: "Route"
+          },
+          value: {
+            text: routeText | safe
+          },
+          actions: {
+            items: [
+              {
+                href: "/new-record/set-route",
+                text: "Change",
+                visuallyHiddenText: "route"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  )
+}}
 
 {# Inset text about the provider and route #}
-{% include "_includes/providerAndRouteInsetText.njk" %}
+{# {% include "_includes/providerAndRouteInsetText.njk" %} #}
 
 <h2 class="govuk-heading-m">Personal details and education</h2>
 {{ appTaskList({

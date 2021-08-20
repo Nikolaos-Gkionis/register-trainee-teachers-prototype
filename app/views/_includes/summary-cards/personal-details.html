@@ -2,21 +2,6 @@
 {% set personalDetailsRows = [
   {
     key: {
-      text: "Full name"
-    },
-    value: {
-      text: record.personalDetails | getFullName or 'Not entered'
-    },
-    actions: {
-      items: [{
-        href: recordPath + "/personal-details" | addReferrer(referrer),
-        text: "Change",
-        visuallyHiddenText: "name"
-      }]
-    } if canAmend
-  },
-  {
-    key: {
       text: "Date of birth"
     },
     value: {

@@ -35,7 +35,16 @@ module.exports = router => {
     else {
       // If single provider, directly assign them to the record
       data.record.provider = data.signedInProviders[0]
-      res.redirect('/new-record/select-route')
+      res.redirect('/new-record/trainee-name-and-id')
+    }
+  })
+
+  // check if their is when creating a new trainee record
+  router.post('trainee-name-and-id', function (req, res) {
+    const data = req.session.data
+    let record = data.record
+    if (record.route) {
+      res.redirect('/new-record/overview')
     }
   })
 
