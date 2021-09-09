@@ -81,7 +81,7 @@ let defaultRouteData = {
     "Now teach",
     "Transition to teach"
   ],
-  bursariesAvailable: false
+  financialSupportAvailable: false
 }
 
 // Data for each route
@@ -97,7 +97,7 @@ let baseRouteData = {
       'degree',
       'funding'
     ],
-    bursariesAvailable: false
+    financialSupportAvailable: false
   },
   "Provider-led (undergrad)": {
     defaultEnabled: true,
@@ -118,9 +118,10 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "bursary",
         subjects: [
           "Mathematics",
           "Physics"
@@ -141,9 +142,10 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "bursary",
         subjects: [
           "Chemistry",
           "Computing",
@@ -154,6 +156,7 @@ let baseRouteData = {
         scholarshipValue: "26000"
       },
       {
+        type: "bursary",
         subjects: [
           "Languages",
           "Classics"
@@ -161,6 +164,7 @@ let baseRouteData = {
         value: "10000"
       },
       {
+        type: "bursary",
         subjects: [
           "Biology"
           ],
@@ -191,7 +195,33 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: false
+    financialSupportAvailable: true,
+    financialSupport: [
+      {
+        type: "grant",
+        subjects: [
+          "Chemistry",
+          "Computing",
+          "Mathematics",
+          "Physics"
+          ],
+        value: "24000"
+      },
+      {
+        type: "grant",
+        subjects: [
+          "Languages",
+          "Classics"
+          ],
+        value: "10000"
+      },
+      {
+        type: "grant",
+        subjects: [
+          "Biology"
+          ],
+        value: "7000"
+      }]
   },
   "School direct (fee funded)": {
     defaultEnabled: true,
@@ -216,9 +246,10 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "bursary",
         subjects: [
           "Chemistry",
           "Computing",
@@ -229,6 +260,7 @@ let baseRouteData = {
         scholarshipValue: "26000"
       },
       {
+        type: "bursary",
         subjects: [
           "Languages",
           "Classics"
@@ -236,6 +268,7 @@ let baseRouteData = {
         value: "10000"
       },
       {
+        type: "bursary",
         subjects: [
           "Biology"
           ],
@@ -267,7 +300,7 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: false,
+    financialSupportAvailable: false,
     courseDatesAreAmgiguous: true
   },
   "Opt-in (undergrad)": {
@@ -289,9 +322,10 @@ let baseRouteData = {
       "Now teach",
       "Transition to teach"
     ],
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "bursary",
         subjects: [
           "Languages",
           "Computing",
@@ -323,9 +357,10 @@ let baseRouteData = {
       "EYTS"
     ],
     qualificationsSummary: "EYTS full time",
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "grant",
         subjects: [
           "Early years"
           ],
@@ -352,9 +387,10 @@ let baseRouteData = {
       "EYTS"
     ],
     qualificationsSummary: "EYTS full time",
-    bursariesAvailable: true,
-    bursaries: [
+    financialSupportAvailable: true,
+    financialSupport: [
       {
+        type: "bursary",
         subjects: [
           "Early years"
           ],
@@ -395,7 +431,7 @@ let baseRouteData = {
       "EYTS"
     ],
     qualificationsSummary: "EYTS full time",
-    bursariesAvailable: false
+    financialSupportAvailable: false
   },
   "Early years (undergrad)": {
     defaultEnabled: true,
@@ -416,7 +452,7 @@ let baseRouteData = {
       "EYTS"
     ],
     qualificationsSummary: "EYTS full time",
-    bursariesAvailable: false,
+    financialSupportAvailable: false,
     courseDatesAreAmgiguous: true
   },
   "High potential initial teacher training (HPITT)": {
@@ -431,7 +467,7 @@ let baseRouteData = {
       'degree',
       'funding'
     ],
-    bursariesAvailable: false,
+    financialSupportAvailable: false,
     fields: [
       "region"
     ]
@@ -447,11 +483,11 @@ Object.keys(allRoutes).forEach(routeName => {
   routeData.name = routeName
 
   // Expand 'Languages' in to each individual language
-  if (routeData.bursaries){
-    routeData.bursaries.forEach(bursaryLevel => {
-      if (bursaryLevel.subjects.includes('Languages')){
-        _.pull(bursaryLevel.subjects, 'Languages')
-        bursaryLevel.subjects = bursaryLevel.subjects.concat(modernLanguages)
+  if (routeData.financialSupport){
+    routeData.financialSupport.forEach(financialSupportLevel => {
+      if (financialSupportLevel.subjects.includes('Languages')){
+        _.pull(financialSupportLevel.subjects, 'Languages')
+        financialSupportLevel.subjects = financialSupportLevel.subjects.concat(modernLanguages)
       }
     })
   }
