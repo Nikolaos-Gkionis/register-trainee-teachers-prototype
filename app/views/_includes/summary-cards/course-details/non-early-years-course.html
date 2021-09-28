@@ -24,7 +24,7 @@
       }
     ]
   } if canAmend and false
-} if record | isNonDraft %}
+} %}
 
 {% set courseNameRow = {
   key: {
@@ -209,7 +209,7 @@
 
 
 {% set courseDetailsRows = [
-  routeRow,
+  routeRow if record | isNonDraft,
   courseNameRow,
   educationPhaseRow,
   subjectsRow,
@@ -247,8 +247,8 @@
   {% set incompleteId = "course-details" %}
   {% if status == "Review" %}
     {% set incompleteText = "Course details not reviewed" %}
-    {% set courseMissingSpecialisms = courseDetails | subjectsAreIncomplete %}
-    {% set courseDetailsHref = "/course-details/publish-minimal" if courseMissingSpecialisms else "/course-details/confirm" %}
+    {% set courseNeedsToBeConfirmed = record.courseDetails | courseNeedsToBeConfirmed %}
+    {% set courseDetailsHref = "/course-details/confirm-course" if courseNeedsToBeConfirmed else "/course-details/confirm" %}
     {% set incompleteLink = recordPath + courseDetailsHref %}
     {% set incompleteLinkText = "Review section" %}
   {% elseif status == "In progress" %}

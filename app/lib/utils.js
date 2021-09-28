@@ -193,6 +193,57 @@ exports.setCourseDefaults = record => {
   return record
 }
 
+
+// Copy relevant Publish course dates to trainee if they’re set
+// Dates depend on what study mode the trainee is on
+exports.setCourseDatesIfPresent = courseDetails => {
+
+  // If there's already start and end dates, do nothing
+  if (courseDetails.startDate && courseDetails.endDate) return courseDetails
+
+  if (exports.isFullTime(courseDetails)){
+    courseDetails.startDate = courseDetails.startDate || courseDetails.startDateFullTime
+    courseDetails.endDate = courseDetails.endDate || courseDetails.endDateFullTime
+  }
+
+  else if (exports.isPartTime(courseDetails)){
+    courseDetails.startDate = courseDetails.startDate || courseDetails.startDatePartTime
+    courseDetails.endDate = courseDetails.endDate || courseDetails.endDatePartTime
+  }
+
+  return courseDetails
+}
+
+// Decision tree of conditional pages for Publish courses
+exports.getNextPublishCourseDetailsUrl = (record, recordPath, referrer) => {
+
+  // Unsure why there's two filters in use here. But it seems to work so not touching for now
+  let hasUnmappedPublishSubjects = exports.hasUnmappedPublishSubjects(record.courseDetails) || exports.subjectsAreIncomplete(record.courseDetails)
+
+  let isMissingStudyMode = exports.needsStudyMode(record)
+  let isMissingDates = exports.needsCourseDates(record)
+  let isAllocated = exports.hasAllocatedPlaces(record)
+
+  if (hasUnmappedPublishSubjects){
+    return `${recordPath}/course-details/choose-specialisms${referrer}`
+  }
+  // Courses can be dual study mode. If so, ask which this trainee is
+  else if (isMissingStudyMode){
+    return `${recordPath}/course-details/study-mode${referrer}`
+  }
+  // Backfill course dates
+  else if (isMissingDates){
+    return `${recordPath}/course-details/dates${referrer}`
+  }
+  else if (isAllocated) {
+    // After /allocated-place the journey will match other course-details routes
+    return `${recordPath}/course-details/allocated-place${referrer}`
+  }
+  else {
+    return `${recordPath}/course-details/confirm${referrer}`
+  }
+}
+
 // -------------------------------------------------------------------
 // Funding - initiatives and bursaries
 // -------------------------------------------------------------------
@@ -371,6 +422,69 @@ exports.getProviderCourses = function(courses, provider, route=false, data=false
   let limitedCourses = filteredCourses.slice(0, data.settings.courseLimit)
   let sortedCourses = exports.sortPublishCourses(limitedCourses)
   return sortedCourses
+}
+
+// Look up a course by the Publish Code
+exports.getCourseByCode = function(code, data=false){
+  data = data || this?.ctx?.data || false
+  let foundCourse
+
+  // Iterate through each provider and then through each of their courses
+  // This code is a bit awkward. It relies on the first find() breaking as soon as a provider
+  // is found
+  Object.keys(data.courses).find( provider => {
+    foundCourse = data.courses[provider].courses.find(course => course.code == code)
+    return foundCourse
+  })
+
+  if (!foundCourse) console.log(`Error: course ${code} not found`)
+
+  return foundCourse
+}
+
+exports.updatePublishCourse = function(course, data=false){
+  data = data || this?.ctx?.data || false
+
+  // Iterate through each provider and then through each of their courses
+  // Avoiding using getCourseByCode() as we want a reference to the course not a copy.
+  let foundCourse
+
+  Object.keys(data.courses).find( provider => {
+    foundCourse = data.courses[provider].courses.find(_course => _course.code == course.code)
+    return foundCourse
+  })
+
+  if (!foundCourse) console.log(`Error: course ${course?.courseNameLong} not found, so couldn’t be 
+    updated`)
+
+  // This overwrites the one we found by reference. There's probably a cleaner way of
+  // doing this
+  foundCourse = course
+}
+
+// Look up a Publish course from the trainee record
+exports.getTraineePublishCourse = function(record, data=false){
+  data = data || this?.ctx?.data || false
+  if (!record.courseDetails || !record.courseDetails.code) return false
+  else return exports.getCourseByCode(record.courseDetails.code, data)
+}
+
+
+exports.updatePublishCourseDates = (courseDetails, data) => {
+
+  let theCourse = exports.getCourseByCode(courseDetails?.code, data)
+
+  if (exports.isFullTime(courseDetails)){
+    theCourse.startDateFullTime = theCourse.startDateFullTime || courseDetails?.startDate || undefined
+    theCourse.endDateFullTime = theCourse.endDateFullTime || courseDetails?.endDate || undefined
+  }
+  else if (exports.isPartTime(courseDetails)){
+    theCourse.startDatePartTime = theCourse.startDatePartTime || courseDetails?.startDate || undefined
+    theCourse.endDatePartTime = theCourse.endDatePartTime || courseDetails?.endDate || undefined
+  }
+
+  exports.updatePublishCourse(theCourse, data)
+
 }
 
 // Check if the selected provider offers publish courses for the selected route
@@ -657,6 +771,14 @@ exports.subjectsAreIncomplete = courseDetails => {
   return Object.values(courseDetails.subjects).some(subject => subject == null)
 }
 
+// For Apply drafts, ask users to confirm the course is correct before proceeding.
+// This allows us to launch in to a flow to backfill missing data *or* let them swap to a different
+// course
+exports.courseNeedsToBeConfirmed = courseDetails => {
+  if (exports.sectionIsComplete(courseDetails)) return false
+  else return (Boolean(courseDetails.needsConfirming))
+}
+
 // -------------------------------------------------------------------
 // Records
 // -------------------------------------------------------------------
@@ -725,8 +847,7 @@ exports.routeIsEarlyYears = route => {
   return route && route.includes("Early years")
 }
 
-// TODO: this might not be reliable - need to check all age ranges
-// map to one of the phases
+
 exports.isPrimary = record => {
   return exports.getCoursePhase(record) == "Primary"
 }
@@ -735,6 +856,23 @@ exports.isPrimary = record => {
 // map to one of the phases
 exports.isSecondary = record => {
   return exports.getCoursePhase(record) == "Secondary"
+}
+
+// Get study mode from record or courseDetails
+exports.getStudyMode = data => {
+  return data?.courseDetails?.studyMode || data?.studyMode
+}
+
+exports.isFullTime = data => {
+  return exports.getStudyMode(data) == "Full time"
+}
+
+exports.isPartTime = data => {
+  return exports.getStudyMode(data) == "Part time"
+}
+
+exports.isFullTimeOrPartTime = data => {
+  return exports.getStudyMode(data) == "Full time or part time"
 }
 
 exports.sectionIsComplete = section => {
@@ -829,6 +967,10 @@ exports.needsStudyMode = record => {
   return (!allowedStudyModes.includes(record?.courseDetails?.studyMode))
 }
 
+exports.needsCourseDates = record => {
+  return !Boolean(record?.courseDetails?.startDate) || !Boolean(record?.courseDetails?.endDate)
+}
+
 // -------------------------------------------------------------------
 // Existing record actions
 // -------------------------------------------------------------------
@@ -898,8 +1040,6 @@ exports.needTraineeStartDate = (record) => {
     return false
   }
 }
-
-
 
 // -------------------------------------------------------------------
 // Get records
