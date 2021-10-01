@@ -831,7 +831,7 @@ exports.isApprenticeship = record => {
 
 // For some courses, the the wider course might be longer than the itt bit we’re interested in
 exports.courseDatesAreAmbiguous = record => {
-  return trainingRoutes?.[record?.route]?.courseDatesAreAmgiguous || false
+  return trainingRoutes?.[record?.route]?.courseDatesAreAmbiguous || false
 }
 
 // Phases
