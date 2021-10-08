@@ -202,3 +202,21 @@ span.summary-validation-symbol {
   text-align: right;
   float: right;
 }
+
+.app-link-button {
+  @extend %govuk-body-s;
+  margin: 0;
+  padding: 0;
+  display: inline;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.app-link-button:focus {
+  outline: none;
+}
+
+.app-hidden-form {
+  display: inline;
+}
