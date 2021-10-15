@@ -175,6 +175,11 @@
   </ul>
   {% set guidanceLink = '/guidance' if data.settings.includeGuidance else '#' %}
   <p class="govuk-body govuk-!-font-size-16"><a href="{{guidanceLink}}" class="govuk-link govuk-footer__link">Find out about Register trainee teachers</a></p>
+  <form method="post" action="/admin/clear-data" class="app-hidden-form">
+    <button class="app-link-button">
+      Clear data
+    </button>
+  </form>
 {% endset %}
 
 {% if useAutoStoreData %}
@@ -198,9 +203,6 @@
           href: "/admin",
           text: "Prototype admin"
         }, {
-          href: "/admin/clear-data",
-          text: "Clear data"
-        }, {
           href: "/apply/" + providerCode + "/" + courseCode + "?dualrunning=true&variant=1",
           text: "v1"
         } if providerCode and courseCode, {
@@ -214,6 +216,7 @@
     }) }}
   {% endblock %}
 {% endif %}
+
 
 {% block bodyEnd %}
   {% block scripts %}
