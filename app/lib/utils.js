@@ -1324,11 +1324,12 @@ exports.sortRecordsByDateUpdated = records => {
 
 
 // Add an event to a record’s timeline
-exports.addEvent = (record, content) => {
+exports.addEvent = (record, title, description) => {
   record.events.items.push({
-    title: content,
+    title: title,
     user: 'Provider',
-    date: new Date()
+    date: new Date(),
+    ...(description ? {description} : {}) // conditionally pass description
   })
 }
 
@@ -1353,7 +1354,8 @@ exports.getTimeline = (record) => {
       },
       byline: {
         text: item.user
-      }
+      },
+      ...(item.description ? {description: item.description} : {})
       // link: getLink(item, record)
     }
   }).reverse()
