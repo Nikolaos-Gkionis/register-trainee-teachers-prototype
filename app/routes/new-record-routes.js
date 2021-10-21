@@ -29,7 +29,7 @@ module.exports = router => {
     record.source = "Manual"
     record.events = { items: []}
     data.record = record
-    // If multiple providers, users must pick one as thier first action
+    // If multiple providers, users must pick one as their first action
     if (data.signedInProviders.length > 1){
       res.redirect('/new-record/pick-provider')
     }
