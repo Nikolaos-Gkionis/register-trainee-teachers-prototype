@@ -5,7 +5,7 @@
 <div class="app-application-card {{justNowClass}}">
 
   <div class="app-application-card_row app-application-card_row--header">
-      <h3 class="app-application-card__trainee-name govuk-heading-m">
+      <h3 class="app-application-card__trainee-name govuk-heading-m govuk-!-margin-bottom-0">
         <a href="/record/{{ record.id }}" class="govuk-link govuk-link--no-visited-state">
           {% if record | hasName %}
             {% if query.sortOrder == "lastName" %}
