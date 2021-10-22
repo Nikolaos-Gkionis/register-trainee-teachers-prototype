@@ -14,9 +14,12 @@
 }
 
 .app-application-card_row--header {
-  display: inline-grid;
-  .govuk-tag {
-    margin-left: govuk-spacing(3);
+  display: flex;
+  justify-content: space-between;
+  .app-application-card_tag-container {
+    .govuk-tag {
+      margin-left: govuk-spacing(3);
+    }
   }
 }
 
