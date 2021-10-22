@@ -5,7 +5,7 @@
 <div class="app-application-card {{justNowClass}}">
 
   <div class="app-application-card_row app-application-card_row--header">
-      <h3 class="app-application-card__trainee-name govuk-heading-m">
+      <h3 class="app-application-card__trainee-name govuk-heading-m govuk-!-margin-bottom-0">
         <a href="/record/{{ record.id }}" class="govuk-link govuk-link--no-visited-state">
           {% if record | hasName %}
             {% if query.sortOrder == "lastName" %}
@@ -22,16 +22,18 @@
           {% endif %}
         </a>
       </h3>
-      {{govukTag({
-        text: record | getStatusText,
-        classes: record.status | getStatusClass
-      })}}
-      {% if record | isDraft and not record | recordIsComplete %}
+      <span class="app-application-card_tag-container">
+        {% if record | isDraft and not record | recordIsComplete %}
+          {{govukTag({
+            text: "Incomplete",
+            classes: "app-tag--record-incomplete"
+          })}}
+        {% endif %}
         {{govukTag({
-          text: "Incomplete",
-          classes: "app-tag--record-incomplete"
+          text: record | getStatusText,
+          classes: record.status | getStatusClass
         })}}
-      {% endif %}
+      </span>
   </div>
   
   {% if data.settings.showBulkLinks %}
