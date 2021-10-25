@@ -24,7 +24,7 @@
         {% if record.status | canRecommendForQts %}
           {% if record | ittInTheFuture %}
             {{ govukInsetText({
-            text: "The trainee’s ITT starts on" + (record.courseDetails.startDate | govukDate),
+            text: "The trainee’s ITT starts on " + (record.courseDetails.startDate | govukDate),
             classes: "govuk-!-margin-0"
           }) }}
           {% elseif record | hasOutstandingActions %}
