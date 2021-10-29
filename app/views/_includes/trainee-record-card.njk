@@ -4,35 +4,41 @@
 
 <div class="app-application-card {{justNowClass}}">
 
-  <h3 class="app-application-card__trainee-name govuk-heading-m govuk-!-margin-bottom-0">
-    <a href="/record/{{ record.id }}" class="govuk-link govuk-link--no-visited-state">
-      {% if record | hasName %}
-        {% if query.sortOrder == "lastName" %}
-          {{ record.personalDetails | getShortNameReversed }}
-        {% else %}
-          {{ record | getShortName }}
-        {% endif %} 
-      {% else %}
-        {% if record.status | isDraft %}
-          Draft record
-        {% else %}
-          Name not known {# Shouldn't be possible - non drafts should always have a name #}
+  <div class="app-application-card_row app-application-card_row--header">
+      <h3 class="app-application-card__trainee-name govuk-heading-m govuk-!-margin-bottom-0">
+        <a href="/record/{{ record.id }}" class="govuk-link govuk-link--no-visited-state">
+          {% if record | hasName %}
+            {% if query.sortOrder == "lastName" %}
+              {{ record.personalDetails | getShortNameReversed }}
+            {% else %}
+              {{ record | getShortName }}
+            {% endif %} 
+          {% else %}
+            {% if record.status | isDraft %}
+              Draft record
+            {% else %}
+              Name not known {# Shouldn't be possible - non drafts should always have a name #}
+            {% endif %}
+          {% endif %}
+        </a>
+      </h3>
+      <span class="app-application-card_tag-container">
+        {% if not record | recordIsComplete %}
+          <span style="display: inline-block;">
+            {{govukTag({
+              text: "Incomplete",
+              classes: "app-tag--record-incomplete"
+            })}}
+          </span>
         {% endif %}
-      {% endif %}
-    </a>
-  </h3>
-  <span class="app-application-card_tag-container">
-    {% if not record | recordIsComplete %}
-      {{govukTag({
-        text: "Incomplete",
-        classes: "app-tag--record-incomplete"
-      })}}
-    {% endif %}
-    {{govukTag({
-      text: record | getStatusText,
-      classes: record.status | getStatusClass
-    })}}
-  </span>
+        <span style="display: inline-block;">
+          {{govukTag({
+            text: record | getStatusText,
+            classes: record.status | getStatusClass
+          })}}
+        </span>
+      </span>
+  </div>
   
   {% if data.settings.showBulkLinks %}
     <div class="app-application-card_col">
