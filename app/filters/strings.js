@@ -3,6 +3,7 @@
 // -------------------------------------------------------------------
 const string = require('string')
 const _ = require('lodash');
+const marked = require('marked');
 // Leave this filters line
 var filters = {}
 
@@ -75,7 +76,15 @@ filters.currency = input => {
 // Usage:
 // {{ 'The count is ${count}' | stringLiteral }}
 filters.stringLiteral = function(str) {
-    return (new Function('with (this) { return `' + str + '` }')).call(this.ctx)
+  return (new Function('with (this) { return `' + str + '` }')).call(this.ctx)
+}
+
+// Format text using markdown
+// Documentation at https://marked.js.org/
+filters.markDown = input => {
+  marked.setOptions({
+  })
+  return marked(input)
 }
 
 // -------------------------------------------------------------------
