@@ -1,3 +1,4 @@
+
 const fs = require('fs')
 const path = require('path')
 const individualFunctionsFolder = path.join(__dirname, './functions')
@@ -27,6 +28,11 @@ module.exports = function (env) {
   // Return today’s date
   functions.today = function() {
     return moment().format('YYYY-MM-DD')
+  }
+
+  // Get current month as number (eg December = '12')
+  functions.currentMonth = () => {
+    return moment().format('MM')
   }
 
   // Get the context - useful for logging
