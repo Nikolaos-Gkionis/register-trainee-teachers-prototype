@@ -128,8 +128,13 @@
       text: 'Courses',
       href: '/root/case-list',
       active: true if navActive == 'courses'
-    } if false
-    ] %}
+    } if false,
+    {
+      text: 'Funding',
+      href: '/funding/monthly-payments',
+      active: true if navActive == 'funding'
+    }
+  ] %}
 
     {# MOJ primary nav does’t handle empty items well, so remove them here #}
     {% set navItems = navItems | removeEmpty %}

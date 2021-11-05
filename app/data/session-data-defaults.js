@@ -8,7 +8,7 @@ let strings                 = require('./strings')
 let awards                  = require('./awards') // Types of degree
 let degreeData              = require('./degree')()
 let degreeTypes             = degreeData.types.all
-let degreeTypesSimple             = degreeData.types.all.map(type => type.text).sort()
+let degreeTypesSimple       = degreeData.types.all.map(type => type.text).sort()
 let subjects                = degreeData.subjects
 let ukComparableDegrees     = degreeData.ukComparableDegrees
 
@@ -61,6 +61,8 @@ let providers               = providerData.selectedProviders
 let allProviders            = providerData.allProviders
 
 let years                   = require('./years')
+
+let funding                 = require('./funding')
 
 // =============================================================================
 // Settings - things that can be changed from /admin
@@ -160,6 +162,7 @@ module.exports = {
   degreeTypes,
   degreeTypesSimple,
   ethnicities,
+  funding,
   ittSubjects,
   allSubjects,
   nationalities,

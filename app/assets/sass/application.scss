@@ -221,3 +221,11 @@ span.summary-validation-symbol {
 .app-hidden-form {
   display: inline;
 }
+
+$sizes: 50, 25, 20, 16;
+
+@each $size in $sizes {
+  .app-table__column-#{$size} {
+    width: $size + unquote('%');
+  }
+}
