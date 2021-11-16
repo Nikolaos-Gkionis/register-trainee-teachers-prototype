@@ -81,7 +81,10 @@ filters.getSchoolNamesForAutocomplete = (schools) => {
 // Biology (J482)
 filters.getCourseNamesForSelect = (courses) => {
   return courses.map(course => {
-    return [course.courseNameLong, course.id]
+    return {
+      text: course.courseNameLong,
+      value: course.id
+    }
   })
 }
 
@@ -91,7 +94,11 @@ filters.getCourseNamesForSelect = (courses) => {
 // QTS with PGCE full-time
 filters.getCourseNamesForAutocomplete = (courses) => {
   return courses.map(course => {
-    return [`${course.courseNameLong} | ${course.qualificationsSummary}`, course.id]
+    return {
+      name: course.courseNameLong,
+      hint: course.qualificationsSummary,
+      value: course.id
+    }
   })
 }
 
@@ -102,12 +109,18 @@ filters.getCourseNamesForAutocomplete = (courses) => {
 // Bachelor of Science (BSc)
 filters.getDegreeTypesForAutocomplete = (degreeTypes) => {
   return degreeTypes.map(type => {
-    let suggestion
-    if (type.short == type.full) suggestion = type.full
-    else suggestion = `${type.text} | ${type.short}`
+
+    let append = ((type.short && type.short != type.full) ? type.short : null)
+
+    if (append) append = ` <span class="autocomplete__option--bold">(${type.short})</span>`
+
     return {
-      value: type.text, // The text that’s ultimately submitted / stored
-      suggestion
+      name: type.text,
+      value: type.value,
+      synonyms: [type.short].concat(type.synonyms).filter(Boolean),
+      append: append,
+      hint: type.hint,
+      boost: type.boost
     }
   })
 }
