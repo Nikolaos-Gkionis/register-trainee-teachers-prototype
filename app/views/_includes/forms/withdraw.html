@@ -3,6 +3,10 @@
   {{pageHeading}}
 </h1>
 
+<div class="govuk-inset-text">
+  Do not withdraw duplicate records. If you need to remove a duplicate record, contact us at <a class="govuk-notification-banner__link" href="mailto:becomingateacher@digital.education.gov.uk">becomingateacher@digital.education.gov.uk</a>.
+</div>
+
 {% set customWithdrawalDateArray = record.withdrawalDate | toDateArray %}
 {% if record.withdrawalDate | isInLast(2, "days") and record.withdrawalDateRadio != "On another day" %}
   {% set customWithdrawalDateArray = undefined %}
@@ -63,7 +67,7 @@
   {{ govukRadios({
     fieldset: {
       legend: {
-        text: "What date did the trainee formally withdraw?",
+        text: "When did the trainee withdraw?",
         classes: "govuk-fieldset__legend--s govuk-!-margin-bottom-4"
       }
     },
@@ -100,16 +104,16 @@
 {% set withdrawalReasonsItems = []  %}
 
 {% for reason in data.withdrawalReasons %}
-  {% set withdrawalReasonsItems = withdrawalReasonsItems | push ({ 
+  {% set withdrawalReasonsItems = withdrawalReasonsItems | push ({
     text: reason
   }) %}
 {% endfor %}
 
-{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({ 
+{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({
   divider: "or"
 }) %}
 
-{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({ 
+{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({
   text: "For another reason",
   checked: storeWithdrawalReasonOther,
   conditional: {
@@ -117,7 +121,7 @@
   }
 }) %}
 
-{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({ 
+{% set withdrawalReasonsItems = withdrawalReasonsItems | push ({
   text: "Unknown"
 }) %}
 
