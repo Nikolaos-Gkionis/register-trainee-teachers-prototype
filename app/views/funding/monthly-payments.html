@@ -69,7 +69,8 @@
 {% set pastMonths = [] %}
 {% set futureMonths = [] %}
 
-{% set thisMonth = currentMonth() %}
+{% set thisMonth = 7 %}
+{# {% set thisMonth = currentMonth() %} #}
 
 {% if thisMonth >= 8 %}
   {% set thisMonth = thisMonth - 8 %}
@@ -150,7 +151,7 @@
       Last updated: {{ "" | yesterdayGovuk }}
     </p>
     <p>
-      <a href="govuk-link--no-visited-state">Export monthly payments</a>
+      <a href="#" class="govuk-link--no-visited-state">Export monthly payments</a>
     </p>
   </div>
 </div>
