@@ -137,7 +137,7 @@
 
   {% set summaryRows = [] %}
   {% if futurePaymentsTotal != 0 %}
-    {% set summaryRowItems = [{ text: "Payments to " + currentMonth("word") }, { text: pastPaymentsTotal | currency, format: "numeric" }] %}
+    {% set summaryRowItems = [{ text: "Payments to " + currentMonth("word") + " " + currentYear() }, { text: pastPaymentsTotal | currency, format: "numeric" }] %}
     {% set summaryRows = summaryRows | push(summaryRowItems) %}
     {% set summaryRowItems = [{ text: "Predicted payments" }, { text: futurePaymentsTotal | currency, format: "numeric" }] %}
     {% set summaryRows = summaryRows | push(summaryRowItems) %}
@@ -181,7 +181,7 @@
   </div>
 
   {{ govukTable({
-    caption: "Payments to " + currentMonth("word"),
+    caption: "Payments to " + currentMonth("word") + " " + currentYear(),
     captionClasses: "govuk-table__caption--m",
     head: headItems,
     rows: rowsPast
