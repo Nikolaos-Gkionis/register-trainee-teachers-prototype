@@ -73,6 +73,11 @@
   {# {% set thisMonth = 7 %} #}
   {% set thisMonth = currentMonth() %}
 
+  {# 
+    Make calendar months align with academic year
+    eg August = 0, Jan = 5, July = 12
+
+   #}
   {% if thisMonth >= 8 %}
     {% set thisMonth = thisMonth - 8 %}
   {% else %}
