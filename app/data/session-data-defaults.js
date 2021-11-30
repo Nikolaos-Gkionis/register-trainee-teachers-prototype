@@ -1,8 +1,14 @@
+const yaml                  = require('js-yaml')
+const fs                    = require('fs')
+const path                  = require('path')
+
 let countries               = require('./countries')
 let ethnicities             = require('./ethnicities')
 let nationalities           = require('./nationalities')
 let statuses                = require('./status')
 let strings                 = require('./strings')
+const dataPath              = path.resolve(__dirname);
+let serviceUpdates          = yaml.load(fs.readFileSync(dataPath + '/service-updates.yaml'))
 
 // Degree stuff
 let awards                  = require('./awards') // Types of degree
@@ -34,15 +40,15 @@ let ugEntryQualifications   = require('./undergraduate-qualifications')
 
 // Assessment only
 let assessmentOnlyAgeRanges = require('./assessmentOnlyAgeRanges')
-let ittSubjectData = require('./itt-subjects')
-let ittSubjects = ittSubjectData.subjectSpecialismsArray
-let allSubjects = ittSubjectData.allSubjects
+let ittSubjectData          = require('./itt-subjects')
+let ittSubjects             = ittSubjectData.subjectSpecialismsArray
+let allSubjects             = ittSubjectData.allSubjects
 
 let withdrawalReasons       = require('./withdrawal-reasons')
-let notPassedReasons       = require('./not-passed-reasons')
+let notPassedReasons        = require('./not-passed-reasons')
 
 // Different training routes
-let trainingRouteData          = require('./training-route-data')
+let trainingRouteData       = require('./training-route-data')
 let trainingRoutes = trainingRouteData.trainingRoutes
 let publishRoutes = trainingRouteData.publishRoutes
 let nonPublishRoutes = trainingRouteData.nonPublishRoutes
@@ -181,6 +187,7 @@ module.exports = {
   publishRoutes,
   nonPublishRoutes,
   ukComparableDegrees,
+  serviceUpdates,
   withdrawalReasons,
   ugEntryQualifications,
   years,

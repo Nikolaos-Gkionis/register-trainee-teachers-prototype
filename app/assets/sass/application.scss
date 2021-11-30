@@ -229,3 +229,7 @@ $sizes: 50, 25, 20, 16;
     width: $size + unquote('%');
   }
 }
+
+.app-markdown > ul {
+  @extend #{ '.govuk-list', '.govuk-list--bullet'};
+}
