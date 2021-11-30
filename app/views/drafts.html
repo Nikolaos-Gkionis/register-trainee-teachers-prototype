@@ -255,6 +255,7 @@
 
   <div class="govuk-grid-column-full">
 
+    <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
     {# This heading set separately than {{pageHeading}} as it is html #}
     <h1 class="govuk-heading-xl">Draft trainees ({{filteredRecords | length}}<span class="govuk-visually-hidden"> {{ "record" | pluralise(filteredRecords | length)}}</span>)</h1>
 
