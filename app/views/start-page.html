@@ -1,4 +1,4 @@
- {% extends "layout.html" %}
+{% extends "layout.html" %}
 {% set bodyClasses = "start-page" %}
 {% set hideNav = true %}
 {% set hidePrimaryNav = true %}
@@ -56,17 +56,19 @@
 
 {% block content %}
 
-<div class="govuk-grid-row">
+<div class="govuk-grid-row govuk-!-margin-bottom-7">
   <div class="govuk-grid-column-two-thirds">
-
-    <p class="govuk-body">Use this service to:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>register trainee data with the Department for Education, and keep it updated</li>
-      <li>request a teacher reference number (TRN) for your trainees</li>
-      <li>share information about a trainee’s progress, such as whether they withdraw or defer</li>
-      <li>recommend your trainees for qualified teacher status (QTS) or early years teacher status (EYTS)</li>
-    </ul>
-
+    <h2 class="govuk-heading-l">
+      Latest news and updates
+    </h2>
+    {% for update in data.serviceUpdates.items -%}
+      {%- if loop.index == 1 -%}
+        {% include "_includes/app-service-updates.html" %}
+      {%- endif -%}
+    {%- endfor %}
+    <a href="/service-updates" class="govuk-body">
+      View all news and updates
+    </a>
   </div>
 </div>
 

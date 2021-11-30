@@ -221,3 +221,7 @@ span.summary-validation-symbol {
 .app-hidden-form {
   display: inline;
 }
+
+.app-markdown > ul {
+  @extend #{ '.govuk-list', '.govuk-list--bullet'};
+}
