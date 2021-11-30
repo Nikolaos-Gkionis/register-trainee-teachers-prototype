@@ -30,9 +30,15 @@ module.exports = function (env) {
     return moment().format('YYYY-MM-DD')
   }
 
-  // Get current month as number (eg December = '12')
-  functions.currentMonth = () => {
-    return moment().format('MM')
+  // Get current month as "word" (eg December = 'December'), or number (eg December = 12)
+  functions.currentMonth = (type) => {
+    if (type == "word") {
+      return moment().format('MMMM')
+    } else if(typeof(type) === 'number') {
+      return type
+    } else {
+      return moment().format('MM')
+    }
   }
 
   // Get the context - useful for logging
