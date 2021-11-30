@@ -222,6 +222,8 @@ span.summary-validation-symbol {
   display: inline;
 }
 
+
+// column headings for tables
 $sizes: 50, 25, 20, 16;
 
 @each $size in $sizes {
