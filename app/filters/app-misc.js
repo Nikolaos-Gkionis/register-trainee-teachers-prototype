@@ -162,6 +162,9 @@ filters.includes = (route, string) =>{
   }
 }
 
+// work out what types of funding the org is getting to give tab name
+// eg "Bursaries, scholarships and grants"
+// eg "Bursaries and grants"
 filters.getFundingStreams = () => {
   let fundingStreams = []
   
