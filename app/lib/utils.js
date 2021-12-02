@@ -1277,9 +1277,38 @@ exports.filterRecordsBy = (records, key, array, invert=false) => {
   return filtered
 }
 
+exports.filterByProvider = function(records, array, data=false){
+  data = Object.assign({}, (data || this.ctx.data || false))
+
+  array = [].concat(array) // force to array
+
+  return records.filter(record => {
+
+    // Enrich provider data
+    let providerData = exports.getProviderData.apply(this, [array, data])
+
+    // Check if any of the providers match
+    return providerData.some(provider => {
+      if (provider.type == "accreditingProvider"){
+        return record.provider == provider.name
+      }
+      else if (provider.type == "leadSchool"){
+        return provider.name == record?.schools?.leadSchool?.schoolName
+      }
+      else return false
+    })
+
+  })
+}
+
 // Filter records for particular providers
-exports.filterByProvider = (records, array) => {
+exports.filterByAccreditingProvider = (records, array) => {
   return exports.filterRecordsBy(records, 'provider', array)
+}
+
+// Filter records for particular providers
+exports.filterByLeadSchool = (records, array) => {
+  return exports.filterRecordsBy(records, 'schools.leadSchool.schoolName', array)
 }
 
 // Filter records for currently signed in providers
@@ -1294,7 +1323,7 @@ exports.filterBySignedIn = function(records, data=false){
     console.log('Error with filterBySignedIn: user doesn’t appear to be signed in to any providers')
     return []
   }
-  return exports.filterByProvider(records, data.signedInProviders)
+  return exports.filterByProvider(records, data.signedInProviders, data)
 }
 
 // Only records from a specific academic year or years
@@ -1380,6 +1409,62 @@ exports.sortRecordsByLastName = records => {
 exports.sortRecordsByDateUpdated = records => {
   return exports.sortRecordsByDate(records, 'updatedDate')
 }
+
+// -------------------------------------------------------------------
+// Providers
+// -------------------------------------------------------------------
+
+// Look up provider data using the provider name.
+// Works with strings and arrays of strings
+// eg
+// "Coventry University" => 
+// {
+//   name: 'Coventry University',
+//   type: 'accreditingProvider'
+// }
+exports.getProviderData = function(input, data=false){
+  data = data || this?.ctx?.data || false
+
+  if (!data){
+    console.log("Error with getProviderData: no data!")
+    return false
+  }
+
+  const lookUpProvider = provider => {
+    let item
+    if (data?.providers?.all){
+      item = data.providers.all.find(item => item.name == provider) || false
+    }
+    if (!item) console.log(`Error with getProvider data: ${provider} not found.`)
+    return item
+  }
+
+  if (Array.isArray(input)){
+    return input.map(provider => lookUpProvider(provider) ).filter(Boolean)
+  }
+  else return lookUpProvider(input)
+}
+
+// Gets the type of a provider - currently `accreditingProvider` or `leadSchool`
+exports.getProviderType = function(provider, data=false){
+  data = data || this?.ctx?.data || false
+
+  let found = data?.providers?.all && data.providers.all.find(item => item.name == provider)
+  return found?.type || false
+}
+
+exports.providerIsAccrediting = function(provider, data=false){
+  data = data || this?.ctx?.data || false
+  return exports.getProviderType.apply(this, [provider, data]) == 'accreditingProvider'
+}
+
+exports.providerIsLeadSchool = function(provider, data=false){
+  data = data || this?.ctx?.data || false
+  return exports.getProviderType.apply(this, [provider, data]) == 'leadSchool'
+}
+
+
+
 
 // -------------------------------------------------------------------
 // Misc
@@ -1623,54 +1708,55 @@ is wrong.
 exports.highlightInvalidRows = function(rows, params=false) {
   let ctx = Object.assign({}, this.ctx)
 
+  let returnRows = [...rows] //duplicate array - not sure this is needed
+
   // We need to add to any existing answers from previous times
   // this filter has run on this page
   // let invalidAnswers = ctx.data?.temp?.invalidAnswers || []
-  let featureEnabled = ctx.data?.settings?.highlightInvalidAnswers == "true"
+  let featureEnabled = ctx?.data?.settings?.highlightInvalidAnswers == "true"
 
-  if (rows) {
+  if (returnRows) {
     // Loop through each row
-    rows.map(row => {
+    returnRows = returnRows.map(row => {
       if (!row) return row
 
+      let theRow = Object.assign({}, row)
+
       // Values are stored two possible places
-      let value = row?.value?.html || row?.value?.text || ""
+      let value = theRow?.value?.html || theRow?.value?.text || ""
       if (_.isString(value)) value = value.trim()
       
       if (featureEnabled){
 
         if (params?.treatEmptyAsMissing && (!value || value == "")) {
           // Using .apply() to pass on value of 'this'
-          row = exports.markSummaryRowMissing.apply(this, [row])
+          theRow = Object.assign({}, exports.markSummaryRowMissing.apply(this, [theRow]))
+          console.log("here", theRow)
         }
 
-        console.log(value, typeof value)
-        if (value && value.includes('**missing**')) {
+        else if (value && value.includes('**missing**')) {
           // Using .apply() to pass on value of 'this'
-          row = exports.markSummaryRowMissing.apply(this, [row])
+          theRow = Object.assign({}, exports.markSummaryRowMissing.apply(this, [theRow]))
         }
 
         // We preface invalid answers with **invalid** but technically it should work anywhere
         // Probably might not work for dates / values that get transformed before display
-        if (value && value.includes('**invalid**')) {
+        else if (value && value.includes('**invalid**')) {
           // Using .apply() to pass on value of 'this'
-          row = exports.markSummaryRowInvalid.apply(this, [row])
+          theRow = Object.assign({}, exports.markSummaryRowInvalid.apply(this, [theRow]))
         }
-
-
-
       }
       // If feature not enabled, we still need to strip placeholders
       else {
-        row.value.html = exports.stripPlaceholders(value)
-        delete row.value?.text // not needed any more
+        theRow.value.html = exports.stripPlaceholders(value)
+        delete theRow.value?.text // not needed any more
       }
 
-      return row
+      return theRow
     })
   }
 
-  return rows
+  return returnRows
 }
 
 // Internal utility function to add markup to summary row to show visually inset styles
@@ -1723,6 +1809,8 @@ const styleSummaryRowAsInset = (row, params) => {
 // Type can be `invalid` or `missing`
 exports.markSummaryRow = function(row, type) {
 
+  row = Object.assign({}, row)
+
   // Keys are stored two possible places
   let key = row?.key?.html || row?.key?.text
 
@@ -1754,12 +1842,25 @@ exports.markSummaryRow = function(row, type) {
     }
   }
 
-  row = styleSummaryRowAsInset(row, {
-    id,
-    message,
-    linkText,
-    linkTextAppendHidden
-  })
+  // If there are no actions, style text grey instead of blue inset
+  if (!row?.actions?.items ||  !row?.actions?.items.length || !row?.actions?.items[0].href){
+    console.log("no link")
+    row = {
+      ...row,
+      value: {
+        html: `<div class="govuk-hint">${message}</div>`
+      }
+    }
+  }
+
+  else {
+    row = styleSummaryRowAsInset(row, {
+      id,
+      message,
+      linkText,
+      linkTextAppendHidden
+    })
+  }
 
   return row
 }

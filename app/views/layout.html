@@ -87,21 +87,28 @@
 
   {% set rightHandSideNavHtml %}
     {# Only show provider link if there’s more than one #}
-    {% if data.isHatModel and data.signedInProviders | length > 1 %}
+{#     {% if data.isHatModel and data.settings.userProviders | length > 0 %} #}
+
+    {% set providerName = data.settings.userActiveProvider %}
+    {% if providerName | providerIsLeadSchool %}
+      {% set providerName -%}
+        {{providerName}}{#  (view only) #}
+      {%- endset %}
+    {% endif %}
 
       <nav class="moj-primary-navigation">
         <ul class="moj-primary-navigation__list">
 
             <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link" {{ 'aria-current="page"' | safe if navActive == 'provider' }} href="/select-provider">
-                {{ data.settings.userActiveProvider }}
+              <a class="moj-primary-navigation__link {{ 'aria-current="page"' | safe if navActive == 'provider' }}" href="/select-organisation">
+                {{ providerName }}
               </a>
             </li>
 
         </ul>
 
       </nav>
-    {% endif %}
+    {# {% endif %} #}
   {% endset %}
 
   {% set navItems = [{
@@ -113,7 +120,7 @@
       text: 'Draft trainees',
       href: '/drafts',
       active: true if navActive == 'drafts'
-    } if data.settings.draftsInPrimaryNav == 'true',
+    } if isAuthorised('viewDrafts'),
     {
       text: 'Registered trainees',
       href: '/records',
@@ -123,7 +130,7 @@
       text: 'Bulk actions',
       href: '/bulk-action/new',
       active: true if navActive == 'bulk'
-    },
+    } if isAuthorised('bulkActions'),
     {
       text: 'Courses',
       href: '/root/case-list',

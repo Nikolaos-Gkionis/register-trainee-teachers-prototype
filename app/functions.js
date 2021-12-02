@@ -2,7 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const individualFunctionsFolder = path.join(__dirname, './functions')
 const moment = require("moment");
-const _ = require('lodash');
+const _ = require('lodash')
+const permissions = require('./filters/permissions.js').filters
 
 module.exports = function (env) {
 
@@ -37,6 +38,11 @@ module.exports = function (env) {
   // Expose all of lodash
   functions.lodash = _
 
+  // Pass through to utility function. Done like this so we don't need to use filter syntax - as nothing really needs to get sent anyway
+  functions.isAuthorised = function(action){
+    const data = this.ctx?.data
+    return permissions.providerIsAuthorised.apply(this, [data.signedInProviders, action])
+  }
 
   // Config - set upstream variables
   // Function adapted from:
@@ -47,7 +53,7 @@ module.exports = function (env) {
   functions.config = function (prop, value, merge = true) {
     const ctxValue = _.get(this.ctx, prop)
 
-    // Get current contenxt value if no `value` provided
+    // Get current context value if no `value` provided
     if (value === undefined) return ctxValue
 
     if (!merge || !ctxValue) {

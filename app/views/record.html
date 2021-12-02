@@ -9,8 +9,6 @@
 {% block tabContent %}
 {% set referrer = recordPath %}
 
-{% set canAmend = record.status | canBeAmended %}
-
 {% set hasCommencementDate = record.trainingDetails.traineeStarted | falsify %}
 
 {% set recordPath = "/record/" + record.id %}
@@ -19,7 +17,7 @@
 
   <div class="govuk-grid-column-full">
 
-    {% if record.status | canBeAmended %}
+    {% if canEdit %}
       <div class="record-actions">
         {% if record.status | canRecommendForQts %}
           {% if record | ittInTheFuture %}
