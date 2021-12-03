@@ -6,6 +6,7 @@ const trainingRouteData = require('./../data/training-route-data')
 const trainingRoutes = trainingRouteData.trainingRoutes
 const utils = require('./../lib/utils')
 const arrayFilters = require('./arrays.js').filters
+const funding = require('../data/funding')
 
 // Leave this filters line
 var filters = {}
@@ -159,6 +160,44 @@ filters.includes = (route, string) =>{
   } else {
     return false
   }
+}
+
+// work out what types of funding the org is getting to give tab name
+// eg "Bursaries, scholarships and grants"
+// eg "Bursaries and grants"
+filters.getFundingStreams = () => {
+  let fundingStreams = []
+  
+  let bursaryTrainees = 0
+  funding.bursaryPayments.forEach(element => {
+    bursaryTrainees += element.numberOfTrainees
+  })
+  
+  funding.eyIttBursaries.forEach(element => {
+    bursaryTrainees += element.numberOfTrainees
+  })
+
+  if(bursaryTrainees > 0){
+    fundingStreams.push("bursaries")
+  }
+
+  let scholarshipTrainnees = 0
+  funding.scholarshipPayments.forEach(element => {
+    scholarshipTrainnees += element.numberOfTrainees
+  })
+  if(scholarshipTrainnees > 0){
+    fundingStreams.push("scholarships")
+  }
+
+  let grantTrainees = 0
+  funding.eyIttGrants.forEach(element => {
+    grantTrainees += element.numberOfTrainees
+  })
+  if(grantTrainees > 0){
+    fundingStreams.push("grants")
+  }
+
+  return fundingStreams
 }
 
 exports.filters = filters

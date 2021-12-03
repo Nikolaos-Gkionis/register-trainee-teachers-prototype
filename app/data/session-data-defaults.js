@@ -79,6 +79,8 @@ providers.selected = providers.accreditingProviders.selected.concat(providers.le
 
 let years                   = require('./years')
 
+let funding                 = require('./funding')
+
 // =============================================================================
 // Settings - things that can be changed from /admin
 // =============================================================================
@@ -183,6 +185,7 @@ module.exports = {
   degreeTypes,
   degreeTypesSimple,
   ethnicities,
+  funding,
   ittSubjects,
   allSubjects,
   nationalities,
