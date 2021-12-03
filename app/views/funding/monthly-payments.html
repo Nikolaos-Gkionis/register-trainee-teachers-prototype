@@ -161,6 +161,7 @@
       </p>
     </div>
   </div>
+  <hr class="govuk-section-break govuk-section-break--m">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-half-from-desktop govuk-!-margin-top-2">
       {{ govukTable({
@@ -179,7 +180,7 @@
       }) }}
     </div>
   </div>
-
+  <hr class="govuk-section-break govuk-section-break--m">
   {{ govukTable({
     caption: "Payments to " + currentMonth("word") + " " + currentYear(),
     captionClasses: "govuk-table__caption--m",
@@ -188,6 +189,7 @@
   }) }}
 
   {% if futurePaymentsTotal != 0 %}
+    <hr class="govuk-section-break govuk-section-break--m">
     {{ govukTable({
       caption: "Predicted payments",
       captionClasses: "govuk-table__caption--m",
