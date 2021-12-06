@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+  {% set pageHeading = "Funding 2021 to 2022" %}
+  {% set tabName = "Salares and grants" %}
+
+  {% set activeTabMonthly = false %}
+  {% set activeTabYearlyScitt = false %}
+  {% set activeTabYearlyLeadSchool = true %}
+  {% include "_includes/funding-header-and-tab-nav.html" %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h2 class="govuk-heading-l">
+        {{ tabName | sentenceCase }}
+      </h2>
+      <p class="govuk-body govuk-!-margin-bottom-1">
+        Last updated: {{ "" | yesterdayGovuk }}
+      </p>
+      <p>
+        <a href="#" class="govuk-link--no-visited-state">Export {{ tabName | lower }}</a>
+      </p>
+    </div>
+  </div>
+
+  {% set dataSource = data.funding.annualFundingLeadSchools %}
+  {% set dataSource = dataSource | sort(attribute = "subject") %}
+
+  {% set salaryHeadRow = [
+    { text: "Subject",
+      classes: "app-table__column-20"
+    },
+    { text: "Route",
+      classes: ""
+    },
+    { text: "Trainees",
+      classes: ""
+    },
+    { text: "Amount per trainee",
+      classes: ""
+    },
+    { text: "Total",
+      classes: ""
+    }
+  ] %}
+
+  {% set total = 0 %}
+  {% set salaryBodyRows = [] %}
+  {% for item in dataSource %}
+    {% if (item.numberOfTrainees > 0) and (item.amountPerTrainee > 0) %}
+      {% set subjectTotal = (item.numberOfTrainees * item.amountPerTrainee) %}
+      {% set row = [
+        { text: item.subject },
+        { text: item.route },
+        { text: item.numberOfTrainees,
+          format: "numeric" },
+        { text: item.amountPerTrainee | currency,
+          format: "numeric" },
+        { text: subjectTotal | currency,
+          format: "numeric" }
+      ] %}
+    {% set total = total + subjectTotal %}
+    {% set salaryBodyRows = salaryBodyRows | push(row) %}
+    {% endif %}
+  {% endfor %}
+  {% set row = [
+    { },
+    { },
+    { },
+    { },
+    { text: total | currency,
+      format: "numeric" }
+  ] %}
+  {% set salaryBodyRows = salaryBodyRows | push(row) %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
+      <hr class="govuk-section-break govuk-section-break--m">
+
+      {{ govukTable({
+        caption: "Salraries and grants",
+        captionClasses: "govuk-table__caption--m",
+        head: salaryHeadRow,
+        rows: salaryBodyRows
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}
