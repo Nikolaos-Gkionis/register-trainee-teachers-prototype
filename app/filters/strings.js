@@ -27,7 +27,7 @@ filters.kebabCase = (string) => {
   return string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
 }
 
-// Sentence case - uppercase first latter
+// Sentence case - uppercase first letter
 filters.sentenceCase = (input) => {
   if (!input) return '' // avoid printing false to client
   if (_.isString(input)){
@@ -68,7 +68,9 @@ filters.currency = input => {
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-  if (input) return `£${numberWithCommas(input)}`
+  if      ( input > 0 ) { return `£${numberWithCommas(input)}` }
+  // makes number positive and puts minus sign in front of £
+  else if ( input < 0 ) { return `–£${numberWithCommas(input * -1 )}` }
   else return ''
 }
 
@@ -85,6 +87,24 @@ filters.markDown = input => {
   marked.setOptions({
   })
   return marked(input)
+}
+
+filters.startsWith = (string, target) => {
+  if (typeof string == "string"){
+    return string.startsWith(target)
+  } else {
+    return false
+  }
+}
+
+// Replaces "&" with "and"
+filters.ampersandToAnd = (string) => {
+  return string.replace(/&/g,"and")
+}
+
+// Replaces hyphen with non-breaking hyphen
+filters.hyphenToNonBreakingHyphen = (string) => {
+  return string.replace(/-/g,"&#8209;")
 }
 
 // -------------------------------------------------------------------
