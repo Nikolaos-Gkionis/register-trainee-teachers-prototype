@@ -221,6 +221,11 @@ filters.typesOfFunding = () => {
   return typesOfFunding
 }
 
+filters.formatYearRange = (string) => {
+  return string
+    .replace(/(\d{4})\/(\d{2})/, '$1&nbsp;to&nbsp;$2')
+    .replace(/(\d{2})\/(\d{2})/, '20$1&nbsp;to&nbsp;$2');
+}
 
 
 exports.filters = filters
