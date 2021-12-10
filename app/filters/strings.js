@@ -69,7 +69,7 @@ filters.currency = input => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
   if      ( input > 0 ) { return `£${numberWithCommas(input)}` }
-  // makes number positive and puts minus sign in front of £
+  // makes negative number positive and puts minus sign in front of £
   else if ( input < 0 ) { return `–£${numberWithCommas(input * -1 )}` }
   else return ''
 }
