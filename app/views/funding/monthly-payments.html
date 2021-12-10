@@ -24,7 +24,7 @@
 
   {% set headRow = [{ text: "Month" }] %}
   {% for item in dataSource %}
-    {% set headRow = headRow | push({ text: item.description | fixNamesFromFunding | sentenceCase }) %}
+    {% set headRow = headRow | push({ text: item.description | fixNamesFromFunding | sentenceCase | formatYearRange | safe }) %}
   {% endfor %}
   {% set headRow = headRow | push({ text: "Total" }) %}
 
