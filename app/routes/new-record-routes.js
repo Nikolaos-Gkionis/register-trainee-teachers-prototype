@@ -233,7 +233,7 @@ module.exports = router => {
       else returnQuery = "?errors=true"
       res.redirect(`/new-record/check-record${returnQuery}`)
     }
-    // if the ITT start date is in the past ask for the trainee’s start date
+    // if the ITT start date is in the past ask for the trainee start date
     else if (dates.isInPast(record?.courseDetails?.startDate)){
       res.redirect('/new-record/trainee-start-date')
     }
