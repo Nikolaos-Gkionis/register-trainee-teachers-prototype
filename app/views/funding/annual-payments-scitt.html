@@ -5,9 +5,7 @@
   {% set pageHeading = "Funding 2021 to 2022" %}
 
   {% set yearPaymentsTabName = "" | typesOfFunding | joinify  | sentenceCase %}
-  {% set activeTabMonthly = false %}
   {% set activeTabYearlyScitt = true %}
-  {% set activeTabYearlyLeadSchool = false %}
   {% include "_includes/funding-header-and-tab-nav.html" %}
 
   <div class="govuk-grid-row">
@@ -28,7 +26,6 @@
   {% set dataSource = dataSource | sort(attribute = "subject") %}
 
   {# ITT Bursaries #}
-  {# to do – sort alphabetically by subject #}
 
   {% set ittHeadItems = [
     { text: "Subject",
@@ -126,8 +123,9 @@
   {% endfor %}
 
   {# EY ITT Grants #}
-  {% set numberOfEYTrainees = 0 %}
-  {% set eyIttGrantValue = 7000 %}
+  {# Not using this for now as it’s inferred #}
+  {# {% set numberOfEYTrainees = 0 %}
+  {% set eyIttGrantValue  = 7000 %}
   {% set totalEyIttGrant = 0 %}
 
   {% for item in eyIttData %}
@@ -146,7 +144,7 @@
       format: "numeric" },
     { text: totalEyIttGrant | currency,
       format: "numeric" }
-  ]] %}
+  ]] %} #}
 
   {# Summary data #}
 
@@ -217,14 +215,14 @@
     </div>
   {% endif %}
 
-  {# {% if ittScholarshipTotal > 0 %} #}
+  {% if ittScholarshipTotal > 0 %}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
 
         <hr class="govuk-section-break govuk-section-break--m">
 
-        {# ITT Scholarships #}  {# to do – sort alphabetically #}
+        {# ITT Scholarships #}
         {{ govukTable({
           caption: "ITT scholarships",
           captionClasses: "govuk-table__caption--m",
@@ -234,7 +232,7 @@
 
       </div>
     </div>
-  {# {% endif %} #}
+  {% endif %}
   
   {% if eyIttTotal > 0 %}
     <div class="govuk-grid-row">
@@ -265,7 +263,7 @@
       </div>
     </div>
 
-    {# Not showing this for now as its inferred #}
+    {# Not showing this for now as it’s inferred #}
 {#     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
 

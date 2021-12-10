@@ -65,12 +65,13 @@ filters.prependWithAOrAn = string => {
 
 // Format a number as £x,xxx
 filters.currency = input => {
+  let inputAsInt = parseInt(input, 10)
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-  if      ( input > 0 ) { return `£${numberWithCommas(input)}` }
+  if      ( inputAsInt > 0 ) { return `£${numberWithCommas(inputAsInt)}` }
   // makes negative number positive and puts minus sign in front of £
-  else if ( input < 0 ) { return `–£${numberWithCommas(input * -1 )}` }
+  else if ( inputAsInt < 0 ) { return `–£${numberWithCommas(inputAsInt * -1 )}` }
   else return ''
 }
 
@@ -95,16 +96,6 @@ filters.startsWith = (string, target) => {
   } else {
     return false
   }
-}
-
-// Replaces "&" with "and"
-filters.ampersandToAnd = (string) => {
-  return string.replace(/&/g,"and")
-}
-
-// Replaces hyphen with non-breaking hyphen
-filters.hyphenToNonBreakingHyphen = (string) => {
-  return string.replace(/-/g,"&#8209;")
 }
 
 // -------------------------------------------------------------------

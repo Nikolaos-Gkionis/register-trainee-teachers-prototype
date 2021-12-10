@@ -179,7 +179,6 @@ filters.deleteExtraFundingTotals = (array) => {
   pairs.forEach(pair => {
     let attributeIsMissing = ! (firstRow[pair[0]]) 
     if (attributeIsMissing) {
-      console.log(`${pair[0]} is not present!`)
       array = objectFilters.deleteAttribute(array, pair[1])
     }
   })
@@ -221,6 +220,11 @@ filters.typesOfFunding = () => {
   return typesOfFunding
 }
 
+/*
+  Takes year ranges and makes them consistnent
+  - eg "19/20" ----> "2019 to 20"
+  - eg "2019/20" --> "2019 to 20"
+*/
 filters.formatYearRange = (string) => {
   return string
     .replace(/(\d{4})\/(\d{2})/, '$1&nbsp;to&nbsp;$2')

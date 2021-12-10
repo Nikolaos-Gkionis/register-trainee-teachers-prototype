@@ -165,6 +165,7 @@ filters.deleteBlankAttributes = (dictionary) => {
   return newDictionary;
 }
 
+// Delete all params where all items match params
 filters.deleteAttributesWhereAll = (array, params) => {
   let attributes = []
   array.forEach(item => {
@@ -203,7 +204,27 @@ filters.removeWhere = (arr, key, compare) => {
   return filtered
 }
 
-// Filter results for only those containing attribute and value
+/*
+  --------------------------------------------------------
+  whereIncludes
+  ---------------------------------------------------------
+
+  returns an array with all objects that don't match removed
+
+  arr = [
+    {"pet": "dog", name: "Catherine"}, 
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+
+  arr = newArr | whereIncludes ("pet", "cat")
+
+  newArr = [
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+*/
+
 filters.whereIncludes = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
@@ -215,6 +236,23 @@ filters.whereIncludes = (arr, key, compare) => {
   return filtered
 }
 
+/*
+  --------------------------------------------------------
+  whereDoesNotInclude
+  --------------------------------------------------------
+
+  returns an array with objects that match removed
+
+  arr = [
+    {"pet": "dog", name: "Catherine"}, 
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+
+  arr = newArr | whereDoesNotInclude("pet", "cat")
+
+  newArr = [{"pet": "dog", name: "Catherine"}]
+*/
 filters.whereDoesNotInclude = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {

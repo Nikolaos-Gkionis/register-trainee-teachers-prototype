@@ -3,10 +3,8 @@
 {% block content %}
 
   {% set pageHeading = "Funding 2021 to 2022" %}
-  {% set tabName = "Salares and grants" %}
+  {% set tabName = "Salaries and grants" %}
 
-  {% set activeTabMonthly = false %}
-  {% set activeTabYearlyScitt = false %}
   {% set activeTabYearlyLeadSchool = true %}
   {% include "_includes/funding-header-and-tab-nav.html" %}
 
@@ -57,12 +55,10 @@
     {% endif %}
   {% endfor %}
   {% set row = [
-    { },
-    { },
-    { },
-    { },
     { text: total | currency,
-      format: "numeric" }
+      format: "numeric",
+      colspan: salaryHeadRow.length
+    }
   ] %}
   {% set salaryBodyRows = salaryBodyRows | push(row) %}
 

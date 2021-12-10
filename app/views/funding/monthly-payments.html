@@ -6,8 +6,6 @@
 
   {% set yearPaymentsTabName = "" | typesOfFunding | joinify  | sentenceCase %}
   {% set activeTabMonthly = true %}
-  {% set activeTabYearlyScitt = false %}
-  {% set activeTabYearlyLeadSchool = false %}
   {% include "_includes/funding-header-and-tab-nav.html" %}
 
   {% if accessLevel == 'accreditingProvider' %}
@@ -86,7 +84,7 @@
   {% set summaryRows = [] %}
   {% if thisMonth != 11 %}
     {% set summaryRowItems = [
-      { text: "Payments to " + currentMonth("word") + " " + currentYear() }, 
+      { text: "Payments to " + currentMonth("nameOfMonth") + " " + currentYear() }, 
       { text: pastTotal | currency, format: "numeric" }] 
     %}
     {% set summaryRows = summaryRows | push(summaryRowItems) %}
@@ -138,7 +136,7 @@
   </div>
   <hr class="govuk-section-break govuk-section-break--m">
   {{ govukTable({
-    caption: "Payments to " + currentMonth("word") + " " + currentYear(),
+    caption: "Payments to " + currentMonth("nameOfMonth") + " " + currentYear(),
     captionClasses: "govuk-table__caption--m",
     classes: tableClasses,
     head: headRow,
