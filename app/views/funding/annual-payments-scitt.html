@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% set navActive = "funding" %}
 
 {% block content %}
 
@@ -28,18 +29,19 @@
   {# ITT Bursaries #}
 
   {% set ittHeadItems = [
-    { text: "Subject",
-      classes: "app-table__column-20"
-    },
-    { text: "Route",
-      classes: "app-table__column-20"
-    },
+    { text: "Subject and route",
+      classes: "app-table__column-35" },
     { text: "Lead school",
-      classes: "app-table__column-20"
-    },
-    { text: "Trainees" },
-    { text: "Amount per trainee" },
-    { text: "Total" }
+      classes: "app-table__column-35" },
+    { text: "Trainees",
+      classes: "app-table__column-10"
+     },
+    { text: "Amount per trainee",
+      classes: "app-table__column-10"
+     },
+    { text: "Total",
+      classes: "app-table__column-10"
+     }
   ] %}
   {% set ittBursaryTotal = 0 %}
   {% set ittBursaryRows = [] %}
@@ -52,12 +54,12 @@
       {% else %}
         {% set leadSchool = item.leadSchool %}
       {% endif %}
+      {% set subjectAndRoute = item.subject + '<br><span class="app-nowrap">' + item.route | lower | sentenceCase + '</span>' %}
       {% set amount = item.amountPgIttOrTier1EyItt | currency %}
       {% set total = item.numberOfTtraineesPgIttOrTier1EyItt * item.amountPgIttOrTier1EyItt %}
       {% set ittBursaryTotal = ittBursaryTotal + total %}
       {% set row = [
-        { text: item.subject },
-        { text: item.route | capitalize },
+        { text: subjectAndRoute | safe },
         { text: leadSchool },
         { text: item.numberOfTtraineesPgIttOrTier1EyItt,
           format: "numeric" },
@@ -82,11 +84,11 @@
       {% else %}
         {% set leadSchool = item.leadSchool %}
       {% endif %}
+      {% set subjectAndRoute = item.subject + '<br><span class="app-nowrap">' + item.route | lower | sentenceCase + '</span>' %}
       {% set amount = item.amountScholarship %}
       {% set total = item.numberOfTtraineesScholarship * item.amountScholarship %}
       {% set row = [
-        { text: item.subject },
-        { text: item.route | capitalize },
+        { text: subjectAndRoute | safe },
         { text: leadSchool },
         { text: item.numberOfTtraineesScholarship,
           format: "numeric" },
@@ -110,12 +112,12 @@
         {% set total = item.numberOfTtraineesPgIttOrTier1EyItt * item.amountPgIttOrTier1EyItt %}
       {% set row = [
         { text: "Tier " + loop.index }, 
-        { text: item.numberOfTtraineesPgIttOrTier1EyItt },
-        { text: item.amountPgIttOrTier1EyItt | currency },
+        { text: item.numberOfTtraineesPgIttOrTier1EyItt,
+          format: "numeric" },
+        { text: item.amountPgIttOrTier1EyItt | currency,
+          format: "numeric" },
         { text: total | currency,
-          format: "numeric",
-          classes: "app-table__column-20"
-        }
+          format: "numeric" }
       ]%}
       {% set eyIttTotal = eyIttTotal + total %}
     {% endif %}
@@ -244,17 +246,16 @@
           caption: "Early years ITT bursaries",
           captionClasses: "govuk-table__caption--m",
           head: [
-            { text: "Tier",
-              classes: "app-table__column-20"
+            { text: "Tier"
             },
             { text: "Trainees",
-              classes: "app-table__column-20"
+              classes: "app-table__column-15"
             },
             { text: "Amount per trainee",
-              classes: "app-table__column-20"
+              classes: "app-table__column-15"
             },
             { text: "Total",
-              classes: "app-table__column-20"
+              classes: "app-table__column-15"
             }
           ],
           rows: eyIttBursaryRows

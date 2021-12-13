@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% set navActive = "funding" %}
 
 {% block content %}
 
@@ -19,20 +20,21 @@
       <p>
         <a href="#" class="govuk-link--no-visited-state">Export {{ tabName | lower }}</a>
       </p>
-    </div>
-  </div>
+
 
   {% set dataSource = data.funding.annualFundingLeadSchools %}
   {% set dataSource = dataSource | sort(attribute = "subject") %}
 
   {% set salaryHeadRow = [
-    { text: "Subject",
+    { text: "Subject and route",
       classes: "app-table__column-20"
     },
-    { text: "Route" },
-    { text: "Trainees" },
-    { text: "Amount per trainee" },
-    { text: "Total" }
+    { text: "Trainees",
+      classes: "app-table__column-20" },
+    { text: "Amount per trainee",
+      classes: "app-table__column-20" },
+    { text: "Total",
+      classes: "app-table__column-20" }
   ] %}
 
   {% set total = 0 %}
@@ -40,9 +42,9 @@
   {% for item in dataSource %}
     {% if (item.numberOfTrainees > 0) and (item.amountPerTrainee > 0) %}
       {% set subjectTotal = (item.numberOfTrainees * item.amountPerTrainee) %}
+      {% set subjectAndRoute = item.subject + '<br><span class="app-nowrap">' + item.route | lower | sentenceCase + '</span>' %}
       {% set row = [
-        { text: item.subject },
-        { text: item.route },
+        { text: subjectAndRoute | safe },
         { text: item.numberOfTrainees,
           format: "numeric" },
         { text: item.amountPerTrainee | currency,
@@ -54,22 +56,21 @@
     {% set salaryBodyRows = salaryBodyRows | push(row) %}
     {% endif %}
   {% endfor %}
-  {% set row = [
-    { text: total | currency,
-      format: "numeric",
-      colspan: salaryHeadRow.length
-    }
-  ] %}
   {% set salaryBodyRows = salaryBodyRows | push(row) %}
 
+      <hr class="govuk-section-break govuk-section-break--m">
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-2">
+        Total salaries and grants
+      </h2>
+      <p class="govuk-body">
+        {{ total | currency }}
+      </p>
 
       <hr class="govuk-section-break govuk-section-break--m">
 
       {{ govukTable({
-        caption: "Salraries and grants",
+        caption: "Salaries and grants",
         captionClasses: "govuk-table__caption--m",
         head: salaryHeadRow,
         rows: salaryBodyRows
