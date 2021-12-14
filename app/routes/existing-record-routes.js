@@ -278,6 +278,7 @@ module.exports = router => {
   router.post('/record/:uuid/withdraw', (req, res) => {
     const data = req.session.data
     const newRecord = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
 
     // Update failed or no data
     if (!newRecord){
@@ -298,7 +299,7 @@ module.exports = router => {
         }
       }
 
-      res.redirect('/record/' + req.params.uuid + '/withdraw/confirm')
+      res.redirect(`/record/${req.params.uuid}/withdraw/confirm${referrer}`)
     }
   })
 
@@ -446,7 +447,7 @@ module.exports = router => {
     if (traineeStarted == "started-itt-on-time"){
       record.trainingDetails.commencementDate = courseStartDate
     }
-    if (record.deferredDateRadio) {
+    if (record.deferredDate) {
       res.redirect(`/record/${req.params.uuid}/defer/confirm${referrer}`)
     } else {
       res.redirect(`/record/${req.params.uuid}/defer${referrer}`)
@@ -484,14 +485,12 @@ module.exports = router => {
 
     if (traineeStarted == "started-itt-on-time"){
       record.trainingDetails.commencementDate = courseStartDate
-      res.redirect(`/record/${req.params.uuid}/withdraw${referrer}`)
     }
-    if (record.withdrawDateRadio) {
+    if (record.withdrawalDate) {
       res.redirect(`/record/${req.params.uuid}/withdraw/confirm${referrer}`)
     } else {
       res.redirect(`/record/${req.params.uuid}/withdraw${referrer}`)
     }
-    res.redirect(`/record/${req.params.uuid}/withdraw${referrer}`)
   })
 
   // end of delete, defer, withdraw routes
