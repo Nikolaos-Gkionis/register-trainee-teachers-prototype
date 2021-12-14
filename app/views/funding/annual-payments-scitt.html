@@ -84,7 +84,10 @@
       {% else %}
         {% set leadSchool = item.leadSchool %}
       {% endif %}
-      {% set subjectAndRoute = item.subject + '<br><span class="app-nowrap">' + item.route | lower | sentenceCase + '</span>' %}
+      {% set subjectAndRoute %}
+        {{ item.subject }}<br>
+        <span class="app-nowrap">{{ item.route | lower | sentenceCase }}</span>
+      {% endset %}
       {% set amount = item.amountScholarship %}
       {% set total = item.numberOfTtraineesScholarship * item.amountScholarship %}
       {% set row = [

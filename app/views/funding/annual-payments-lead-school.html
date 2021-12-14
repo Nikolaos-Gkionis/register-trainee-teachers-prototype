@@ -26,15 +26,13 @@
   {% set dataSource = dataSource | sort(attribute = "subject") %}
 
   {% set salaryHeadRow = [
-    { text: "Subject and route",
-      classes: "app-table__column-20"
-    },
+    { text: "Subject and route" },
     { text: "Trainees",
-      classes: "app-table__column-20" },
+      classes: "app-table__column-15" },
     { text: "Amount per trainee",
-      classes: "app-table__column-20" },
+      classes: "app-table__column-15" },
     { text: "Total",
-      classes: "app-table__column-20" }
+      classes: "app-table__column-15" }
   ] %}
 
   {% set total = 0 %}
@@ -42,7 +40,10 @@
   {% for item in dataSource %}
     {% if (item.numberOfTrainees > 0) and (item.amountPerTrainee > 0) %}
       {% set subjectTotal = (item.numberOfTrainees * item.amountPerTrainee) %}
-      {% set subjectAndRoute = item.subject + '<br><span class="app-nowrap">' + item.route | lower | sentenceCase + '</span>' %}
+      {% set subjectAndRoute %}
+        {{ item.subject }}<br>
+        <span class="app-nowrap">{{ item.route | lower | sentenceCase }}</span>
+      {% endset %}
       {% set row = [
         { text: subjectAndRoute | safe },
         { text: item.numberOfTrainees,
