@@ -31,12 +31,16 @@ module.exports = function (env) {
     return moment().format('YYYY-MM-DD')
   }
 
-  // Get current month as "nameOfMonth" (eg December = 'December'), or "number" (eg December = 12)
+  /* ---------------------------------------
+      Get current month
+     ---------------------------------------
+     For example, if it’s January:
+     - currentMonth() = 01
+     - currentMonth(nameOfMonth) = ‘January’
+  */
   functions.currentMonth = (type) => {
     if (type == "nameOfMonth") {
       return moment().format('MMMM')
-    } else if (typeof(type) === 'number') {
-      return type
     } else {
       return moment().format('MM')
     }
