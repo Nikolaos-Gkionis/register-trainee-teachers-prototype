@@ -165,45 +165,6 @@ filters.deleteBlankAttributes = (dictionary) => {
   return newDictionary;
 }
 
-// Delete all params where all items match params
-filters.deleteAttributesWhereAll = (array, params) => {
-  let attributes = []
-  array.forEach(item => {
-    attributes = attributes.concat(Object.keys(item))
-  })
-  attributes = [...new Set(attributes)]
-
-  let filteredAttributes = []
-
-  attributes.forEach(attribute => {
-    let match = array.every(item => {
-      return item[attribute] == params.value
-    })
-    if (!match){
-      filteredAttributes.push(attribute)
-    }
-  })
-  return filters.keepAttributes(array, filteredAttributes)
-}
-
-// Filter results for only those containing attribute and value
-filters.where = (arr, key, compare) => {
-  compare = [].concat(compare) // force to arr
-  let filtered = arr.filter(item => {
-    return compare.includes(_.get(item, key))
-  })
-  return filtered
-}
-
-// Remove items with a specified attribute and value
-filters.removeWhere = (arr, key, compare) => {
-  compare = [].concat(compare) // force to arr
-  let filtered = arr.filter(item => {
-    return !compare.includes(_.get(item, key))
-  })
-  return filtered
-}
-
 /*
   ---------------------------------------------------------
   whereIncludes
