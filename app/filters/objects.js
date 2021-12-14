@@ -165,24 +165,67 @@ filters.deleteBlankAttributes = (dictionary) => {
   return newDictionary;
 }
 
-// Filter results for only those containing attribute and value
-filters.where = (arr, key, compare) => {
+/*
+  ---------------------------------------------------------
+  whereIncludes
+  ---------------------------------------------------------
+
+  returns an array with all objects that don't match removed
+
+  arr = [
+    {"pet": "dog", name: "Catherine"}, 
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+
+  arr = newArr | whereIncludes ("pet", "cat")
+
+  newArr = [
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+*/
+
+filters.whereIncludes = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
+    return compare.some(string => {
+      return _.get(item, key) && _.get(item, key).includes(string)
+    })
     return compare.includes(_.get(item, key))
   })
   return filtered
 }
 
-// Remove items with a specified attribute and value
-filters.removeWhere = (arr, key, compare) => {
+/*
+  --------------------------------------------------------
+  whereDoesNotInclude
+  --------------------------------------------------------
+
+  returns an array with objects that match removed
+
+  arr = [
+    {"pet": "dog", name: "Catherine"}, 
+    {"pet": "cat", name: "Vasili"} 
+    {"pet": "big cat", name: "Elizaveta"}
+    ]
+
+  arr = newArr | whereDoesNotInclude("pet", "cat")
+
+  newArr = [{"pet": "dog", name: "Catherine"}]
+*/
+filters.whereDoesNotInclude = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
-    return !compare.includes(_.get(item, key))
+    return !compare.some(string => {
+      return _.get(item, key) && _.get(item, key).includes(string)
+    })
+    return compare.includes(_.get(item, key))
   })
   return filtered
 }
 
+<<<<<<< HEAD
 /*
   ---------------------------------------------------------
   whereIncludes
