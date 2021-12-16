@@ -106,8 +106,8 @@ settings.viewAsAdmin = 'false'
 
 // The ‘active’ provider for the current user if using hat model
 // Must be one of the ones in settings.userProviders
-// settings.userActiveProvider = "Coventry University"
-settings.userActiveProvider = "Beam Primary School"
+settings.userActiveProvider = "Coventry University"
+// settings.userActiveProvider = "Beam Primary School"
 
 settings.providerType = "accrediting-provider"
 
