@@ -225,7 +225,6 @@ filters.whereDoesNotInclude = (arr, key, compare) => {
   return filtered
 }
 
-<<<<<<< HEAD
 /*
   ---------------------------------------------------------
   whereIncludes
