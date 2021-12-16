@@ -1,14 +1,8 @@
 {% extends "_templates/_record-form.html" %}
 
-{% set traineeStartDate = data.record.trainingDetails.commencementDate or false %}
-
-{% if traineeStartDate %}
-  {% set pageHeading = "When did the trainee start their ITT?" %}
-{% else %}
-  {% set pageHeading = "Did the trainee start their ITT on time?" %}
-{% endif %}
-
-
+{% set pageHeading %}
+  Did the trainee start their ITT on time?
+{% endset %}
 
 {% set startConfirmed = true %}
 

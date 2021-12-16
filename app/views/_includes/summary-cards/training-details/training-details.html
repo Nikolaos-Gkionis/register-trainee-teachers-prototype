@@ -52,7 +52,7 @@
 
 {% set traineeStartDateRow = {
     key: {
-      text: "Trainee start date"
+      text: "Trainee’s start date"
     },
     value: {
       text: commencementDateLabel
@@ -62,7 +62,7 @@
         {
           href: recordPath + "/training-details" | addReferrer(referrer),
           text: "Change",
-          visuallyHiddenText: "Trainee start date"
+          visuallyHiddenText: "trainee’s start date"
         }
       ]
     } if canAmend
