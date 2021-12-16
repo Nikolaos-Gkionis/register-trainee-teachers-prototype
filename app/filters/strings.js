@@ -27,7 +27,7 @@ filters.kebabCase = (string) => {
   return string.replace(/([a-z])([A-Z])/g, '$1-$2').replace(/\s+/g, '-').toLowerCase()
 }
 
-// Sentence case - uppercase first letter
+// Sentence case - uppercase first latter
 filters.sentenceCase = (input) => {
   if (!input) return '' // avoid printing false to client
   if (_.isString(input)){
@@ -65,13 +65,10 @@ filters.prependWithAOrAn = string => {
 
 // Format a number as £x,xxx
 filters.currency = input => {
-  let inputAsInt = parseInt(input, 10)
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-  if      ( inputAsInt > 0 ) { return `£${numberWithCommas(inputAsInt)}` }
-  // makes negative number positive and puts minus sign in front of £
-  else if ( inputAsInt < 0 ) { return `–£${numberWithCommas(inputAsInt * -1 )}` }
+  if (input) return `£${numberWithCommas(input)}`
   else return ''
 }
 
@@ -88,14 +85,6 @@ filters.markDown = input => {
   marked.setOptions({
   })
   return marked(input)
-}
-
-filters.startsWith = (string, target) => {
-  if (typeof string == "string"){
-    return string.startsWith(target)
-  } else {
-    return false
-  }
 }
 
 // -------------------------------------------------------------------
