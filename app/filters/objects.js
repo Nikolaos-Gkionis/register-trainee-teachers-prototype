@@ -68,12 +68,15 @@ filters.objectToArray = object => {
 filters.keepAttributes = (array, keysToKeep) => {
   const keepKeys = theObject => {
     let newObj = {}
-    // Re-orders in order of keysToKeep and keeps only selected keys
+    // Re-orders and keeps only selected keys
 
     // Coerce string to array
     if (_.isString(keysToKeep)) keysToKeep = [keysToKeep]
+
+
     keysToKeep.forEach(key => {
-      if (theObject[key]){
+      let objectKeys = Object.keys(theObject)
+      if (objectKeys.includes(key)){
         newObj[key] = theObject[key]
       }
     })
@@ -94,7 +97,7 @@ filters.setAttribute = (dictionary, key, value) => {
   return newDictionary;
 }
 
-// set attribute on object (or array of objects)
+// Aet attribute on object (or array of objects)
 filters.addAttribute = (dictionary, key, value) => {
   if (Array.isArray(dictionary)){
     newArr = []
@@ -135,22 +138,12 @@ filters.renameAttribute = (dictionary, oldKey, newKey) => {
   return newObj
 };
 
-// Delete a single attribute from an object or array of objects
-filters.deleteAttribute = (input, attribute) => {
-
-  const deleteAttributeFromObject = (object) =>{
-    // Don't modify the original
-    var newDictionary = Object.assign({}, object)
-    delete newDictionary[attribute]
-    return newDictionary
-  }
-
-  // Array of objects
-  if (_.isArray(input)){
-    return input.map(deleteAttributeFromObject)
-  }
-  // Single object
-  else return deleteAttributeFromObject(input)
+// Delete a single attribute
+filters.deleteAttribute = (dictionary, key) => {
+  // Don't modify the original
+  var newDictionary = Object.assign({}, dictionary)
+  delete newDictionary[key]
+  return newDictionary
 }
 
 // Delete a keys with blank values
@@ -165,126 +158,23 @@ filters.deleteBlankAttributes = (dictionary) => {
   return newDictionary;
 }
 
-/*
-  ---------------------------------------------------------
-  whereIncludes
-  ---------------------------------------------------------
-
-  returns an array with all objects that don't match removed
-
-  arr = [
-    {"pet": "dog", name: "Catherine"}, 
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-
-  arr = newArr | whereIncludes ("pet", "cat")
-
-  newArr = [
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-*/
-
-filters.whereIncludes = (arr, key, compare) => {
+// Filter results for only those containing attribute and value
+filters.where = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
-    return compare.some(string => {
-      return _.get(item, key) && _.get(item, key).includes(string)
-    })
     return compare.includes(_.get(item, key))
   })
   return filtered
 }
 
-/*
-  --------------------------------------------------------
-  whereDoesNotInclude
-  --------------------------------------------------------
-
-  returns an array with objects that match removed
-
-  arr = [
-    {"pet": "dog", name: "Catherine"}, 
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-
-  arr = newArr | whereDoesNotInclude("pet", "cat")
-
-  newArr = [{"pet": "dog", name: "Catherine"}]
-*/
-filters.whereDoesNotInclude = (arr, key, compare) => {
+// Remove items with a specified attribute and value
+filters.removeWhere = (arr, key, compare) => {
   compare = [].concat(compare) // force to arr
   let filtered = arr.filter(item => {
-    return !compare.some(string => {
-      return _.get(item, key) && _.get(item, key).includes(string)
-    })
-    return compare.includes(_.get(item, key))
+    return !compare.includes(_.get(item, key))
   })
   return filtered
 }
-
-/*
-  ---------------------------------------------------------
-  whereIncludes
-  ---------------------------------------------------------
-
-  returns an array with all objects that don't match removed
-
-  arr = [
-    {"pet": "dog", name: "Catherine"}, 
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-
-  arr = newArr | whereIncludes ("pet", "cat")
-
-  newArr = [
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-*/
-
-filters.whereIncludes = (arr, key, compare) => {
-  compare = [].concat(compare) // force to arr
-  let filtered = arr.filter(item => {
-    return compare.some(string => {
-      return _.get(item, key) && _.get(item, key).includes(string)
-    })
-    return compare.includes(_.get(item, key))
-  })
-  return filtered
-}
-
-/*
-  --------------------------------------------------------
-  whereDoesNotInclude
-  --------------------------------------------------------
-
-  returns an array with objects that match removed
-
-  arr = [
-    {"pet": "dog", name: "Catherine"}, 
-    {"pet": "cat", name: "Vasili"} 
-    {"pet": "big cat", name: "Elizaveta"}
-    ]
-
-  arr = newArr | whereDoesNotInclude("pet", "cat")
-
-  newArr = [{"pet": "dog", name: "Catherine"}]
-*/
-filters.whereDoesNotInclude = (arr, key, compare) => {
-  compare = [].concat(compare) // force to arr
-  let filtered = arr.filter(item => {
-    return !compare.some(string => {
-      return _.get(item, key) && _.get(item, key).includes(string)
-    })
-    return compare.includes(_.get(item, key))
-  })
-  return filtered
-}
-
 // -------------------------------------------------------------------
 // keep the following line to return your filters to the app
 // -------------------------------------------------------------------

@@ -7,7 +7,6 @@ const trainingRoutes = trainingRouteData.trainingRoutes
 const utils = require('./../lib/utils')
 const arrayFilters = require('./arrays.js').filters
 const funding = require('../data/funding')
-const objectFilters = require('./objects.js').filters
 
 // Leave this filters line
 var filters = {}
@@ -163,73 +162,42 @@ filters.includes = (route, string) =>{
   }
 }
 
-// Delete funding total columns if the columns they depend on don't exist
-filters.deleteExtraFundingTotals = (array) => {
-
-  let pairs = [
-    ['numberOfTtraineesPgIttOrTier1EyItt', "amountPgIttOrTier1EyItt"],
-    ['numberOfTtraineesTier2EyItt', "amountTier2EyItt"],
-    ['numberOfTtraineesTier3EyItt', "amountTier3EyItt"],
-    ['numberOfTtraineesNoBursaryAwarded', "amountUGIttOrTier4EyItt"],
-    ['numberOfTtraineesScholarship', "amountScholarship"]
-  ]
-
-  let firstRow = array[0]
-
-  pairs.forEach(pair => {
-    let attributeIsMissing = ! (firstRow[pair[0]]) 
-    if (attributeIsMissing) {
-      array = objectFilters.deleteAttribute(array, pair[1])
-    }
-  })
-
-  return array
-}
-
-// Attempt to fix the names from funding
-filters.fixNamesFromFunding = (string) => {
-  return string.toLowerCase().replace(/ ay /g," ").replace(/ & /g," and ").replace(/in-year/g,"").replace(/adjs |adj /g,"adjustment ").replace(/annex g/g,"").replace(/fe/g, "further education").replace(/itt/g, "ITT").replace(/ey /g, "early years ")
-}
-
 // work out what types of funding the org is getting to give tab name
-// eg "[bursaries]"
-// eg "[bursaries, grants]"
-filters.typesOfFunding = () => {
-  let typesOfFunding = []
-
+// eg "Bursaries, scholarships and grants"
+// eg "Bursaries and grants"
+filters.getFundingStreams = () => {
+  let fundingStreams = []
+  
   let bursaryTrainees = 0
-  funding.annualFundingScitts.forEach(element => {
-    bursaryTrainees += bursaryTrainees 
-    + element.numberOfTtraineesPgIttOrTier1EyItt
-    + element.numberOfTtraineesTier2EyItt
-    + element.numberOfTtraineesTier3EyItt
-    + element.numberOfTtraineesUGIttOrTier4EyItt
+  funding.bursaryPayments.forEach(element => {
+    bursaryTrainees += element.numberOfTrainees
+  })
+  
+  funding.eyIttBursaries.forEach(element => {
+    bursaryTrainees += element.numberOfTrainees
   })
 
   if(bursaryTrainees > 0){
-    typesOfFunding.push("bursaries")
+    fundingStreams.push("bursaries")
   }
 
   let scholarshipTrainnees = 0
-  funding.annualFundingScitts.forEach(element => {
-    scholarshipTrainnees += element.numberOfTtraineesScholarship
+  funding.scholarshipPayments.forEach(element => {
+    scholarshipTrainnees += element.numberOfTrainees
   })
   if(scholarshipTrainnees > 0){
-    typesOfFunding.push("scholarships")
+    fundingStreams.push("scholarships")
   }
-  return typesOfFunding
-}
 
-/*
-  Takes year ranges and makes them consistnent
-  - eg "19/20" ----> "2019 to 20"
-  - eg "2019/20" --> "2019 to 20"
-*/
-filters.formatYearRange = (string) => {
-  return string
-    .replace(/(\d{4})\/(\d{2})/, '$1&nbsp;to&nbsp;$2')
-    .replace(/(\d{2})\/(\d{2})/, '20$1&nbsp;to&nbsp;$2');
-}
+  let grantTrainees = 0
+  funding.eyIttGrants.forEach(element => {
+    grantTrainees += element.numberOfTrainees
+  })
+  if(grantTrainees > 0){
+    fundingStreams.push("grants")
+  }
 
+  return fundingStreams
+}
 
 exports.filters = filters
