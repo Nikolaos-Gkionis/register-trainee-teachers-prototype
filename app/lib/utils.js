@@ -220,11 +220,6 @@ exports.getCoursePhase = record => {
   return matchedPhase
 }
 
-// Undergraduate / Postgraduate
-exports.getCourseLevel = record => {
-  return trainingRoutes?.[record.route]?.courseLevel || false
-}
-
 // Used to set the right qualification on a record
 exports.setCourseDefaults = record => {
   let route = record?.route
@@ -901,15 +896,6 @@ exports.isApprenticeship = record => {
   return record?.route == "Teaching apprenticeship (postgrad)"
 }
 
-// Course levels
-
-exports.isUndergraduate = data => {
-  return exports.getCourseLevel(data) == "Undergraduate"
-}
-
-exports.isPostgraduate= data => {
-  return exports.getCourseLevel(data) == "Postgraduate"
-}
 // Phases
 
 // Unlike the other phases, this is probably reliable - as it checcks the route rather than the age
@@ -1163,10 +1149,6 @@ exports.filterRecords = (records, data, filters = {}) => {
       let completeStatus = (exports.recordIsComplete(record, data)) ? 'Complete' : 'Incomplete'
       return filters.completeStatus.includes(completeStatus)
     })
-  }
-
-  if (filters.courseLevel){
-    filteredRecords = filteredRecords.filter(record => filters.courseLevel.includes(exports.getCourseLevel(record)))
   }
 
   // Apply or manual

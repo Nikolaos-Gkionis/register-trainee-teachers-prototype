@@ -25,24 +25,22 @@ const getFilters = req => {
 
   // Copy the query
   let query = Object.assign({}, req.query)
+  // let searchQuery = query?.searchQuery || ""
+  // let searchQueryLowercase = searchQuery.toLowerCase()
 
-  // Following code is awkward - had some issues with saving objects in query string and then
-  // with _unchecked values appearing. So it's set as top level data, then cleaned and remapped
-  // to an object
 
   // Needed because this is coming via query string and not auto-data store
   // And these values may contain '_unchecked'
   let filtersToClean = [
-  'filterAllProviders',
-  'filterCompleteStatus',
-  'filterCourseLevel',
-  'filterCycle',
-  'filterPhase',
-  'filterSource',
   'filterStatus',
+  'filterCompleteStatus',
+  'filterSource',
+  'filterPhase',
   'filterStudyMode',
-  'filterTrainingRoutes',
-  'filterUserProviders']
+  'filterCycle',
+  'filterUserProviders',
+  'filterAllProviders',
+  'filterTrainingRoutes']
   filtersToClean.forEach(filter => query[filter] = cleanInputData(query[filter]))
 
   // Remap to an object so we can pass it to the filterRecords function
@@ -51,7 +49,6 @@ const getFilters = req => {
     status: query.filterStatus,
     source: query.filterSource,
     completeStatus: query.filterCompleteStatus,
-    courseLevel: query.filterCourseLevel,
     cycle: query.filterCycle,
     phase: query.filterPhase,
     studyMode: query.filterStudyMode,
@@ -68,7 +65,6 @@ const getFilters = req => {
 const getHasFilters = (filters, searchQuery) => {
   return !!(filters.status) 
   || !!(filters.completeStatus)
-  || !!(filters.courseLevel)
   || !!(filters.source)
   || !!(filters.phase)
   || !!(filters.studyMode)
@@ -178,24 +174,6 @@ const getSelectedFilters = req => {
         newQuery.filterSource = filters.source.filter(a => a != source)
         return {
           text: source,
-          href: url.format({
-            pathname,
-            query: newQuery,
-          })
-        }
-      })
-    })
-  }
-
-  if (filters.courseLevel) {
-    selectedFilters.categories.push({
-      heading: { text: 'Course level' },
-      items: filters.courseLevel.map((courseLevel) => {
-
-        let newQuery = Object.assign({}, query)
-        newQuery.filtercourseLevel = filters.courseLevel.filter(a => a != courseLevel)
-        return {
-          text: courseLevel,
           href: url.format({
             pathname,
             query: newQuery,
