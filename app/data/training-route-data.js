@@ -88,6 +88,7 @@ let defaultRouteData = {
 let baseRouteData = {
   "Assessment only": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -101,6 +102,7 @@ let baseRouteData = {
   },
   "Provider-led (undergrad)": {
     defaultEnabled: true,
+    courseLevel: "Undergraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -132,6 +134,7 @@ let baseRouteData = {
   },
   "Provider-led (postgrad)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     hasAllocatedPlaces: true,
     fields: [
       "studyMode",
@@ -157,22 +160,25 @@ let baseRouteData = {
       {
         type: "bursary",
         subjects: [
+          "Design and technology",
+          "Geography",
           "Languages",
-          "Classics"
+          "Ancient languages"
           ],
-        value: "10000"
+        value: "15000"
       },
       {
         type: "bursary",
         subjects: [
           "Biology"
           ],
-        value: "7000"
+        value: "10000"
       }
     ]
   },
   "School direct (salaried)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -198,7 +204,7 @@ let baseRouteData = {
     financialSupportAvailable: true,
     financialSupport: [
       {
-        type: "grant",
+        type: "bursary",
         subjects: [
           "Chemistry",
           "Computing",
@@ -208,23 +214,27 @@ let baseRouteData = {
         value: "24000"
       },
       {
-        type: "grant",
+        type: "bursary",
         subjects: [
+          "Design and technology",
+          "Geography",
           "Languages",
-          "Classics"
+          "Ancient languages"
           ],
-        value: "10000"
+        value: "15000"
       },
       {
-        type: "grant",
+        type: "bursary",
         subjects: [
           "Biology"
           ],
-        value: "7000"
-      }]
+        value: "10000"
+      }
+    ]
   },
   "School direct (fee funded)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     hasAllocatedPlaces: true,
     sections: [
       // 'trainingDetails',
@@ -262,23 +272,26 @@ let baseRouteData = {
       {
         type: "bursary",
         subjects: [
+          "Design and technology",
+          "Geography",
           "Languages",
-          "Classics"
+          "Ancient languages"
           ],
-        value: "10000"
+        value: "15000"
       },
       {
         type: "bursary",
         subjects: [
           "Biology"
           ],
-        value: "7000"
+        value: "10000"
       }
     ]
   },
   "Teach first (postgrad)": {},
   "Teaching apprenticeship (postgrad)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -316,8 +329,17 @@ let baseRouteData = {
       {
         type: "grant",
         subjects: [
+          "Design and technology",
+          "Geography",
           "Languages",
-          "Classics"
+          "Ancient languages"
+          ],
+        value: "6000"
+      },
+      {
+        type: "grant",
+        subjects: [
+          "Biology"
           ],
         value: "1000"
       }
@@ -325,6 +347,7 @@ let baseRouteData = {
   },
   "Opt-in (undergrad)": {
     defaultEnabled: true,
+    courseLevel: "Undergraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -348,6 +371,7 @@ let baseRouteData = {
         type: "bursary",
         subjects: [
           "Languages",
+          "Ancient languages",
           "Computing",
           "Mathematics",
           "Physics"
@@ -358,6 +382,7 @@ let baseRouteData = {
   },
   "Early years (salaried)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -389,6 +414,7 @@ let baseRouteData = {
   },
   "Early years (postgrad)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -437,6 +463,7 @@ let baseRouteData = {
   },
   "Early years (assessment only)": {
     defaultEnabled: true,
+    courseLevel: "Postgraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -454,6 +481,7 @@ let baseRouteData = {
   },
   "Early years (undergrad)": {
     defaultEnabled: true,
+    courseLevel: "Undergraduate",
     sections: [
       // 'trainingDetails',
       'courseDetails',
@@ -475,6 +503,7 @@ let baseRouteData = {
   },
   "High potential initial teacher training (HPITT)": {
     disableForNewDrafts: true, // we want to show trainees on this route, but not allow new ones
+    courseLevel: "Postgraduate",
     defaultEnabled: false,
     sections: [
       // 'trainingDetails',
