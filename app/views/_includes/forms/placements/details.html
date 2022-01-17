@@ -8,7 +8,6 @@
 {# Placement data is stored in a temp location before being merged back to array #}
 
 {# Get placement (if it exists) from existing data #}
-
 {% set placement = {} %}
 
 {% if record.placement.items %}
@@ -20,90 +19,43 @@
 
 {% set label = "Search for a school by its unique reference number (URN), name or postcode" %}
 
-{{ govukInput({
-  label: {
-    text: label,
-    classes: "govuk-label--s"
-  },
-  classes: "govuk-!-width-two-thirds"
-}| decorateAttributes(placementTemp, "placementTemp.location"))}}
+{# Todo - this could probably be the default that the autocomplete progressively enhances #}
+<div class="app-no-js-only">
+  {{ govukInput({
+    id: "schoolSearch",
+    name: "_schoolSearch",
+    label: {
+      text: label
+    },
+    value: query._schoolSearch,
+    classes: 'app-!-max-width-two-thirds'
+  }) }}
+</div>
 
-{{ govukRadios({
-  fieldset: {
-    legend: {
-      text: "Select the start month for this placement",
-      classes: "govuk-label--s"
+<div class="app-js-only">
+  {{ appSchoolAutocomplete({
+    name: "_schoolSearch",
+    value: (placementTemp.school.schoolName | safe),
+    uuid: placementTemp.school.uuid,
+    label: {
+      text: label
     }
-  },
-  items: [
-    {
-      value: "1",
-      text: "January"
-    },
-    {
-      value: "2",
-      text: "February"
-    },
-    {
-      value: "3",
-      text: "March"
-    },
-    {
-      value: "4",
-      text: 'April'
-    },
-    {
-      value: "5",
-      text: "May"
-    },
-    {
-      value: "6",
-      text: "June"
-    },
-    {
-      value: "7",
-      text: "July"
-    },
-    {
-      value: "8",
-      text: "August"
-    },
-    {
-      value: "9",
-      text: "September"
-    },
-    {
-      value: "10",
-      text: "October"
-    },
-    {
-      value: "11",
-      text: "November"
-    },
-    {
-      value: "12",
-      text: "December"
-    },
-    {
-      divider: "or"
-    },
-    {
-      value: "Not provided",
-      text: "Not known"
-    }
-  ]
-} | decorateAttributes(placementTemp, "placementTemp.startMonth"))}}
+  }) }}
+</div>
 
-{{ govukInput({
-  label: {
-    text: "Approximate duration in weeks",
-    classes: "govuk-label--s"
-  },
-  suffix: {
-    text: "weeks"
-  },
-  classes: "govuk-!-width-one-quarter"
-}| decorateAttributes(placementTemp, "placementTemp.duration"))}}
+{# Manual entry #}
+{% set detailsHtml %}
+  {# {% set isManualEntry = (placementTemp.school.manualEntry | falsify) == true %} #}
+  {% include "_includes/forms/placements/details-manual.html" %}
+{% endset %}
+
+<div class="app-js-only">
+  {{ govukDetails({
+    summaryText: "Placement school is not listed, or the school is an early years setting",
+    html: detailsHtml,
+    open: true if placementTemp.school.manualEntry == "true"
+  }) }}
+</div>
 
 {{ govukButton({
   text: "Continue"
