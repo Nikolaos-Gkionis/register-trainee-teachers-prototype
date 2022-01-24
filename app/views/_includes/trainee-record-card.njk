@@ -77,7 +77,13 @@
 
         {% if data.isAdmin or (data.signedInProviders | length > 1) or (accessLevel == 'leadSchool') %}
           <p class="govuk-caption-m govuk-!-font-size-16 app-application-card__provider govuk-!-margin-bottom-0 govuk-!-margin-top-2">
-            <span class="govuk-visually-hidden">Provider: </span>{{record.provider}}</p>
+            <span class="govuk-visually-hidden">Provider: </span>{{record.provider}}
+          </p>
+        {% endif %}
+        {% if data.isAdmin %}
+          <p class="govuk-caption-m govuk-!-font-size-16 app-application-card__provider govuk-!-margin-bottom-0 govuk-!-margin-top-1">
+              Source: {{ record.source }}
+          </p>
         {% endif %}
       </div>
 
