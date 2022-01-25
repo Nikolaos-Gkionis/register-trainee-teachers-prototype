@@ -22,8 +22,8 @@ module.exports = (application) => {
     })
   }
 
-if (application.source == 'Apply'){
-  addEvent("Record imported from Apply")
+if ( application.source !== "Manual" ){
+  addEvent("Record imported from " +  application.source )
 }
 else {
   addEvent("Record created")
