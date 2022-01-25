@@ -51,7 +51,21 @@
 
 {% set filterOptionsHtml %}
 
-  {% include "_includes/filter-panel/all-providers.njk" %}
+  {% if data.isAdmin %}
+
+
+    {% set adminOnlyFilters %}
+      {% include "_includes/filter-panel/all-providers.njk" %}
+      {% include "_includes/filter-panel/source.njk" %}
+    {% endset %}
+
+    {{ appAdminFeature({
+      classes: "app-status-box--filter-outdent",
+      html: adminOnlyFilters
+    }) }}
+
+  {% endif %}
+
   
   {% include "_includes/filter-panel/cohort-filter.njk" %}
 
