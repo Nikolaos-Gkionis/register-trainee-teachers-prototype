@@ -17,6 +17,16 @@
       text: "Added manually",
       value: "Manual",
       checked: checked(query.filterSource, "Manual")
-    }
+    },
+    {
+      text: "Imported from DTTP",
+      value: "DTTP",
+      checked: checked(query.filterSource, "DTTP")
+    } if data.isAdmin and navActive !== "drafts",
+    {
+      text: "Imported from HESA",
+      value: "HESA",
+      checked: checked(query.filterSource, "HESA")
+    } if data.isAdmin and navActive !== "drafts"
   ]
 } | decorateAttributes(data, "data.filterSource"))}}

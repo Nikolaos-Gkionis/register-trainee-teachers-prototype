@@ -25,6 +25,25 @@
   } if canAmend and false
 } %}
 
+{% set sourceText %}
+  {% if record.source == "Manual" %}
+    Added manually
+  {% elseif record.source %}
+    {{ record.source }}
+  {% else %}
+    Not provided
+  {% endif %}
+{% endset %}
+
+{% set recordSourceRow = {
+  key: {
+    text: "Record source"
+  },
+  value: {
+    text: sourceText
+  }
+} %}
+
 {% set trnRow = {
   key: {
     text: "TRN"
@@ -278,6 +297,7 @@
 
 {% set traineeProgressRows = [
   providerRow if data.isAdmin or data.settings.userProviders | length > 1,
+  recordSourceRow if data.isAdmin,
   trnRow if record.trn,
   referenceRow,
   traineeIdRow,

@@ -9,12 +9,13 @@ module.exports = application => {
   else {
     if (trainingRouteData.applyRoutes.includes(application.route)){
       return weighted.select({
-        "Manual": 0.2,
-        "Apply": 0.7
+        "Manual": 0.1,
+        "HESA":   0.3,
+        "DTTP":   0.3,
+        "Apply":  0.3
       })
     }
     else return "Manual"
   }
-
 
 }

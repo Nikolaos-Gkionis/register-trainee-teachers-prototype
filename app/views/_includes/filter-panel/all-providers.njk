@@ -1,40 +1,29 @@
-{% if data.isAdmin %}
+{% set providerItems = [] %}
 
-  {% set providerItems = [] %}
+{# Default state - first value is 'all' #}
+{% set providerItems = providerItems | push({
+  value: "All providers",
+  text: "All providers",
+  selected: true if (not query.filterAllProviders or query.filterAllProviders ==  "All providers")
+}) %}
 
-  {# Default state - first value is 'all' #}
+{% set allProviders = data.providers.accreditingProviders.all %}
+
+{% for provider in allProviders %}
   {% set providerItems = providerItems | push({
-    value: "All providers",
-    text: "All providers",
-    selected: true if (not query.filterAllProviders or query.filterAllProviders ==  "All providers")
+    value: provider.name,
+    text: provider.name,
+    selected: true if (provider.name == query.filterAllProviders)
   }) %}
+{% endfor %}
 
-  {% set allProviders = data.providers.accreditingProviders.all %}
-
-  {% for provider in allProviders %}
-    {% set providerItems = providerItems | push({
-      value: provider.name,
-      text: provider.name,
-      selected: true if (provider.name == query.filterAllProviders)
-    }) %}
-  {% endfor %}
-
-  {% set selectHtml %}
-    {{ govukSelect({
-      id: "all-provider-select",
-      name: "filterAllProviders",
-      classes: "js-auto-submit",
-      label: {
-        text: "Provider",
-        classes: "govuk-label--s"
-      },
-      items: providerItems
-    }) }}
-  {% endset %}
-
-  {{ appAdminFeature({
-    classes: "app-status-box--filter-outdent",
-    html: selectHtml
-  }) }}
-
-{% endif %}
+{{ govukSelect({
+  id: "all-provider-select",
+  name: "filterAllProviders",
+  classes: "js-auto-submit",
+  label: {
+    text: "Provider",
+    classes: "govuk-label--s"
+  },
+  items: providerItems
+}) }}
