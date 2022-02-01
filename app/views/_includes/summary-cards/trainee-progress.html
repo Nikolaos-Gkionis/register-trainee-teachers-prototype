@@ -25,9 +25,12 @@
   } if canAmend and false
 } %}
 
-{% set sourceText %}
+{% set sourceTextHTML %}
   {% if record.source == "Manual" %}
     Added manually
+  {% elseif record.source == "HESA" %}
+    <p class="govuk-body">{{ record.source }}</p>
+    <span class="govuk-hint">Last imported: {{ "2022-01-23" | formatDate('relative')}}</span>
   {% elseif record.source %}
     {{ record.source }}
   {% else %}
@@ -40,7 +43,7 @@
     text: "Record source"
   },
   value: {
-    text: sourceText
+    text: sourceTextHTML | safe
   }
 } %}
 
