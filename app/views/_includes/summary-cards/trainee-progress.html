@@ -29,10 +29,10 @@
   {% if record.source == "Manual" %}
     Added manually
   {% elseif record.source == "HESA" %}
-    <p class="govuk-body">{{ record.source }}</p>
+    <p class="govuk-body">Imported from {{ record.source }}</p>
     <span class="govuk-hint">Last imported: {{ "2022-01-23" | formatDate('relative')}}</span>
   {% elseif record.source %}
-    {{ record.source }}
+    Imported from {{ record.source }}
   {% else %}
     Not provided
   {% endif %}
