@@ -184,7 +184,7 @@ const generateFakeApplications = () => {
     // Hardcode provider and year
     // Todo - apply these back to seed records?
     let seed = {...seedRecord, ...{
-      provider: "Coventry University",
+      provider: "Webury Hill SCITT",
       academicYearSimple: currentYear
     }}
     applications.push(generateFakeApplication(seed))
@@ -201,7 +201,7 @@ const generateFakeApplications = () => {
     yearsToGenerate.forEach((year) => {
       // Years can be ±10% in size
       let traineeCount = getRandomArbitrary((providerSize * 0.9), (providerSize * 1.1))
-      if (provider == "Coventry University") traineeCount = 130
+      if (provider?.name == "Webury Hill SCITT") traineeCount = 130
       applications = applications.concat(generateFakeApplicationsForProvider(provider.name, year, traineeCount))
     })
 
