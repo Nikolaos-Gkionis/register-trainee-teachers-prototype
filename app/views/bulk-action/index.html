@@ -1,28 +1,70 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Recommend a group for teacher status" %}
+{% set pageHeading = "Award a group teacher status" %}
 {% set navActive = 'bulk' %}
+
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
 
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-xl">
-        <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+        <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
         {{ pageHeading }}
       </h1>
-      <h2 class="govuk-heading-l">
-        Incomplete records
+      <p class="govuk-body">
+        Use spreadsheet software (for example Microsoft Excel) to update a group of trainee records.
+      </p>
+      <p class="govuk-body">
+        <a href="#">How to update records using spreadsheet software</a>
+      </p>
+      <hr class="govuk-section-break govuk-section-break--m">
+      <h2 class="govuk-heading-m">
+        Add information to incomplete records
       </h2>
       <p class="govuk-body">
-        <a href="#">View current trainees with incomplete records</a>
+        You have {{ currentTrainees | filterByIncomplete | length }} trainees that need more information before they can be recommended for teacher status. To add the missing information:
       </p>
+      <ol class="govuk-list govuk-list--number govuk-list--spaced">
+        <li>
+          <a href="#">
+            Export incomplete trainee records (csv)
+          </a>
+        </li>
+        <li>
+          Add the missing data
+        </li>
+        <li>
+          <a href="#">
+            Upload the updated records
+          </a>
+        </li>
+      </ol>
+      <hr class="govuk-section-break govuk-section-break--m">
+      <h2 class="govuk-heading-m">
+        Recommend trainees for teacher status
+      </h2>
       <p class="govuk-body">
-        You can add information to each record, or download them and add missing information using spreadsheet software (for example Microsoft Excel).
+        You have {{ currentTrainees | filterByComplete | length }} trainees ready to be recommend for teacher status. To recommend these trainees:
       </p>
+      <ol class="govuk-list govuk-list--number govuk-list--spaced">
+        <li>
+          <a href="#">
+            Export complete trainee records (csv)
+          </a>
+        </li>
+        <li>
+          Add the date the trainee met QTS or EYTS standard and if applicable, their academic award
+        </li>
+        <li>
+          <a href="#">
+            Upload the completed records
+          </a>
+        </li>
+      </ol>
     </div>
   </div>
 
 {% endblock %}
-
-
