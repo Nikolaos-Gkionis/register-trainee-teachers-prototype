@@ -1,0 +1,238 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Trainee records processed" %}
+{% set navActive = 'bulk' %}
+
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
+{% set traineesThatCanBeAwarded = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+
+{% set incompleteTraineesThatCanBeUpdated = registeredTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+
+{% set traineesThatCanBeAwardedCount = traineesThatCanBeAwarded | length %}
+
+{% set errors = range(3, 10) | random %}
+{% set unchanged = range(3, 10) | random %}
+
+{% set successfulAwards = traineesThatCanBeAwardedCount - (errors + unchanged) %}
+
+{% block content %}
+
+  {% set errorRows     = [] %}
+  {% set unchangedRows = [] %}
+  {% set completedRows = [] %}
+
+  {% for trainee in traineesThatCanBeAwarded %}
+
+    {% set randomNumber = range(0, 10) | random %}
+
+    {% if randomNumber == 1 %}
+      {% set destination = "error" %}
+    {% elseif (randomNumber > 1) and (randomNumber < 3) %}
+      {% set destination = "unchanged" %}
+    {% else %}
+      {% set destination = "completed" %}
+    {% endif %}
+
+    {% set errorMessage = [
+     'Trainee has already been awarded QTS',
+     'Trainee has already been recommened for QTS',
+     'Trainee has already been awarded EYTS',
+     'Trainee has already been recommened for EYTS',
+     'Teacher reference number is not recognised',
+     'Teacher reference number is missing',
+     'Academic qualification added, but date standards met is missing',
+     'Date standards met was added as ‘07-20-2023’, we cannot process this date',
+     'Date standards met was added as ‘20-07-2023’, it cannot be in the future',
+     'Postgraduate academic qualification is missing. If the trainee did not get a qualification, give the Postgraduate academic qualification as ‘None’',
+     'Trainee was on undergraduate course, but has been given ‘PGDE’ award',
+     'Trainee was on undergraduate course, but has been given ‘PGCE’ award'
+    ] | random  %}
+
+    {% set row = [
+      { text: loop.index,
+        format: "numeric" },
+      { text: "–" if destination == "error" and (errorMessage == "Teacher reference number is missing" or errorMessage == "Teacher reference number is not recognised") else trainee.personalDetails.shortName },
+      { text: "–" if destination == "error" and errorMessage == "Teacher reference number is missing" else trainee.reference }
+    ] %}
+
+    {% if destination == "error" %}
+
+      {# To do — set multiple errors #}
+      {% set row = row | push ({ text: errorMessage }) %}
+      {% set errorRows = errorRows | push(row) %}
+    
+    {% elseif destination == "unchanged" %}
+      {% set unchangedRows = unchangedRows | push(row) %}
+    
+    {% elseif destination == "completed" %}
+      {% set row = row | push({ text: "20-07-" + data.years.endOfCurrentCycle }) %}
+      {% set row = row | push({ text: trainee | getQualificationText }) %}
+
+      {% if trainee | isPostgraduate %}
+          {% set academicGrade = "—" %}
+          {% if trainee.route == "Assessment Only" %}
+            {% set academicAward = "—" %}
+          {% else %}
+            {% set academicAward = ["PGCE", "PGDE", "None"] | random %}
+          {% endif %}
+      {% else %}
+        {% set academicAward = "—" %}
+      {% endif %}
+      {% set row = row | push({ text: academicAward }) %}
+      {% set completedRows = completedRows | push(row) %}
+    {% endif %}
+  {% endfor %}
+  {% if errors %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h1 class="govuk-heading-l">
+          <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+          {{ pageHeading }}
+        </h1>
+        <p class="govuk-body">
+          Your file was successfully uploaded, it had:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          {% if errors %}
+            <li>{{ errorRows | length }} errors</li>
+          {% endif %}
+          {% if unchangedRows %}
+            <li>{{ unchangedRows | length }} unchanged records</li>
+          {% endif %}
+          {% if completedRows %}
+            <li>{{ completedRows | length }} trainees recommended for teacher status</li>
+          {% endif %}
+        </ul>
+        <hr class="govuk-section-break govuk-section-break--m">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+          Errors
+        </h2>
+        <p class="govuk-body">
+          To recommend these trainees for teacher status, correct the errors
+          and upload the file again.
+        </p>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable({
+          caption: "Errors",
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            {
+              text: "Row",
+              classes: "app-table__column-4"
+            },
+            {
+              text: "Trainee name",
+              classes: "app-table__column-20"
+            },
+            {
+              text: "TRN",
+              classes: "app-table__column-15"
+            },
+            {
+              text: "Error"
+            }
+          ],
+          rows: errorRows
+        }) }}
+      </div>
+    </div>
+    {% endif %}
+    {% if unchangedRows %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+          Unchanged trainee records
+        </h2>
+        {{ govukTable({
+                caption: "Unchanged records",
+                captionClasses: "govuk-visually-hidden",
+                head: [
+                  {
+                    text: "Row",
+                    classes: "app-table__column-8"
+                  },
+                  {
+                    text: "Trainee name",
+                    classes: "app-table__column-40"
+                  },
+                  {
+                    text: "TRN"
+                  }
+                ],
+                rows: unchangedRows
+            }) }}
+      </div>
+    </div>
+    {% endif %}
+    {% if successfulAwards %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+          Trainees recommended for teacher status
+        </h2>
+        <p class="govuk-body">
+          These records have been recommended for teacher status. The
+          DfE will award QTS or EYTS where appropriate within 3 working
+          days.
+        </p>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable({
+                caption: "Trainees recommended for teacher status",
+                captionClasses: "govuk-visually-hidden",
+                head: [
+                  {
+                    text: "Row",
+                    classes: "app-table__column-4"
+                  },
+                  {
+                    text: "Trainee name",
+                    classes: "app-table__column-20"
+                  },
+                  {
+                    text: "TRN",
+                    classes: "app-table__column-15"
+                  },
+                  {
+                    text: "Date standards met"
+                  },
+                  {
+                    text: "Teacher standard"
+                  },
+                  {
+                    text: "Postgraduate academic qualification"
+                  }
+                ],
+                rows: completedRows
+              }) }}
+      </div>
+    </div>
+    {% endif %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m">
+          Next steps
+        </h2>
+        <ul class="govuk-list govuk-list--spaced">
+          {% if errorRows %}
+          <li><a href="/bulk-action/add-missing/index">Fix errors and
+              upload a new file</a></li>
+          {% endif %}
+          {% if incompleteTraineesThatCanBeUpdated %}
+          <li> <a href="/records?%5BfilterCompleteStatus%5D=Incomplete">View
+              incomplete records</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+{% endblock %}

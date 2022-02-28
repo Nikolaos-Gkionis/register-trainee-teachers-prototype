@@ -1,0 +1,114 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Recommend trainees for teacher status" %}
+{% set pageTitle %}
+  Recommend trainees for <span class="app-nowrap">teacher status</span>
+{% endset %}
+{% set navActive = 'bulk' %}
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
+{% set traineesThatCanBeAwarded = currentTrainees | filterByComplete| filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set needAcademicAward = traineesThatCanBeAwarded | filterByAcademicQualificationsApply %}
+{% set filename = "complete-trainee-records" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+      {{ pageTitle | safe }}
+    </h1>
+    <p class="govuk-body">
+      You have {{ traineesThatCanBeAwarded | length }} trainees
+      ready to be recommend for teacher status.
+    </p>
+    <h2 class="govuk-heading-m">
+      How to recommend trainees for teacher status
+    </h2>
+    <ol class="govuk-list govuk-list--number">
+      <li>Export the trainee records file</li>
+      <li>
+        Open the file <span class="app-nowrap">‘{{ filename }}.csv’</span>
+        in your <span class="app-nowrap">spreadsheet software</span>
+      </li>
+      <li>Save your file as CSV</li>
+      <li>Upload the file</li>
+    </ol>
+    <h2 class="govuk-heading-m">
+      How to add information
+    </h2>
+    <h3 class="govuk-heading-s">
+      When the trainee met teacher standards
+    </h3>
+    <p class="govuk-body">
+      In the column ‘Date standards met’ add the date the trainee
+      was awarded teacher status.
+    </p>
+    <p class="govuk-body">
+      The date must be written in the format <span class="app-nowrap">‘DD-MM-YYYY’</span>.
+      For example, if the trainee was awarded teacher status on <span class="app-nowrap">20 June {{ data.years.defaultCourseYear }}</span>, write <span class="app-nowrap">‘20-07-{{ data.years.defaultCourseYear }}’</span>.
+    </p>
+    <h3 class="govuk-heading-s">
+      Postgraduate qualifications
+    </h3>
+    {% if needAcademicAward | filterByPostgraduate %}
+    {# Notes - consider tolerating 'None' for routes that are not
+    postgrad #}
+    <p class="govuk-body">
+      If the trainee was on a postgraduate course, in the column ‘Postgraduate qualification’ add one of these
+      options:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>PCGE</li>
+      <li>PGDE</li>
+      <li>None</li>
+    </ul>
+    <p class="govuk-body">
+      If the trainee was not on a postgraduate course, leave the cell blank.
+    </p>
+    {% endif %}
+    {# {% if needAcademicAward | filterByUndergraduate %}
+    <h3 class="govuk-heading-s">
+      Undergraduate qualifications
+    </h3>
+    <p class="govuk-body">
+      In the column ‘Undergraduate qualification’ add one of these
+      options:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>1</li>
+      <li>2.1</li>
+      <li>2.2</li>
+      <li>3</li>
+    </ul>
+    <p class="govuk-body">
+      If the trainee did not study an undergraduate course, leave
+      the cell blank.
+    </p>
+    {% endif %} #}
+    <h2 class="govuk-heading-m">
+      Export trainee records
+    </h2>
+    <p class="govuk-body govuk-!-margin-bottom-4">
+      <a href="/public/downloads/complete-trainee-records.csv"
+       download="{{ filename }}.csv">Export trainee records (csv)</a>
+    </p>
+    <form action="/bulk-action/recommend/file-uploaded" method="post"
+     novalidate>
+      <h2 class="govuk-heading-m">
+        Upload updated records
+      </h2>
+      {{ govukFileUpload({
+          id: "file-upload-1",
+          name: "file-upload-1",
+          label: {
+            text: "Upload a file"
+          }
+        }) }}
+      {{ govukButton({
+          text: "Upload records"
+        }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Trainee records processed" %}
+{% set navActive = 'bulk' %}
+
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
+{% set incompleteTraineesThatCanBeUpdated = registeredTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+{% set incompleteTrainees = registeredTrainees | filterByIncomplete | length %}
+
+{% block content %}
+
+      {% set updatedAndUnchangedTableHead = [
+        {
+          text: "Row",
+          classes: "app-table__column-4"
+        },
+        {
+          text: "Trainee",
+          classes: "app-table__column-15"
+        },
+        {
+          text: "TRN",
+          classes: "app-table__column-15"
+        },
+        {
+          text: "Trainee start date",
+          format: "numeric"
+        },
+        {
+          text: "Placement 1",
+          format: "numeric"
+        },
+        {
+          text: "Placement 2",
+          format: "numeric"
+        },
+        {
+          text: "Placement 3",
+          format: "numeric"
+        }
+      ] %}
+
+      {% set errorRows              = [] %}
+      {% set unchangedRows          = [] %}
+      {% set updatedTraineeRows     = [] %}
+      {% set completedRecords = 0 %}
+
+      {% for trainee in incompleteTraineesThatCanBeUpdated %}
+
+        {% set randomNumber = range(0, 10) | random %}
+
+        {% if randomNumber == 1 %}
+          {% set destination = "error" %}
+        {% elseif randomNumber > 1 %}
+          {% set destination = "notError" %}
+        {% endif %}
+
+        {% set errorMessage = [
+            'Teacher reference number is not recognised',
+            'Teacher reference number is missing',
+            'Trainee start date was added as ‘07-20-2023’, we cannot process this date',
+            'Trainee start date was added as ‘20-07-2023’, it cannot be in the future',
+            'URN not recognised'
+            ] | random
+          %}
+
+        {% set row = [
+            { text: loop.index,
+              format: "numeric" },
+            { text: "–" if destination == "error" and (errorMessage == "Teacher reference number is missing" or errorMessage == "Teacher reference number is not recognised") else trainee.personalDetails.shortName },
+            { text: "–" if destination == "error" and errorMessage == "Teacher reference number is missing" else trainee.reference  }
+          ] %}
+          {% set commencementDate = trainee.trainingDetails.commencementDate | formatDate("dashDateFriendly") %}
+
+          {% if destination == "error" %}
+            {% set fakeSchoolName = [
+                "Stratford Academy",
+                "Stratford School",
+                "St Peter and St Paul Infant School",
+                "All Saints Catholic Middle School",
+                "St Andrew’s Catholic School",
+                "Sapel Heath Sixth Form College",
+                "All Saints Catholic School",
+                "Manor Academy",
+                "St John's Primary School",
+                "St Clement’s Church of England Middle School",
+                "Cherry Primary School",
+                "St John's Church of England School",
+                "Saterton Academy",
+                "Langley Tuition Centre",
+                "Wattervea (Riarth Barborton College",
+                "Langley College",
+                "St Peter’s Catholic School",
+                "St Thomas’s Catholic Primary School",
+                "New Primary School",
+                "Church Hill High School",
+                "Abbey Secondary School",
+                "Langley College",
+                "North East Academy",
+                "Spockhope High School",
+                "St Peter and St Paul Catholic Infant School",
+                "Langley High School",
+                "Somelcomwo's Tommon Primary School",
+                "Cherry Academy"
+              ] | random %}
+            {% if errorMessage == "URN not recognised" %}
+              {% set errorMessage = "‘" + fakeSchoolName + "’ is not a recognised URN" %}
+            {% endif %}
+            {% set row = row | push({ text: errorMessage }) %}
+            {% set errorRows = errorRows | push(row) %}
+
+          {% elseif destination == "notError" %}
+
+            {% set numberOfUpdates = 0 %}
+            {% set completion = 0 %}
+            {% set randomNumber = range(1, 15) | random %}
+
+            {% if commencementDate %}
+              {% set completion = completion + 1 %}
+            {% elseif randomNumber > 2 %}
+              {% set commencementDate = "20-09-" + data.years.defaultCourseYear %}
+              {% set completion = completion + 1 %}
+              {% set numberOfUpdates = numberOfUpdates + 1 %}
+            {% else %}
+              {% set commencementDate = "–" %}
+            {% endif %}
+            {% set row = row | push({ text: commencementDate, format: "numeric" }) %}
+
+            {% for item in trainee.placement.items %}
+              {% set row = row | push({ text: item.school.urn, format: "numeric" }) %}
+              {% set completion = completion + 1 %}
+            {% endfor %}
+            {# Fill in rest of row with either fake URN or "–" #}
+            {% set randomNumber = range(1, 15) | random %}
+            {% if randomNumber > 2 %}
+              {% for items in row %}
+                {% if row.length != (updatedAndUnchangedTableHead.length - 1) %}
+                  {# sets a fake URN if there isn't one #}
+                  {% set row = row | push({ text: range(111111, 200000) | random, format: "numeric" }) %}
+                  {% set numberOfUpdates = numberOfUpdates + 1 %}
+                  {% set completion = completion + 1 %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+
+            {% for items in row %}
+              {% if row.length != updatedAndUnchangedTableHead.length %}
+                {% set row = row | push({ text: "–", format: "numeric" }) %}
+              {% endif %}
+            {% endfor %}
+
+            {% if numberOfUpdates == 0 %}
+              {% set unchangedRows = unchangedRows | push(row) %}
+            {% else %}
+              {% set updatedTraineeRows = updatedTraineeRows | push(row) %}
+            {% endif %}
+            {% if completion >= 3 %}
+              {% set completedRecords = completedRecords + 1 %}
+            {% endif %}
+          {% endif %}
+
+
+      {% endfor %}
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+        {{ pageHeading }}
+      </h1>
+      <p class="govuk-body">
+        Your file was successfully uploaded, it had:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>
+          {% if errorRows %}{{ errorRows.length }} errors{% endif %}
+        </li>
+        <li>
+          {% if unchangedRows %}{{ unchangedRows.length }} unchanged records{% endif %}
+        </li>
+        <li>
+          {% if updatedTraineeRows %}{{ updatedTraineeRows.length }} updated trainee records{% if completedRecords %} ({{ completedRecords }} completed){% endif %}{% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {% if errorRows %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds-from-desktop">
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">
+          Errors
+        </h2>
+        <p class="govuk-body">
+          To update these trainee records, correct the errors and upload the file.
+        </p>
+      </div>
+    </div>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable({
+          caption: "Errors",
+          captionClasses: "govuk-visually-hidden",
+          head: [
+            {
+              text: "Row",
+              classes: "app-table__column-4"
+            },
+            {
+              text: "Trainee",
+              classes: "app-table__column-15"
+            },
+            {
+              text: "TRN",
+              classes: "app-table__column-15"
+            },
+            { 
+              text: "Error"
+            }
+          ],
+          rows: errorRows
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+  {% if unchangedRows %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable({
+          caption: "Unchanged trainee records",
+          captionClasses: "govuk-table__caption--m",
+          head: updatedAndUnchangedTableHead,
+          rows: unchangedRows
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+  {% if updatedTraineeRows %}
+    <hr class="govuk-section-break govuk-section-break--m">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ govukTable({
+          caption: "Updated trainee records",
+          captionClasses: "govuk-table__caption--m",
+          head: updatedAndUnchangedTableHead,
+          rows: updatedTraineeRows
+        }) }}
+      </div>
+    </div>
+  {% endif %}
+  <hr class="govuk-section-break govuk-section-break--m">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h2 class="govuk-heading-m">
+        Next steps
+      </h2>
+      <ul class="govuk-list govuk-list--spaced">
+        {% if errorRows %}
+          <li><a href="/bulk-action/add-missing/index">Fix errors and upload a new file</a></li>
+        {% endif %}
+        {% if completedRecords %}
+          <li><a href="/bulk-action/recommend/index">Recommend a group of trainees for teacher status</a></li>
+        {% endif %}
+        {% if incompleteTrainees %}
+          <li> <a href="/records?%5BfilterCompleteStatus%5D=Incomplete">View incomplete records</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  {% endblock %}

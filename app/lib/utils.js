@@ -1078,7 +1078,7 @@ exports.isUndergraduate = data => {
   return exports.getCourseLevel(data) == "Undergraduate"
 }
 
-exports.isPostgraduate= data => {
+exports.isPostgraduate = data => {
   return exports.getCourseLevel(data) == "Postgraduate"
 }
 // Phases
@@ -1210,6 +1210,23 @@ exports.needsPlacementDetails = function(record, data = false) {
   return needsPlacementDetails
 }
 
+// Check if record has start date
+exports.needsStartDate = function(record, data=false) {
+  data = Object.assign({}, (data || this.ctx.data || false))
+
+  let needsStartDate = false
+
+  let traineeStarted = record?.trainingDetails?.commencementDate
+  let ittStartDate = moment(record?.courseDetails?.startDate)
+
+  if (!traineeStarted && dates.isInPast(record?.courseDetails?.startDate) && record.status != "Deferred") {
+    needsStartDate = true
+  }
+
+  return needsStartDate
+
+}
+
 // Check if there are outsanding actions (Either adding start date or placements details)
 exports.hasOutstandingActions = function(record, data = false) {
 
@@ -1219,7 +1236,7 @@ exports.hasOutstandingActions = function(record, data = false) {
   let traineeStarted = record?.trainingDetails?.commencementDate
   let ittStartDate = moment(record?.courseDetails?.startDate)
 
-  if (!traineeStarted && dates.isInPast(record?.courseDetails?.startDate) && record.status != "Deferred") {
+  if (exports.needsStartDate(record, data)) {
     hasOutstandingActions = true
   }
   else if (exports.needsPlacementDetails(record, data)) {
@@ -1570,6 +1587,32 @@ exports.filterByQualification = (records, qualification) => {
     let courseQualificationMatches = courseQualifications && courseQualifications.includes(qualification)
     return courseQualificationMatches
  })
+}
+
+exports.filterByNeedsStartDate = (records, data=false) => {
+  data = Object.assign({}, (data || this?.ctx?.data || false))
+  return records.filter(record => exports.needsStartDate(record, data))
+}
+
+exports.filterByNeedsPlacements = (records, data=false) => {
+  data = Object.assign({}, (data || this?.ctx?.data || false))
+  return records.filter(record => exports.needsPlacementDetails(record, data))
+}
+
+exports.filterOutEarlyYears = (records) => {
+  return records.filter(record => exports.qualificationIsQTS(record))
+}
+
+exports.filterByAcademicQualificationsApply = (records) => {
+  return records.filter(record => exports.academicQualificationsApply(record))
+}
+
+exports.filterByPostgraduate = (records) => {
+  return records.filter(record => exports.isPostgraduate(record))
+}
+
+exports.filterByUndergraduate = (records) => {
+  return records.filter(record => exports.isUndergraduate(record))
 }
 
 // -------------------------------------------------------------------

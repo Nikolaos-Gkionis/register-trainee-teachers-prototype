@@ -1,18 +1,50 @@
-{% extends "_templates/_form.html" %}
+{% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Choose an action" %}
+{% set pageHeading = "Update a group of records and recommend trainees for teacher status" %}
 {% set navActive = 'bulk' %}
 
-{% set formAction = "./bulk-action/filter-trainees" | addReferrer(referrer) %}
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
+
+{% set traineesThatCanBeAwarded = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) | length %}
+
+{% set incompleteTraineesThatCanBeUpdated = registeredTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) | length %}
+{% set incompleteTraineesThatCannotBeUpdated = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated) %}
 
 
 
-{% block formContent %}
+{% block content %}
 
-  {% include "_includes/forms/bulk/choose-action.html" %}
-  
-  
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+        {{ pageHeading }}
+      </h1>
+      <p class="govuk-body">
+        You can make changes to a group of trainee records using <span class="app-nowrap">spreadsheet software</span> (for example, <span class="app-nowrap">Microsoft Excel</span>).
+      </p>
+      {% if traineesThatCanBeAwarded %}
+        <h2 class="govuk-heading-m">
+          Update incomplete records
+        </h2>
+        <p class="govuk-body">
+          You have {{ incompleteTraineesThatCanBeUpdated }} trainees that need more information and can be updated using spreadsheet software.
+        </p>
+        <p class="govuk-body">
+          <a href="/bulk-action/add-missing/index">Update incomplete records</a>
+        </p>
+      {% endif %}
+      <h2 class="govuk-heading-m">
+        Recommend trainees for teacher status
+      </h2>
+      <p class="govuk-body">
+        You can recommened {{ traineesThatCanBeAwarded }} trainees for teacher status.
+      </p>
+      <p class="govuk-body">
+        <a href="/bulk-action/recommend">Recommend trainees for teacher status</a>
+      </p>
+    </div>
+  </div>
 
 {% endblock %}
-
-
