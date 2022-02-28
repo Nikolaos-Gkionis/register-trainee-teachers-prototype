@@ -1,17 +1,27 @@
-{% extends "_templates/_form.html" %}
+{% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Choose an action" %}
+{% set pageHeading = "Recommend a group for teacher status" %}
 {% set navActive = 'bulk' %}
 
-{% set formAction = "./bulk-action/filter-trainees" | addReferrer(referrer) %}
+{% block content %}
 
-
-
-{% block formContent %}
-
-  {% include "_includes/forms/bulk/choose-action.html" %}
-  
-  
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+        {{ pageHeading }}
+      </h1>
+      <h2 class="govuk-heading-l">
+        Incomplete records
+      </h2>
+      <p class="govuk-body">
+        <a href="#">View current trainees with incomplete records</a>
+      </p>
+      <p class="govuk-body">
+        You can add information to each record, or download them and add missing information using spreadsheet software (for example Microsoft Excel).
+      </p>
+    </div>
+  </div>
 
 {% endblock %}
 
