@@ -1,0 +1,102 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Update incomplete records" %}
+{% set navActive = 'bulk' %}
+
+{% set registeredTrainees = data.filteredRecords | filterByStatus("Draft", true) %}
+{% set currentTrainees = registeredTrainees | filterByActive %}
+
+{% set traineesWithoutStartDates =  currentTrainees | filterByNeedsStartDate | filterOutEarlyYears | length %}
+{% set traineesWithoutPlacements =  currentTrainees | filterByNeedsPlacements | filterOutEarlyYears | length %}
+
+{% set minPlacementsRequired = data.settings.minPlacementsRequired %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+      <h1 class="govuk-heading-l">
+        <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
+        {{ pageHeading }}
+      </h1>
+
+      <h2 class="govuk-heading-m">
+        How to update records
+      </h2>
+      
+      <p class="govuk-body">
+        You have {{ currentTrainees | filterByIncomplete | filterOutEarlyYears | length }} trainees that need more information and can be updated using spreadsheet software.
+      </p>
+      <p class="govuk-body">
+        You have <a href="#">{{ (currentTrainees | filterByIncomplete | length) - (currentTrainees | filterByIncomplete | filterOutEarlyYears | length) }} trainee records that need to be updated individually</a>.
+      </p>
+
+      <h2 class="govuk-heading-m">
+        How to update records
+      </h2>
+
+      <ol class="govuk-list govuk-list--number">
+        <li><a href="# download">Export incomplete trainee records (csv)</a></li>
+        <li>Add the missing information using spreadsheet software (for example, Microsoft Excel)</li>
+        <li>Save your file as CSV</li>
+        <li>Upload the spreadsheet</li>
+      </ol>
+
+      <h3 class="govuk-heading-m">
+        How the information needs to be provided
+      </h3>
+
+      {% if traineesWithoutStartDates %}
+        <h3 class="govuk-heading-s">
+          Start dates
+        </h3>
+        <p class="govuk-body">
+          For each trainee missing a start date, in the column ‘Start date’ add the date the trainee began their ITT.
+        </p>
+        <p class="govuk-body">
+          The date must be written in the format <span class="app-nowrap">‘DD-MM-YYYY’</span>. For example, if the trainee started on 9 September {{ data.years.defaultCourseYear }}, write <span class="app-nowrap">‘20-09-{{ data.years.defaultCourseYear }}’</span>.
+        </p>
+        <p class="govuk-body">
+          If a trainee does not have a start date, leave the cell empty.
+        </p>
+      {% endif %}
+
+      {% if traineesWithoutStartDates %}
+        <h3 class="govuk-heading-s">
+          Placement details
+        </h3>
+        <p class="govuk-body">
+          For each trainee missing placement details, you need to provide the URN.
+        </p>
+        <p class="govuk-body">
+          You can find the URNs using <a href="https://www.get-information-schools.service.gov.uk/Search">Get information about schools</a>.
+        </p>
+        {# TO DO — how will URNS/NAMES work? #}
+        <p class="govuk-body">
+          If you do not have the information for a placement, leave the cell empty.
+        </p>
+        <p class="govuk-body">
+          If the trainee has done more than {{ minPlacementsRequired + 1 }} placements, you can add the additional placements directly to the trainee record in Register.
+        </p>
+      {% endif %}
+
+
+      <h2 class="govuk-heading-m">
+        Upload updated records
+      </h2>
+
+      {{ govukFileUpload({
+        id: "file-upload-1",
+        name: "file-upload-1",
+        label: {
+          text: "Upload a file"
+        }
+      }) }}
+      {{ govukButton({
+        text: "Upload records"
+      }) }}
+
+    </div>
+  </div>
+
+{% endblock %}
