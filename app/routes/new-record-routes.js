@@ -88,8 +88,8 @@ module.exports = router => {
     }
   })
 
-  // Show error if route is not assessment only
-  router.post('/new-record/select-route-answer', function (req, res) {
+  // Route for when changing route separate from the course - used as the first page of manual drafts
+  router.post(['/:recordtype/:uuid/select-route-answer','/:recordtype/select-route-answer'], function (req, res) {
     const data = req.session.data
     let record = data.record
     let route = record?.route
@@ -104,28 +104,24 @@ module.exports = router => {
     else if (route == "Other") {
       res.redirect(`/new-record/route-not-supported${referrer}`)
     }
-    else {
 
-      // It’s possible for a user to pick a Publish course, then go back to change the
-      // route to one that doesn’t have publish courses. If they do this, we delete the
-      // course details section
-      if (existingCourseDetails?.isPublishCourse && route != existingCourseDetails?.route){
-        // delete record.courseDetails
-        console.log("Changing to a route that doesn’t match the selected Publish course")
-        // In the future, this could send to a confirm page checking if this is the right course
-      }
-
-      // TODO Make course details not complete if route is changed from Early years to a non Early years
-      
-      // Coming from the check answers page
-      if (referrer){
-        res.redirect(utils.getReferrerDestination(req.query.referrer))
-      }
-      else {
-        res.redirect(`/new-record/overview`)
-      }
+    // It’s possible for a user to pick a Publish course, then go back to change the
+    // route to one that doesn’t have publish courses. If they do this, we delete the
+    // course details section
+    if (existingCourseDetails?.isPublishCourse && route != existingCourseDetails?.route){
+      delete record.courseDetails
+      console.log("Changing to a route that doesn’t match the selected Publish course")
+      // In the future, this could send to a confirm page checking if this is the right course
     }
-   
+
+    // Coming from the check answers page
+    if (referrer){
+      res.redirect(utils.getReferrerDestination(req.query.referrer))
+    }
+    else {
+      res.redirect(`/new-record/overview`)
+    }
+
   })
 
   // Swap between two different templates for this page
