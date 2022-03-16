@@ -1,0 +1,46 @@
+{% set fileName = data.signedInProviders | makeFileName("change pending","csv") %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+      {{ pageHeading }}
+    </h1>
+    <h2 class="govuk-heading-m">
+      1. Export the pending updates file
+    </h2>
+    <p class="govuk-body">
+      <a href="../public/downloads/{{ bulkPath }}-change-pending.csv" download="{{ fileName }}">
+        Export trainee records with pending updates (csv)
+      </a>
+    </p>
+    <h2 class="govuk-heading-m">
+      2. Update your trainee records
+    </h2>
+    <p class="govuk">
+      Changes you make to this file will overwrite the previous pending changes. For example if you remove a row, changes made to that trainee will be lost.
+    </p>
+    <h2 class="govuk-heading-m">
+      3. Upload file
+    </h2>
+    <form action="/bulk-action/{{ bulkPath }}/review-pending-updates" method="post" novalidate>
+      {{ govukFileUpload({
+        id: "file-upload-1",
+        name: "file-upload-1",
+        hint: {
+          text: "File type must be ‘csv’."
+        },
+        label: {
+          text: "Upload a file"
+        }
+      }) }}
+      {{ govukButton({
+        text: "Upload records"
+      }) }}
+    </form>
+    <p class="govuk-body">
+      <a href="/bulk-action/{{ bulkPath }}/no-update">
+        Cancel and return to pending updates
+      </a>
+    </p>
+  </div>
+</div>

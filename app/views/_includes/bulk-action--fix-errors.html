@@ -1,0 +1,56 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+      {{ pageHeading }}
+    </h1>
+    <p class="govuk-body">
+      <a href="../public/assets/downloads/{{ bulkPath }}-fix-errors" download="{{ fileName}}">Download your trainee records with a description of the errors (csv)</a> or change your original file.
+    </p>
+    <h2 class="govuk-heading-m">
+      1. Fix the errors
+    </h2>
+    <p class="govuk-body">
+      Changes you make to this file will overwrite previous changes. For example, if you remove a row, changes made to that trainee will be lost.
+    </p>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {{ govukTable({
+      caption: tableCaption,
+      captionClasses: tableCaptionClasses,
+      head: tableHeadRow,
+      rows: tableBodyRows
+    }) }}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">
+      2. Upload file
+    </h2>
+    <form action="/bulk-action/{{ bulkPath }}/review-pending-updates" method="post" novalidate>
+      {{ govukFileUpload({
+        id: "file-upload-1",
+        name: "file-upload-1",
+        hint: {
+          text: "File type must be ‘csv’."
+        },
+        label: {
+          text: "Upload a file"
+        }
+      }) }}
+      {{ govukButton({
+        text: "Upload records"
+      }) }}
+    </form>
+    <p class="govuk-body">
+      <a href="/bulk-action/{{ bulkPath }}/no-update">
+        Skip fixing errors and review pending updates to trainee records
+      </a>
+    </p>
+  </div>
+</div>

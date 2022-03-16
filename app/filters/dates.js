@@ -286,6 +286,10 @@ filters.formatDate = (date, format, dateFormat) => {
       case (format == 'dashDate'):
         return returnDate.format('YYYY-MM-DD');
 
+      // 2018-03-21
+      case (format == 'dashDateFriendly'):
+        return returnDate.format('DD-MM-YYYY' );
+
       // 2018/03/21
       case (format == 'slashDate'):
         return returnDate.format('YYYY/MM/DD');

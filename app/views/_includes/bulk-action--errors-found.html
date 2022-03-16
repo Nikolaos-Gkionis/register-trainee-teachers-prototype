@@ -1,0 +1,32 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+      {{ pageHeading }}
+    </h1>
+    {% include "_includes/bulk-action--upload-summary.html" %}
+    {% set errorPluralisation = "error" | pluralise(tableBodyRows.length) %}
+    <form action="/bulk-action/add-details/fix-errors-answer" method="post" novalidate>
+      {{ govukRadios({
+        fieldset: {
+          legend: {
+            text: "Do you want to fix the " + errorPluralisation + " now?",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: [
+          {
+            text: "Yes, fix " + errorPluralisation + " now"
+          },
+          {
+            text: "No, continue without fixing " + errorPluralisation + " and review " + updatedCount + " pending updates"
+          }
+        ]
+      } | decorateAttributes(data, "data.bulk." + bulkRoute + "FixErrors" )) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
+</div>

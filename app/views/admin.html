@@ -43,6 +43,18 @@
         items: [
           {
             value: 'true',
+            text: "Bulk actions",
+            hint: {
+              text: "Set this to see bulk actions instead of bulk upload"
+            }
+          }
+        ]
+      } | decorateAttributes(data, "data.settings.bulkActionsNotBulkUploads")) }}
+
+      {{ govukCheckboxes({
+        items: [
+          {
+            value: 'true',
             text: "Include timeline on records"
           }
         ]

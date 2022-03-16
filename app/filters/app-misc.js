@@ -8,6 +8,7 @@ const utils = require('./../lib/utils')
 const arrayFilters = require('./arrays.js').filters
 const funding = require('../data/funding')
 const moment = require("moment")
+const strings = require('./../filters/strings.js').filters
 
 // Leave this filters line
 var filters = {}
@@ -256,6 +257,18 @@ filters.prettyMonthFromAugust = (monthNumber) => {
     return moment().month(monthNumber - 6).format("MMMM");
   } else {
     return moment().month(monthNumber + 6).format("MMMM");
+  }
+}
+
+/*
+  Makes file names
+*/
+
+filters.makeFileName = (provider, input, fileType) => {
+  if (typeof input === "string") {
+   return strings.slugify(provider + "-" + input) + "." + fileType
+  } else {
+    console.log("Error with makeFileName filter. Input is not a string")
   }
 }
 

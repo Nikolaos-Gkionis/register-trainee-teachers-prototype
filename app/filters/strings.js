@@ -129,6 +129,13 @@ filters.possessive = (noun) => {
   }
 }
 
+filters.makeNumberTwoDigits = (input) => {
+  if (typeof input == "number" && input < 10) {
+    return "0" + input
+  } else {
+    return input
+  }
+}
 
 // -------------------------------------------------------------------
 // keep the following line to return your filters to the app

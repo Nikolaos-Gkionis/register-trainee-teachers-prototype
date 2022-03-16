@@ -1,0 +1,35 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <h1 class="govuk-heading-l">
+      <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+      {# {{ pageHeading }} #}
+      Review pending updates to <span class="app-nowrap">trainee records</span>
+    </h1>
+    {% if data.bulk.recommendFixErrors == "Yes, fix errors now" or data.bulk.recommendFixErrors == "Yes, fix error now" %}
+      {% include "_includes/bulk-action--upload-summary.html" %}
+    {% endif %}
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {{ govukTable({
+      caption: tableCaption,
+      captionClasses: tableCaptionClasses,
+      head: tableHeadRow,
+      rows: tableBodyRows
+    }) }}
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds-from-desktop">
+    <p class="govuk-body govuk-!-margin-bottom-7">
+      <a href="fix-pending-updates">Make changes to your pending updates</a>
+    </p>
+    <form action="/bulk-action/recommend/confirmation" method="post" novalidate>
+        {{ govukButton({
+          text: "Confirm updates to records"
+        }) }}
+        <p class="govuk-body"><a href="/bulk-action/cancel" class="govuk-link">Cancel bulk changes to records</a></p>
+    </form>
+  </div>
+</div>

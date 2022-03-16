@@ -1,0 +1,40 @@
+{% extends "_templates/_page.html" %}
+
+{% set navActive = 'bulk' %}
+
+{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+
+{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set qualText = ["QTS"] %}
+{% set qualText = qualText | push("EYTS") if (traineesThatCanBeRecommended | filterOutEarlyYears) != traineesThatCanBeRecommended %}
+
+{% set traineesThatCannotBeUpdatedCount = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated | length ) %}
+
+{% set pageHeading = traineesThatCanBeRecommended | length  + " trainee records recommended for " + qualText | orSeparate %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ govukPanel({
+        titleText: pageHeading,
+        classes: "govuk-!-margin-bottom-7"
+      }) }}
+
+      <p class="govuk-body">
+        The Department for Education will award {{ qualText | orSeparate }} where appropriate within 3 working days.
+      </p>
+
+      <h2 class="govuk-heading-m">
+        Next steps
+      </h2>
+      <p class="govuk-body">
+        <a href="/records/">View your current trainees</a>
+      </p>
+    </div>
+  </div>
+
+{% endblock %}
+
+
