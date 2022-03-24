@@ -8,7 +8,7 @@
 
 {% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
 
-{% set headRow = [
+{% set tableHeadRow = [
     {
       text: "Trainee",
       classes: "app-table__column-25"
@@ -28,7 +28,7 @@
   ]
 %}
 
-{% set updatedTraineeRows = [] %}
+{% set tableBodyRows = [] %}
 
 {% for trainee in traineesThatCanBeUpdated %}
 
@@ -65,60 +65,28 @@
   {% endfor %}
 
   {% for items in row %}
-    {% if row.length != headRow.length %}
+    {% if row.length != tableHeadRow.length %}
       {% set row = row | push({ text: "–" }) %}
     {% endif %}
   {% endfor %}
 
   {% if completion > 0 %}
-    {% set updatedTraineeRows = updatedTraineeRows | push(row) %}
+    {% set tableBodyRows = tableBodyRows | push(row) %}
   {% endif %}
 
 {% endfor %}
 
 {# These counts are used by include "_includes/bulk-upload/upload-summary.html  #}
 {% set errorCount = 0 %}
-{% set unchangedCount = traineesThatCanBeUpdated.length - updatedTraineeRows.length %}
-{% set updatedCount = updatedTraineeRows.length %}
+{% set unchangedCount = traineesThatCanBeUpdated.length - tableBodyRows.length %}
+{% set updatedCount = tableBodyRows.length %}
+
+{% set tableCaption = "Pending updates to trainee records (" + tableBodyRows.length + ")" %}
+{% set tableCaptionClasses = "govuk-table__caption--m" %}
 
 {% block content %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <h1 class="govuk-heading-l">
-        <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
-        {# {{ pageHeading }} #}
-        Review pending updates to <span class="app-nowrap">trainee records</span>
-      </h1>
-      {% if data.bulk.addDetailsFixErrors == "Yes, fix errors now" or data.bulk.addDetailsFixErrors == "Yes, fix error now" %}
-        {% include "_includes/bulk-upload/upload-summary.html" %}
-      {% endif %}
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      {{ govukTable({
-        caption: "Pending updates to trainee records (" + updatedTraineeRows.length + ")",
-        captionClasses: "govuk-table__caption--m",
-        head: headRow,
-        rows: updatedTraineeRows
-      }) }}
-    </div>
-  </div>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds-from-desktop">
-      <p class="govuk-body govuk-!-margin-bottom-7">
-        <a href="fix-pending-updates">Make changes to your pending updates</a>
-      </p>
-      <form action="/bulk-upload/add-details/confirmation" method="post" novalidate>
-      {# put cancle below #}
-          {{ govukButton({
-            text: "Confirm updates to records"
-          }) }}
-          <p class="govuk-body"><a href="#" class="govuk-link">Cancel bulk changes to records</a></p>
-      </form>
-    </div>
-  </div>
+  {% include "_includes/bulk-upload/review-pending-updates.html" %}
 
 {% endblock %}
 
