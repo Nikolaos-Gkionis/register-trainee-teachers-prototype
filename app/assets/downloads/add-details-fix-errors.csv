@@ -1,9 +1,0 @@
-TRN,Trainee ITT start date,Placement 1 URN,Placement 2 URN,Error
-Do not change this column,"When the trainee started their ITT.
-Must be written DD-MM-YYYY. 
-For example, if the trainee started their ITT on 20 September 2022, write '20-09-2022'.
-The date must be in the past.
-If you do not know the trainee’s ITT start date, leave the cell empty.","The URN of the trainees first placement school. URNs must be 6 digits long. If you do not know the placement school’s URN, leave the cell empty.","The URN of the trainees first placement school. URNs must be 6 digits long. If you do not know the placement school’s URN, leave the cell empty.",
-NS3688,07-20-2023,138838,143307,"Trainee start date: ‘07-20-2023’, enter a valid start date"
-LX0679,07-09-2022,Langley College,143307,"Placement 1 URN: ‘Langley College’, enter a valid URN"
-EQ1522,07-09-2022,Spockhope High School,143307,"Placement 1 URN: ‘Spockhope High School’, enter a valid URN"
