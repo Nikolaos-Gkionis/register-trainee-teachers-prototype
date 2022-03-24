@@ -108,7 +108,7 @@
   ]
 %}
 
-{# These counts are used by include "_includes/bulk-action--upload-summary.html  #}
+{# These counts are used by include "_includes/bulk-action/upload-summary.html  #}
 {% set errorCount = tableBodyRows.length %}
 {% set unchangedCount = unchangedTrainees %}
 {% set updatedCount = updatedTrainees %}
@@ -118,6 +118,6 @@
 
 {% block content %}
 
-  {% include "_includes/bulk-action--fix-errors.html" %}
+  {% include "_includes/bulk-action/fix-errors.html" %}
 
 {% endblock %}

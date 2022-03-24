@@ -1,0 +1,21 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Make a change to your pending updates" %}
+{% set navActive = 'bulk' %}
+
+{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+
+{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+{% set traineesThatCannotBeUpdatedCount = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated | length ) %}
+
+{% set fileName = data.signedInProviders | makeFileName("change pending","csv") %}
+
+{% set bulkPath = "recommend" %}
+
+{% block content %}
+
+  {% include "_includes/bulk-action/fix-pending-updates.html" %}
+
+{% endblock %}
+
+

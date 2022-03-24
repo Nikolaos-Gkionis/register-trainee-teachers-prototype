@@ -6,7 +6,7 @@
       Review pending updates to <span class="app-nowrap">trainee records</span>
     </h1>
     {% if data.bulk.recommendFixErrors == "Yes, fix errors now" or data.bulk.recommendFixErrors == "Yes, fix error now" %}
-      {% include "_includes/bulk-action--upload-summary.html" %}
+      {% include "_includes/bulk-upload/upload-summary.html" %}
     {% endif %}
   </div>
 </div>
@@ -25,11 +25,11 @@
     <p class="govuk-body govuk-!-margin-bottom-7">
       <a href="fix-pending-updates">Make changes to your pending updates</a>
     </p>
-    <form action="/bulk-action/recommend/confirmation" method="post" novalidate>
+    <form action="/bulk-upload/recommend/confirmation" method="post" novalidate>
         {{ govukButton({
           text: "Confirm updates to records"
         }) }}
-        <p class="govuk-body"><a href="/bulk-action/cancel" class="govuk-link">Cancel bulk changes to records</a></p>
+        <p class="govuk-body"><a href="/bulk-upload/cancel" class="govuk-link">Cancel bulk changes to records</a></p>
     </form>
   </div>
 </div>

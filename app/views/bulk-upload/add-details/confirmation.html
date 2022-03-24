@@ -3,10 +3,12 @@
 {% set pageHeading = "Review updates to trainee records" %}
 {% set navActive = 'bulk' %}
 
-{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
 {% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
 {% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+
 {% set qualText = ["QTS"] %}
 {% set qualText = qualText | push("EYTS") if (traineesThatCanBeRecommended | filterOutEarlyYears) != traineesThatCanBeRecommended %}
 
@@ -32,7 +34,7 @@
       <h3 class="govuk-heading-s">
         Trainees with incomplete records
       </h3>
-      {% include "_includes/bulk-action--update-individual-records.html" %}
+      {% include "_includes/bulk-upload/update-individual-records.html" %}
       <h3 class="govuk-heading-s">
         Recommend trainees for {{ qualText | orSeparate }}
       </h3>
@@ -40,7 +42,7 @@
         You have {{ traineesThatCanBeRecommended | length }} trainees that can be recommended for {{ qualText | orSeparate }}.
       </p> 
       <p class="govuk-body">
-        <a href="/bulk-action/">Bulk recommend trainees for {{ qualText | orSeparate }}</a>
+        <a href="/bulk-upload/">Bulk recommend trainees for {{ qualText | orSeparate }}</a>
       </p>
     </div>
   </div>

@@ -1,0 +1,92 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Review pending updates to trainee records" %}
+{% set navActive = 'bulk' %}
+
+{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+
+{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+
+{% set tableHeadRow = [
+    {
+      text: "Trainee",
+      classes: "app-table__column-25"
+    },
+    {
+      text: "Route and course",
+      classes: "app-table__column-25"
+    },
+    {
+      text: "Study mode",
+      classes: "app-table__column-25"
+    },
+    {
+      text: "Teacher standard",
+      classes: "app-table__column-25"
+    },
+    {
+      text: "Date standards met",
+      classes: "app-table__column-25"
+    },
+    {
+      text: "Postgraduate qualification",
+      classes: "app-table__column-25"
+    }
+  ]
+%}
+
+{% set tableBodyRows = [] %}
+
+{% for trainee in traineesThatCanBeRecommended %}
+
+  {% set traineeInfo = trainee.personalDetails.shortName + '<br> <span style="color:  #505a5f">' + trainee.reference + '</span>' %}
+
+  {% set row = [
+    { text: traineeInfo | safe }
+  ] %}
+  
+  {% set rowAndCourse %}
+    <p class="govuk-body govuk-!-margin-bottom-1">{{ trainee.route }}</p>
+    {% if trainee.courseDetails.courseNameLong %}
+      <p class="govuk-body govuk-!-margin-bottom-0">{{ trainee.courseDetails.courseNameShort }}</p>
+    {% endif %}
+  {% endset %}
+  {% set row = row | push({ text: rowAndCourse | safe }) %}
+
+  {% set row = row | push({ text: trainee.courseDetails.studyMode }) %}
+
+  {% set row = row | push({ text: trainee | getQualificationText }) %}
+
+  {% set standardsMetDate = [range(1, 29) | random | makeNumberTwoDigits, range(6, 7) | random | makeNumberTwoDigits, data.years.defaultCourseYear + 1] %}
+  {% set row = row | push({ text: standardsMetDate | govukDate })%}
+
+  {% if trainee | isPostgraduate %}
+    {% if trainee.route == "Assessment Only" %}
+      {% set academicAward = "—" %}
+    {% else %}
+      {% set academicAward = ["PGCE", "PGDE", "None"] | random %}
+    {% endif %}
+  {% else %}
+    {% set academicAward = "—" %}
+  {% endif %}
+  {% set row = row | push({ text: academicAward }) %}
+
+  {% set tableBodyRows = tableBodyRows | push(row) %}
+
+{% endfor %}
+
+{# These counts are used by include "_includes/bulk-action/upload-summary.html  #}
+{% set errorCount = 0 %}
+{% set unchangedCount = traineesThatCanBeUpdated.length - tableBodyRows.length %}
+{% set updatedCount = tableBodyRows.length %}
+
+{% set tableCaption = "Pending updates to trainee records (" + tableBodyRows.length + ")" %}
+{% set tableCaptionClasses = "govuk-table__caption--m" %}
+
+{% block content %}
+
+  {% include "_includes/bulk-action/review-pending-updates.html" %}
+
+{% endblock %}
+
+

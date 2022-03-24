@@ -1,8 +1,10 @@
 {% extends "_templates/_page.html" %}
-
 {% set navActive = 'bulk' %}
 
-{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+{% set pageHeading = "Fix the errors in your trainee records" %}
+
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
 {% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
 {% set traineesThatCannotBeUpdatedCount = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated | length ) %}
@@ -90,7 +92,7 @@
 {% endfor %}
 
 {% set tableCaption = "Trainee " + 'record' | pluralise(tableBodyRows.length) + " with errors (" + tableBodyRows.length + ")" %}
-{% set tableCaptionClasses =  "govuk-visually-hidden" %}
+{% set tableCaptionClasses = "govuk-table__caption--m" %}
 {% set tableHeadRow = 
   [
     {
@@ -107,19 +109,16 @@
   ]
 %}
 
-{# These counts are used by include "_includes/bulk-action--upload-summary.html  #}
+{# These counts are used by include "_includes/bulk-upload/upload-summary.html  #}
 {% set errorCount = tableBodyRows.length %}
 {% set unchangedCount = unchangedTrainees %}
 {% set updatedCount = updatedTrainees %}
 
-{% set bulkRoute = "addDetails" %}
-
-{% set pageHeading = "Errors in your trainee records file" %}
+{% set fileName = data.signedInProviders | makeFileName("fix errors","csv") %}
+{% set bulkPath = "add-details" %}
 
 {% block content %}
 
-  {% include "_includes/bulk-action--errors-found.html" %}
+  {% include "_includes/bulk-upload/fix-errors.html" %}
 
 {% endblock %}
-
-

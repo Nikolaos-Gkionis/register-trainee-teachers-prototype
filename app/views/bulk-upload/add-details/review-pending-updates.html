@@ -3,7 +3,8 @@
 {% set pageHeading = "Review pending updates to trainee records" %}
 {% set navActive = 'bulk' %}
 
-{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
 {% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
 
@@ -75,7 +76,7 @@
 
 {% endfor %}
 
-{# These counts are used by include "_includes/bulk-action--upload-summary.html  #}
+{# These counts are used by include "_includes/bulk-upload/upload-summary.html  #}
 {% set errorCount = 0 %}
 {% set unchangedCount = traineesThatCanBeUpdated.length - updatedTraineeRows.length %}
 {% set updatedCount = updatedTraineeRows.length %}
@@ -90,7 +91,7 @@
         Review pending updates to <span class="app-nowrap">trainee records</span>
       </h1>
       {% if data.bulk.addDetailsFixErrors == "Yes, fix errors now" or data.bulk.addDetailsFixErrors == "Yes, fix error now" %}
-        {% include "_includes/bulk-action--upload-summary.html" %}
+        {% include "_includes/bulk-upload/upload-summary.html" %}
       {% endif %}
     </div>
   </div>
@@ -109,7 +110,7 @@
       <p class="govuk-body govuk-!-margin-bottom-7">
         <a href="fix-pending-updates">Make changes to your pending updates</a>
       </p>
-      <form action="/bulk-action/add-details/confirmation" method="post" novalidate>
+      <form action="/bulk-upload/add-details/confirmation" method="post" novalidate>
       {# put cancle below #}
           {{ govukButton({
             text: "Confirm updates to records"

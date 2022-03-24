@@ -43,18 +43,6 @@
         items: [
           {
             value: 'true',
-            text: "Bulk actions",
-            hint: {
-              text: "Set this to see bulk actions instead of bulk upload"
-            }
-          }
-        ]
-      } | decorateAttributes(data, "data.settings.bulkActionsNotBulkUploads")) }}
-
-      {{ govukCheckboxes({
-        items: [
-          {
-            value: 'true',
             text: "Include timeline on records"
           }
         ]
@@ -127,7 +115,16 @@
         items: [
           {
             value: 'true',
-            text: "Show bulk actions in nav"
+            text: "Bulk actions not bulk updates"
+          }
+        ]
+      } | decorateAttributes(data, "data.settings.bulkActionsNotBulkUploads")) }}
+
+      {{ govukCheckboxes({
+        items: [
+          {
+            value: 'true',
+            text: "Show bulk updates or actions in nav"
           }
         ]
       } | decorateAttributes(data, "data.settings.showBulkInPrimaryNav")) }}

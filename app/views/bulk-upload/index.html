@@ -1,0 +1,73 @@
+{% extends "_templates/_page.html" %}
+
+{% set pageHeading = "Bulk updates" %}
+{% set navActive = 'bulk' %}
+
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+
+{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+
+{% set incompleteTrainees = currentTrainees | filterByIncomplete %}
+{% set traineesWithoutStartDates = traineesThatCanBeUpdated | filterByNeedsStartDate | length %}
+{% set traineesWithoutPlacements = traineesThatCanBeUpdated | filterByNeedsPlacements | length %}
+
+{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set qtsTrainees = traineesThatCanBeRecommended | filterOutEarlyYears %}
+{% set eytsTraineeCount = traineesThatCanBeRecommended | length - qtsTrainees | length %}
+
+{% set qualText = [] %}
+{% set qualText = qualText | push("QTS") if qtsTrainees | length > 0 %}
+{% set qualText = qualText | push("EYTS") if eytsTraineeCount > 0 %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        <span class="govuk-caption-xl">{{ data.signedInProviders | andSeparate }}</span>
+        {{ pageHeading }}
+      </h1>
+      <p class="govuk-body">
+        Make changes to a group of trainee records at the same time.
+      </p>
+
+      {# to do Show empty states #}
+      <h2 class="govuk-heading-m">Add missing details</h2>
+      {% if traineesThatCanBeUpdated %}
+        <p class="govuk-body">
+          Bulk add missing information to trainee records. You can add {{ "trainee start dates" if traineesWithoutStartDates }} {{ "and" if traineesWithoutStartDates and traineesWithoutPlacements }} {{ "placement schools" if traineesWithoutPlacements }}.
+        </p>
+        <p class="govuk-body">
+          <a href="/bulk-upload/add-details">Bulk add missing details to trainee records</a>
+        </p>
+      {% else %}
+        <p class="govuk-body">
+          You do not have any trainee records you can add missing details to in bulk.
+        </p>
+        {% include "_includes/bulk-upload/update-individual-records.html" %}
+      {% endif %}
+      {% if traineesThatCanBeRecommended %}
+        <h2 class="govuk-heading-m">Recommend trainees for {{ qualText | orSeparate }}</h2>
+        <p class="govuk-body">
+          Bulk recommended trainees for {{ qualText | orSeparate }}. After you have recommended trainees, the
+          DfE will award QTS or EYTS where appropriate within <span class="app-nowrap">3 working days</span>.
+        </p>
+        <p class="govuk-body">
+          <a href="/bulk-upload/recommend">Bulk recommend trainees for {{ qualText | orSeparate }}</a>
+        </p>
+      {% endif %}
+      {% if not traineesThatCanBeUpdated and not traineesThatCanBeRecommended %}
+        <p class="govuk-body">
+          You do not have any trainee records that need additional details or can be recommended for QTS or EYTS.
+        </p>
+        {% if incompleteTrainees %}
+          <p class="govuk-body">
+            <a href="/records?%5BfilterCompleteStatus%5D=Incomplete">View incomplete trainees records</a>
+          </p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}

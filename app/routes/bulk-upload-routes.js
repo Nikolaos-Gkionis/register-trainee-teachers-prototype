@@ -7,17 +7,6 @@ const filters = require('./../filters.js')()
 
 module.exports = router => { 
 
-
-  /*
-  switch between bulk upload and bulk actions
-  */
-  router.get('/bulk-upload', function(req, res) {
-    const data = req.session.data
-    if (data.settings.bulkActionsNotBulkUploads) {
-      res.redirect('/bulk-action')
-    }
-  })
-
   /* 
   =========================================================
   Add (missing) details routes 
@@ -25,20 +14,20 @@ module.exports = router => {
   */
 
   /* Review errors or skip */
-  router.get('/bulk-action/add-details/fix-errors-answer', function(req, res) {
+  router.get('/bulk-upload/add-details/fix-errors-answer', function(req, res) {
     const data = req.session.data
     if (data.bulk.addDetailsFixErrors == "Yes, fix errors now" || data.bulk.addDetailsFixErrors == "Yes, fix error now") {
-      res.redirect('/bulk-action/add-details/fix-errors');
+      res.redirect('/bulk-upload/add-details/fix-errors');
     } else {
-      res.redirect('/bulk-action/add-details/review-pending-updates');
+      res.redirect('/bulk-upload/add-details/review-pending-updates');
     }
   });
 
   /* Clear review errors answer */
-  router.get('/bulk-action/add-details/no-update', function(req, res) {
+  router.get('/bulk-upload/add-details/no-update', function(req, res) {
     const data = req.session.data
     data.bulk.addDetailsFixErrors = null
-    res.redirect('/bulk-action/add-details/review-pending-updates');
+    res.redirect('/bulk-upload/add-details/review-pending-updates');
   });
 
 
@@ -49,20 +38,20 @@ module.exports = router => {
   */
 
   /* Review errors or skip */
-  router.get('/bulk-action/recommend/fix-errors-answer', function(req, res) {
+  router.get('/bulk-upload/recommend/fix-errors-answer', function(req, res) {
     const data = req.session.data
     if (data.bulk.recommendFixErrors == "Yes, fix errors now" || data.bulk.recommendFixErrors == "Yes, fix error now") {
-      res.redirect('/bulk-action/recommend/fix-errors');
+      res.redirect('/bulk-upload/recommend/fix-errors');
     } else {
-      res.redirect('/bulk-action/recommend/review-pending-updates');
+      res.redirect('/bulk-upload/recommend/review-pending-updates');
     }
   });
 
   /* Clear review errors answer */
-  router.get('/bulk-action/recommend/no-update', function(req, res) {
+  router.get('/bulk-upload/recommend/no-update', function(req, res) {
     const data = req.session.data
     data.bulk.recommendFixErrors = null
-    res.redirect('/bulk-action/recommend/review-pending-updates');
+    res.redirect('/bulk-upload/recommend/review-pending-updates');
   });
 
 }

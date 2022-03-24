@@ -3,7 +3,8 @@
 {% set pageHeading = "Review pending updates to trainee records" %}
 {% set navActive = 'bulk' %}
 
-{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
 {% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
 
@@ -75,7 +76,7 @@
 
 {% endfor %}
 
-{# These counts are used by include "_includes/bulk-action--upload-summary.html  #}
+{# These counts are used by include "_includes/bulk-upload/upload-summary.html  #}
 {% set errorCount = 0 %}
 {% set unchangedCount = traineesThatCanBeUpdated.length - tableBodyRows.length %}
 {% set updatedCount = tableBodyRows.length %}
@@ -85,7 +86,7 @@
 
 {% block content %}
 
-  {% include "_includes/bulk-action--review-pending-updates.html" %}
+  {% include "_includes/bulk-upload/review-pending-updates.html" %}
 
 {% endblock %}
 

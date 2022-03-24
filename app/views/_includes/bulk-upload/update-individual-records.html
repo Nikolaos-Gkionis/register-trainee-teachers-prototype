@@ -1,4 +1,5 @@
-{% set currentTrainees = data.filteredRecords | filterByStatus("Draft", true) | filterByActive %}
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 {% set incompleteTrainees = currentTrainees | filterByIncomplete %}
 <p class="govuk-body">
   You have {{ incompleteTrainees | length }} trainees with incomplete records.
