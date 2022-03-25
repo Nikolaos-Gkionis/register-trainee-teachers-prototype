@@ -39,7 +39,9 @@
           Bulk add missing information to trainee records. You can add {{ "trainee start dates" if traineesWithoutStartDates }} {{ "and" if traineesWithoutStartDates and traineesWithoutPlacements }} {{ "placement schools" if traineesWithoutPlacements }}.
         </p>
         <p class="govuk-body">
-          <a href="/bulk-upload/add-details">Bulk add missing details to trainee records</a>
+          <a href="/bulk-upload/add-details" class="govuk-link">
+            Bulk add missing details to trainee records
+          </a>
         </p>
       {% else %}
         <p class="govuk-body">
@@ -54,7 +56,9 @@
           DfE will award QTS or EYTS where appropriate within <span class="app-nowrap">3 working days</span>.
         </p>
         <p class="govuk-body">
-          <a href="/bulk-upload/recommend">Bulk recommend trainees for {{ qualText | orSeparate }}</a>
+          <a href="/bulk-upload/recommend" class="govuk-link">
+            Bulk recommend trainees for {{ qualText | orSeparate }}
+          </a>
         </p>
       {% endif %}
       {% if not traineesThatCanBeUpdated and not traineesThatCanBeRecommended %}
@@ -63,7 +67,9 @@
         </p>
         {% if incompleteTrainees %}
           <p class="govuk-body">
-            <a href="/records?%5BfilterCompleteStatus%5D=Incomplete">View incomplete trainees records</a>
+            <a href="/records?%5BfilterCompleteStatus%5D=Incomplete" class="govuk-link">
+              View incomplete trainees records
+            </a>
           </p>
         {% endif %}
       {% endif %}

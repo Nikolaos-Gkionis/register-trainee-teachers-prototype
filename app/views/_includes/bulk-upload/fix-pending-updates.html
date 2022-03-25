@@ -9,7 +9,9 @@
       1. Export the pending updates file
     </h2>
     <p class="govuk-body">
-      <a href="../public/downloads/{{ bulkPath }}-change-pending.csv" download="{{ fileName }}">
+      <a href="../public/downloads/{{ bulkPath }}-change-pending.csv" 
+         download="{{ fileName }}"
+         class="govuk-link">
         Export trainee records with pending updates (csv)
       </a>
     </p>
@@ -38,7 +40,7 @@
       }) }}
     </form>
     <p class="govuk-body">
-      <a href="/bulk-upload/{{ bulkPath }}/no-update">
+      <a href="/bulk-upload/{{ bulkPath }}/no-update" class="govuk-link">
         Cancel and return to pending updates
       </a>
     </p>
