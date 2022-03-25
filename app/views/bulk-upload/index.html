@@ -32,9 +32,8 @@
         Make changes to a group of trainee records at the same time.
       </p>
 
-      {# to do Show empty states #}
-      <h2 class="govuk-heading-m">Add missing details</h2>
       {% if traineesThatCanBeUpdated %}
+        <h2 class="govuk-heading-m">Add missing details</h2>
         <p class="govuk-body">
           Bulk add missing information to trainee records. You can add {{ "trainee start dates" if traineesWithoutStartDates }} {{ "and" if traineesWithoutStartDates and traineesWithoutPlacements }} {{ "placement schools" if traineesWithoutPlacements }}.
         </p>
@@ -59,6 +58,11 @@
           <a href="/bulk-upload/recommend" class="govuk-link">
             Bulk recommend trainees for {{ qualText | orSeparate }}
           </a>
+        </p>
+      {% else %}
+        <h2 class="govuk-heading-m">Recommend trainees for {{ qualText | orSeparate }}</h2>
+        <p class="govuk-body">
+          You do not have any trainees that can be bulk recommended for QTS or EYTS.
         </p>
       {% endif %}
       {% if not traineesThatCanBeUpdated and not traineesThatCanBeRecommended %}
