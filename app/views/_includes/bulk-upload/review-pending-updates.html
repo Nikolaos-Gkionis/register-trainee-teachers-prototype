@@ -5,7 +5,7 @@
       {# {{ pageHeading }} #}
       Review pending updates to <span class="app-nowrap">trainee records</span>
     </h1>
-    {% if data.bulk.recommendFixErrors == "Yes, fix errors now" or data.bulk.recommendFixErrors == "Yes, fix error now" %}
+    {% if data.bulk.recommendFixErrors == "Yes, fix errors now" or data.bulk.recommendFixErrors == "Yes, fix error now" or data.bulk.addDetailsFixErrors == "Yes, fix errors now" or data.bulk.addDetailsFixErrors == "Yes, fix errors now"  %}
       {% include "_includes/bulk-upload/upload-summary.html" %}
     {% endif %}
   </div>

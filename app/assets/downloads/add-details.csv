@@ -1,9 +1,21 @@
 TRN,Trainee ITT start date,Placement 1 URN,Placement 2 URN
-Do not change this column.,"When the trainee started their ITT.
-Must be written DD-MM-YYYY. 
-For example, if the trainee started their ITT on 20 September 2022, write '20-09-2022'.
+Do not change this column,"When the trainee started their ITT.
+
+Must be written DD/MM/YYYY. 
+
+For example, if the trainee started their ITT on 20 September 2022, write '20/09/2022'.
+
 The date must be in the past.
-If you do not know the trainee’s ITT start date, leave the cell empty.","The URN of the trainees first placement school. URNs must be 6 digits long. If you do not know the placement school’s URN, leave the cell empty.","The URN of the trainees first placement school. URNs must be 6 digits long. If you do not know the placement school’s URN, leave the cell empty."
+
+If you do not know the trainee’s ITT start date, leave the cell empty.","The URN of the trainees first placement school.
+
+URNs must be 6 digits long.
+
+If you do not know the placement school’s URN, leave the cell empty.","The URN of the trainees first placement school.
+
+URNs must be 6 digits long.
+
+If you do not know the placement school’s URN, leave the cell empty."
 GJ8729,,144861,143307
 BW2512,,103332,142888
 YW1442,,,
@@ -23,7 +35,7 @@ ZB9290,05-06-2021,121613,
 TZ6006,19-02-2022,104157,
 TW2203,24-12-2021,110570,
 DD9831,,146513,
-MX7126,28-11-2021,113442,
+MX7126,20-7-2021,113442,
 LP2487,14-11-2021,103015,
 YN7963,18-10-2021,146785,
 NY1443,,115862,113398
@@ -34,7 +46,7 @@ NC9302,08-07-2021,138395,
 GG4122,07-07-2021,147401,
 PC5406,,107727,
 TH4472,04-07-2021,146407,
-CT3126,,137248,
+CT3126,07/20/2023,137248,
 PL5175,,108158,
 GP2273,,110391,
 ZG6199,24-02-2022,118788,

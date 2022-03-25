@@ -39,7 +39,7 @@
         1. Export trainee records
       </h2>
       <p class="govuk-body">
-        <a href="../public/downloads/add-details.csv" download="{{ fileName }}">Export trainee records with missing details (csv)</a>
+        <a href="/public/downloads/add-details.csv" download="{{ fileName }}">Export trainee records with missing details (csv)</a>
       </p>
       <h2 class="govuk-heading-m">
         2. Add missing details
@@ -86,7 +86,7 @@
       <h2 class="govuk-heading-m">
         3. Upload file
       </h2>
-      <form action="/bulk-upload/add-details/review-errors" method="post" novalidate>
+      <form action="/bulk-upload/add-details/errors-found" method="post" novalidate>
         {{ govukFileUpload({
           id: "file-upload-1",
           name: "file-upload-1",
