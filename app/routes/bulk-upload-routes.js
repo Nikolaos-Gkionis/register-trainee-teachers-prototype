@@ -16,17 +16,19 @@ module.exports = router => {
   /* Review errors or skip */
   router.get('/bulk-upload/add-details/fix-errors-answer', function(req, res) {
     const data = req.session.data
-    if (data.bulk.addDetailsFixErrors == "Yes, fix errors now" || data.bulk.addDetailsFixErrors == "Yes, fix error now") {
+    if (data.bulk.addDetailsFixErrors == "Fix errors now") {
       res.redirect('/bulk-upload/add-details/fix-errors');
-    } else {
+    } else if (data.bulk.addDetailsFixErrors == "Skip fixing errors") {
       res.redirect('/bulk-upload/add-details/review-pending-updates');
+    } else {
+      res.redirect('/bulk-upload/recommend/errors-found');
     }
   });
 
   /* Clear review errors answer */
   router.get('/bulk-upload/add-details/no-update', function(req, res) {
     const data = req.session.data
-    data.bulk.addDetailsFixErrors = null
+    delete data.bulk.addDetailsFixErrors
     res.redirect('/bulk-upload/add-details/review-pending-updates');
   });
 
@@ -40,17 +42,19 @@ module.exports = router => {
   /* Review errors or skip */
   router.get('/bulk-upload/recommend/fix-errors-answer', function(req, res) {
     const data = req.session.data
-    if (data.bulk.recommendFixErrors == "Yes, fix errors now" || data.bulk.recommendFixErrors == "Yes, fix error now") {
+    if (data.bulk.recommendFixErrors == "Fix errors now") {
       res.redirect('/bulk-upload/recommend/fix-errors');
-    } else {
+    } else if (data.bulk.recommendFixErrors == "Skip fixing errors") {
       res.redirect('/bulk-upload/recommend/review-pending-updates');
+    } else {
+      res.redirect('/bulk-upload/recommend/errors-found');
     }
   });
 
   /* Clear review errors answer */
   router.get('/bulk-upload/recommend/no-update', function(req, res) {
     const data = req.session.data
-    data.bulk.recommendFixErrors = null
+    delete data.bulk.recommendFixErrors
     res.redirect('/bulk-upload/recommend/review-pending-updates');
   });
 
