@@ -58,7 +58,7 @@
 
   {% set row = row | push({ text: trainee | getQualificationText }) %}
 
-  {% set standardsMetDate = [range(1, 29) | random | makeNumberTwoDigits, range(6, 7) | random | makeNumberTwoDigits, data.years.defaultCourseYear + 1] %}
+  {% set standardsMetDate = [range(1, 29) | random | numberOfDigits(2), range(6, 7) | random | numberOfDigits(2), data.years.defaultCourseYear + 1] %}
   {% set row = row | push({ text: standardsMetDate | govukDate })%}
 
   {% if trainee | isPostgraduate %}

@@ -1263,10 +1263,8 @@ exports.needsPlacementDetails = function(record, data = false) {
   return needsPlacementDetails
 }
 
-// Check if record has start date
-exports.needsStartDate = function(record, data=false) {
-  data = Object.assign({}, (data || this.ctx.data || false))
-
+// Check if record has started and if it is, is missing a start date
+exports.needsStartDate = function(record) {
   let needsStartDate = false
 
   let traineeStarted = record?.trainingDetails?.commencementDate
@@ -1277,7 +1275,6 @@ exports.needsStartDate = function(record, data=false) {
   }
 
   return needsStartDate
-
 }
 
 // Check if there are outsanding actions (Either adding start date or placements details)
@@ -1289,7 +1286,7 @@ exports.hasOutstandingActions = function(record, data = false) {
   let traineeStarted = record?.trainingDetails?.commencementDate
   let ittStartDate = moment(record?.courseDetails?.startDate)
 
-  if (exports.needsStartDate(record, data)) {
+  if (exports.needsStartDate(record)) {
     hasOutstandingActions = true
   }
   else if (exports.needsPlacementDetails(record, data)) {
@@ -1666,9 +1663,8 @@ exports.filterByQualification = (records, qualification) => {
  })
 }
 
-exports.filterByNeedsStartDate = (records, data=false) => {
-  data = Object.assign({}, (data || this?.ctx?.data || false))
-  return records.filter(record => exports.needsStartDate(record, data))
+exports.filterByNeedsStartDate = (records) => {
+  return records.filter(record => exports.needsStartDate(record))
 }
 
 exports.filterByNeedsPlacements = (records, data=false) => {

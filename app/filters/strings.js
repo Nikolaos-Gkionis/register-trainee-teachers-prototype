@@ -129,12 +129,8 @@ filters.possessive = (noun) => {
   }
 }
 
-filters.makeNumberTwoDigits = (input) => {
-  if (typeof input == "number" && input < 10) {
-    return "0" + input
-  } else {
-    return input
-  }
+filters.numberOfDigits = (input, targetLength) => {
+  return input.toString().padStart(targetLength, 0);
 }
 
 // -------------------------------------------------------------------

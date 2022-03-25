@@ -44,7 +44,7 @@
       {{ trainee.trainingDetails.commencementDate | govukDate }}
       {% set completion = completion + 1 %}
     {% elseif (range(0, 10) | random) > 2 %}
-      {% set fakeDate = [range(1, 29) | random | makeNumberTwoDigits, range(9, 11) | random | makeNumberTwoDigits, data.years.defaultCourseYear] %}
+      {% set fakeDate = [range(1, 29) | random | numberOfDigits(2), range(9, 11) | random | numberOfDigits(2), data.years.defaultCourseYear] %}
       {{ fakeDate | govukDate }}
       {% set completion = completion + 1 %}
     {% else -%}
