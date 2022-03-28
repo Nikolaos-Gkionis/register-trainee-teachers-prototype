@@ -4,10 +4,7 @@
 {% set pageHeading = "Fix the errors in your trainee records" %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
-{% set traineesThatCannotBeUpdatedCount = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated | length ) %}
+{% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
 
 {% set tableBodyRows     = [] %}
 {% set unchangedTrainees =  0 %}

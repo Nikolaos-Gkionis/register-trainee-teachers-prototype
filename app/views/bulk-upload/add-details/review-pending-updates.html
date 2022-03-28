@@ -4,9 +4,7 @@
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
+{% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
 
 {% set tableHeadRow = [
     {
@@ -54,7 +52,6 @@
 
   {% set row = row | push({ text: commencementDate | safe })%}
 
-
   {% for item in trainee.placement.items %}
     {% set placementContent %}
       {{ item.school.schoolName }}<br>
@@ -83,6 +80,8 @@
 
 {% set tableCaption = "Pending updates to trainee records (" + tableBodyRows.length + ")" %}
 {% set tableCaptionClasses = "govuk-table__caption--m" %}
+
+{% set bulkPath = "add-details" %}
 
 {% block content %}
 

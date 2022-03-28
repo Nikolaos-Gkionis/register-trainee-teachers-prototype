@@ -4,13 +4,10 @@
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
-{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
-{% set traineesThatCannotBeUpdatedCount = (currentTrainees | filterByIncomplete | length) - (traineesThatCanBeUpdated | length ) %}
-
-{% set withoutStartDates = traineesThatCanBeUpdated | filterByNeedsStartDate | length %}
-{% set withoutPlacements = traineesThatCanBeUpdated | filterByNeedsPlacements | length %}
+{% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
+{% set traineesWithoutStartDates = traineesThatCanBeUpdated | filterByNeedsStartDate | length %}
+{% set traineesWithoutPlacements = traineesThatCanBeUpdated | filterByNeedsPlacements | length %}
 
 {% set fileName = data.signedInProviders | makeFileName("incomplete trainee records","csv") %}
 
@@ -33,7 +30,7 @@
       </p>
       <ul class="govuk-list govuk-list--bullet">
         <li>{{ traineesThatCanBeUpdated | length }} that can be bulk updated</li>
-        <li>{{ traineesThatCannotBeUpdatedCount }} that cannot be bulk updated and need to be updated manually</li>
+        <li>{{ filteredRecords | filterByCannotBulkUpdate | length }} that cannot be bulk updated and need to be updated manually</li>
       </ul>
       <h2 class="govuk-heading-m">
         1. Export trainee records
@@ -50,7 +47,7 @@
       <p class="govuk-body">
         You can leave rows or cells empty if you do not want to updates those trainee records.
       </p>
-      {% if withoutStartDates %}
+      {% if traineesWithoutStartDates %}
         <h3 class="govuk-heading-s">Trainee start date</h3>
         <p class="govuk-body">
           In the column ‘Trainee start date’ add the date the trainee began their ITT.
@@ -65,7 +62,7 @@
           If a trainee does not have a start date, leave the cell empty.
         </p>
       {% endif %}
-      {% if withoutPlacements %}
+      {% if traineesWithoutPlacements %}
         <h3 class="govuk-heading-s">Placement schools</h3>
         <p class="govuk-body">
           In the columns {{ placementRowHeading | joinify | safe }} add the school’s URN.

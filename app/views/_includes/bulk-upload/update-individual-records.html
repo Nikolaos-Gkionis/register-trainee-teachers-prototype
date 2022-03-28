@@ -1,8 +1,6 @@
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-{% set incompleteTrainees = currentTrainees | filterByIncomplete %}
 <p class="govuk-body">
-  You have {{ incompleteTrainees | length }} trainees with incomplete records.
+  You have {{ filteredRecords | filterByCannotBulkUpdate | length }} trainees with incomplete records.
 </p> 
 <p class="govuk-body">
   Not all trainee records can be updated in bulk and you may need to add information to these records individually.
