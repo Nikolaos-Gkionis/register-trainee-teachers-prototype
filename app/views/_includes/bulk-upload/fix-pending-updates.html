@@ -24,7 +24,7 @@
     <h2 class="govuk-heading-m">
       3. Upload file
     </h2>
-    <form action="/bulk-upload/{{ bulkPath }}/review-pending-updates" method="post" novalidate>
+    <form action="/bulk-update/{{ bulkPath }}/review-pending-updates" method="post" novalidate>
       {{ govukFileUpload({
         id: "file-upload-1",
         name: "file-upload-1",
@@ -40,7 +40,7 @@
       }) }}
     </form>
     <p class="govuk-body">
-      <a href="/bulk-upload/{{ bulkPath }}/no-update" class="govuk-link">
+      <a href="/bulk-update/{{ bulkPath }}/no-update" class="govuk-link">
         Cancel and return to pending updates
       </a>
     </p>

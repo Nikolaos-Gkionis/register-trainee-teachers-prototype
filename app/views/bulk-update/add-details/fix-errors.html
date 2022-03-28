@@ -1,23 +1,16 @@
 {% extends "_templates/_page.html" %}
-
-{% set pageHeading = "Fix the errors in your trainee records" %}
 {% set navActive = 'bulk' %}
 
-{% set fileName = data.signedInProviders | makeFileName("fix errors","csv") %}
-{% set bulkPath = "recommend" %}
+{% set pageHeading = "Fix the errors in your trainee records" %}
 
-{% block content %}
-
-  {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-  {% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set filteredRecords = data.records | filterRecords(data) %}
+{% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
 
 {% set tableBodyRows     = [] %}
 {% set unchangedTrainees =  0 %}
 {% set updatedTrainees   =  0 %}
 
-{% for trainee in traineesThatCanBeRecommended %}
+{% for trainee in traineesThatCanBeUpdated %}
 
   {% set traineeRecord = null %}
 
@@ -35,13 +28,43 @@
     {% set errorMessage = [
       'TRN not recognised',
       'TRN missing',
-      'Date standards met: ‘07/20/2023’, enter a valid start date',
-      'Date standards met: ‘20/07/2023’, trainee start date must be in the past',
-      'Postgraduate qualification: ‘BA (Hons)’, enter ‘PGCE’, ‘PGDE’ or ‘None’ for postgraduate qualification',
-      'Postgraduate qualification: ‘PCGE’, trainees on undergraduate courses cannot be awarded a postgraduate qualification.',
-      'Postgraduate qualification missing. If the trainee did not get a postgraduate qualification enter ‘None’.'
+      'Trainee start date: ‘07/20/2023’, enter a valid start date',
+      'Trainee start date: ‘20/07/2023’, trainee start date must be in the past',
+      'URN not recognised',
+      'School is closed'
       ] | random
     %}
+
+    {% set schoolName = [
+      "Stratford Academy",
+      "Stratford School",
+      "St Peter and St Paul Infant School",
+      "All Saints Catholic Middle School",
+      "St Andrew’s Catholic School",
+      "Sapel Heath Sixth Form College",
+      "All Saints Catholic School",
+      "Manor Academy",
+      "St John's Primary School",
+      "St Clement’s Church of England Middle School",
+      "Cherry Primary School",
+      "St John's Church of England School",
+      "Saterton Academy",
+      "Langley Tuition Centre",
+      "Wattervea (Riarth Barborton College)",
+      "Langley College",
+      "St Peter’s Catholic School",
+      "St Thomas’s Catholic Primary School",
+      "New Primary School",
+      "Church Hill High School",
+      "Abbey Secondary School",
+      "Langley College",
+      "North East Academy",
+      "Spockhope High School",
+      "St Peter and St Paul Catholic Infant School",
+      "Langley High School",
+      "Somelcomwo's Tommon Primary School",
+      "Cherry Academy"
+    ] | random %}
 
     {% set traineeInfo = trainee.personalDetails.shortName + '<br> <span class="govuk-hint">' + trainee.reference + '</span>' %}
 
@@ -83,6 +106,16 @@
   ]
 %}
 
-  {% include "_includes/bulk-upload/fix-errors.html" %}
+{# These counts are used by include "_includes/bulk-update/upload-summary.html  #}
+{% set errorCount = tableBodyRows.length %}
+{% set unchangedCount = unchangedTrainees %}
+{% set updatedCount = updatedTrainees %}
+
+{% set fileName = data.signedInProviders | makeFileName("fix errors","csv") %}
+{% set bulkPath = "add-details" %}
+
+{% block content %}
+
+  {% include "_includes/bulk-update/fix-errors.html" %}
 
 {% endblock %}

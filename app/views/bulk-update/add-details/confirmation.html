@@ -28,7 +28,7 @@
       <h3 class="govuk-heading-s">
         Trainees with incomplete records
       </h3>
-      {% include "_includes/bulk-upload/update-individual-records.html" %}
+      {% include "_includes/bulk-update/update-individual-records.html" %}
       <h3 class="govuk-heading-s">
         Recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}
       </h3>
@@ -36,7 +36,7 @@
         You have {{ traineesThatCanBeRecommended | length }} trainees that can be recommended for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
       </p> 
       <p class="govuk-body">
-        <a href="/bulk-upload/" class="govuk-link">Bulk recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}</a>
+        <a href="/bulk-update/" class="govuk-link">Bulk recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}</a>
       </p>
     </div>
   </div>

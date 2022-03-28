@@ -74,7 +74,7 @@
 
 {% endfor %}
 
-{# These counts are used by include "_includes/bulk-upload/upload-summary.html  #}
+{# These counts are used by include "_includes/bulk-update/upload-summary.html  #}
 {% set errorCount = 0 %}
 {% set unchangedCount = traineesThatCanBeUpdated.length - tableBodyRows.length %}
 {% set updatedCount = tableBodyRows.length %}
@@ -86,7 +86,7 @@
 
 {% block content %}
 
-  {% include "_includes/bulk-upload/review-pending-updates.html" %}
+  {% include "_includes/bulk-update/review-pending-updates.html" %}
 
 {% endblock %}
 
