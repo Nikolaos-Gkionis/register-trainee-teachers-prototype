@@ -31,7 +31,7 @@
 {% for trainee in traineesThatCanBeUpdated %}
 
   {% set completion = 0 %}
-  {% set traineeInfo = trainee.personalDetails.shortName + '<br> <span style="color:  #505a5f">' + trainee.reference + '</span>' %}
+  {% set traineeInfo = trainee.personalDetails.shortName + '<br> <span class="govuk-hint">' + trainee.reference + '</span>' %}
 
   {% set row = [
     { text: traineeInfo | safe }
