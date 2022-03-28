@@ -41,7 +41,7 @@ module.exports = router => {
   */
 
   /* Review errors or skip */
-  router.get('/bulk-upload/recommend/fix-errors-answer', function(req, res) {
+  router.get('/bulk-upload/recommend/errors-found-answer', function(req, res) {
     const data = req.session.data
     if (data?.bulk?.recommendFixErrors == "Fix errors now") {
       res.redirect('/bulk-upload/recommend/fix-errors');
