@@ -4,21 +4,13 @@
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
 
-{% set traineesThatCanBeUpdated = currentTrainees | filterByIncomplete | filterOutEarlyYears | filterByStatus(["Deferred", "Withdrawn"], true) %}
-
-{% set incompleteTrainees = currentTrainees | filterByIncomplete %}
+{% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
 {% set traineesWithoutStartDates = traineesThatCanBeUpdated | filterByNeedsStartDate | length %}
 {% set traineesWithoutPlacements = traineesThatCanBeUpdated | filterByNeedsPlacements | length %}
 
-{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
-{% set qtsTrainees = traineesThatCanBeRecommended | filterOutEarlyYears %}
-{% set eytsTraineeCount = traineesThatCanBeRecommended | length - qtsTrainees | length %}
+{% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
 
-{% set qualText = [] %}
-{% set qualText = qualText | push("QTS") if qtsTrainees | length > 0 %}
-{% set qualText = qualText | push("EYTS") if eytsTraineeCount > 0 %}
 
 {% block content %}
 
@@ -49,25 +41,25 @@
         {% include "_includes/bulk-upload/update-individual-records.html" %}
       {% endif %}
       {% if traineesThatCanBeRecommended %}
-        <h2 class="govuk-heading-m">Recommend trainees for {{ qualText | orSeparate }}</h2>
+        <h2 class="govuk-heading-m">Recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}</h2>
         <p class="govuk-body">
-          Bulk recommended trainees for {{ qualText | orSeparate }}. After you have recommended trainees, the
+          Bulk recommended trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}. After you have recommended trainees, the
           DfE will award QTS or EYTS where appropriate within <span class="app-nowrap">3 working days</span>.
         </p>
         <p class="govuk-body">
           <a href="/bulk-upload/recommend" class="govuk-link">
-            Bulk recommend trainees for {{ qualText | orSeparate }}
+            Bulk recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}
           </a>
         </p>
       {% else %}
-        <h2 class="govuk-heading-m">Recommend trainees for {{ qualText | orSeparate }}</h2>
+        <h2 class="govuk-heading-m">Recommend trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}</h2>
         <p class="govuk-body">
-          You do not have any trainees that can be bulk recommended for QTS or EYTS.
+          You do not have any trainees that can be bulk recommended for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
         </p>
       {% endif %}
       {% if not traineesThatCanBeUpdated and not traineesThatCanBeRecommended %}
         <p class="govuk-body">
-          You do not have any trainee records that need additional details or can be recommended for QTS or EYTS.
+          You do not have any trainee records that need additional details or can be recommended for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
         </p>
         {% if incompleteTrainees %}
           <p class="govuk-body">

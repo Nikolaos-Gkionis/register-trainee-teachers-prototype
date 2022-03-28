@@ -1004,6 +1004,10 @@ exports.isDeferred = record => {
   return record?.status == "Deferred"
 }
 
+exports.isNotDeferred = record => {
+  return record?.status !== "Deferred"
+}
+
 exports.isWithdrawn = record => {
   return record?.status == "Withdrawn"
 }
@@ -1195,7 +1199,7 @@ exports.recordIsComplete = function(record, data=false ) {
 
   data = Object.assign({}, (data || this?.ctx?.data || false))
 
-  if (!record || !_.get(record, "route")) return false
+  if (!record || !record?.route) return false
 
   // Pretend 20% of submitted records are incomplete
   if (exports.isNonDraft(record)){
@@ -1204,7 +1208,7 @@ exports.recordIsComplete = function(record, data=false ) {
       'EYTS awarded',
       'QTS recommended',
       'QTS awarded',
-      // 'Deferred',
+      'Deferred',
       'Withdrawn'
     ]
     if (statusesThatMustBeComplete.includes(record?.status)) return true
@@ -1248,7 +1252,7 @@ exports.recordIsComplete = function(record, data=false ) {
 // Checks if the placement criteria has been met
 exports.needsPlacementDetails = function(record, data = false) {
 
-  data = Object.assign({}, (data || this.ctx.data || false))
+  data = Object.assign({}, (data || this?.ctx?.data || false))
 
   let needsPlacementDetails = false
   let placementCount = (record?.placement?.items) ? record.placement.items.length : 0
@@ -1280,11 +1284,9 @@ exports.needsStartDate = function(record) {
 // Check if there are outsanding actions (Either adding start date or placements details)
 exports.hasOutstandingActions = function(record, data = false) {
 
-  data = Object.assign({}, (data || this.ctx.data || false))
+  data = Object.assign({}, (data || this?.ctx?.data || false))
   
   let hasOutstandingActions = false
-  let traineeStarted = record?.trainingDetails?.commencementDate
-  let ittStartDate = moment(record?.courseDetails?.startDate)
 
   if (exports.needsStartDate(record)) {
     hasOutstandingActions = true
@@ -1643,13 +1645,15 @@ exports.filterByStatus = (records, array, invert) => {
   return exports.filterRecordsBy(records, 'status', array, invert)
 }
 
-// For use on drafts only?
+exports.filterOutDeferred = (records) => {
+  return records.filter(record => exports.isNotDeferred(record))
+}
+
 exports.filterByComplete = function(records, data=false) {
   data = Object.assign({}, (data || this?.ctx?.data || false))
   return records.filter(record => exports.recordIsComplete(record, data))
 }
 
-// For use on drafts only?
 exports.filterByIncomplete = function(records, data=false) {
   data = Object.assign({}, (data || this?.ctx?.data || false))
   return records.filter(record => !exports.recordIsComplete(record, data))
@@ -1673,7 +1677,11 @@ exports.filterByNeedsPlacements = (records, data=false) => {
 }
 
 exports.filterOutEarlyYears = (records) => {
-  return records.filter(record => exports.qualificationIsQTS(record))
+  return records.filter(record => !exports.isEarlyYears(record))
+}
+
+exports.filterByEarlyYears = (records) => {
+  return records.filter(record => exports.isEarlyYears(record))
 }
 
 exports.filterByAcademicQualificationsApply = (records) => {
@@ -1686,6 +1694,22 @@ exports.filterByPostgraduate = (records) => {
 
 exports.filterByUndergraduate = (records) => {
   return records.filter(record => exports.isUndergraduate(record))
+}
+
+// Trainees that can be bulk updated
+exports.filterByCanBulkUpdate = (records) => {
+  let filteredRecords = exports.filterByActive(records)
+  filteredRecords = exports.filterOutEarlyYears(filteredRecords)
+  filteredRecords = exports.filterByIncomplete(filteredRecords)
+  return filteredRecords
+}
+
+// Trainees that can be bulk recommended
+exports.filterByCanBeRecommended = (records) => {
+  let filteredRecords = exports.filterByComplete(records)
+  filteredRecords = exports.filterByActive(filteredRecords)
+  filteredRecords = exports.filterOutDeferred(filteredRecords)
+  return filteredRecords
 }
 
 // -------------------------------------------------------------------
