@@ -1,11 +1,8 @@
 {% extends "_templates/_page.html" %}
 
 {% set navActive = 'bulk' %}
-
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
 
 {% set errorTrainees     = [] %}
 {% set unchangedTrainees =  0 %}

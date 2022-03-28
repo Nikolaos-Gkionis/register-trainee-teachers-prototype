@@ -3,22 +3,13 @@
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
-
-{% set qtsTrainees = traineesThatCanBeRecommended | filterOutEarlyYears %}
-{% set eytsTraineeCount = traineesThatCanBeRecommended | length - qtsTrainees | length %}
-
-{% set qualText = [] %}
-{% set qualText = qualText | push("QTS") if qtsTrainees | length > 0 %}
-{% set qualText = qualText | push("EYTS") if eytsTraineeCount > 0 %}
+{% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
 
 {% set needAcademicAward = traineesThatCanBeRecommended | filterByAcademicQualificationsApply %}
 
 {% set fileName = data.signedInProviders | makeFileName("trainees to recommend","csv") %}
 
-{% set pageHeading = "Recommend trainees for " + qualText | orSeparate %}
+{% set pageHeading = "Recommend trainees for " + traineesThatCanBeRecommended | getQualifications | orSeparate %}
 
 {% block content %}
 
@@ -26,11 +17,10 @@
     <div class="govuk-grid-column-two-thirds-from-desktop">
       <h1 class="govuk-heading-l">
         <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
-        {# {{ pageHeading }} #}
-        Recommend trainees for <span class="app-nowrap">{{ qualText | orSeparate }}</span>
+        {{ pageHeading }}
       </h1>
       <p class="govuk-body">
-        You have {{ traineesThatCanBeRecommended | length }} trainees ready to be recommend for {{ qualText | orSeparate }}.
+        You have {{ traineesThatCanBeRecommended | length }} trainees ready to be recommend for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
       </p>
       <h2 class="govuk-heading-m">
         1. Export trainee records
@@ -44,13 +34,13 @@
         2. Add details of the trainees outcome
       </h2>
       <p class="govuk-body">
-        Open ‘{{ fileName }}’ in <span class="app-nowrap">spreadsheet software</span> (for example, <span class="app-nowrap">Microsoft Excel</span>) and add when the trainee met {{ qualText | orSeparate }} {{ "and their postgraduate academic qualification" if needAcademicAward | filterByPostgraduate }}.
+        Open ‘{{ fileName }}’ in <span class="app-nowrap">spreadsheet software</span> (for example, <span class="app-nowrap">Microsoft Excel</span>) and add when the trainee met {{ traineesThatCanBeRecommended | getQualifications | orSeparate }} {{ "and their postgraduate academic qualification" if needAcademicAward | filterByPostgraduate }}.
       </p>
       <p class="govuk-body">
-        You can leave rows or cells empty if you do not want to recommend the trainees for {{ qualText | orSeparate }}.
+        You can leave rows or cells empty if you do not want to recommend the trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
       </p>
       <h3 class="govuk-heading-s">
-        When the trainee meet {{ qualText | orSeparate }}
+        When the trainee meet {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}
       </h3>
       <p class="govuk-body">
         In the column ‘Date standards met’ add the date the trainee
@@ -63,10 +53,10 @@
       <p class="govuk-body">
         If the trainee has not met QTS or EYTS standards, withdraw them manually.
       </p>
+      {% if needAcademicAward | filterByPostgraduate %}
       <h3 class="govuk-heading-s">
         Postgraduate academic qualification
       </h3>
-      {% if needAcademicAward | filterByPostgraduate %}
         {# Notes - consider tolerating 'None' for routes that are not
         postgrad #}
         <p class="govuk-body">

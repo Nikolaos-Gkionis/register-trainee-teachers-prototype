@@ -4,9 +4,7 @@
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
-{% set currentTrainees = filteredRecords | filterByStatus("Draft", true) | filterByActive %}
-
-{% set traineesThatCanBeRecommended = currentTrainees | filterByComplete | filterByStatus(["Deferred", "Withdrawn", "QTS recommended", "QTS awarded", "EYTS recommended", "EYTS awarded"], true) %}
+{% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
 
 {% set tableHeadRow = [
     {
@@ -83,6 +81,8 @@
 
 {% set tableCaption = "Pending updates to trainee records (" + tableBodyRows.length + ")" %}
 {% set tableCaptionClasses = "govuk-table__caption--m" %}
+
+{% set bulkPath = "recommend" %}
 
 {% block content %}
 
