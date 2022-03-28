@@ -237,6 +237,23 @@ filters.formatYearRange = (string) => {
     .replace(/(\d{2})\/(\d{2})/, '20$1&nbsp;to&nbsp;20$2');
 }
 
+filters.recordsHaveQualification = (records, qualification) => {
+  return records.some(record => {
+    return utils.qualificationIs(record, qualification)
+  })
+}
+
+filters.getQualifications = (records) => {
+  let output = []
+  if (filters.recordsHaveQualification(records, "QTS")) {
+    output.push("QTS")
+  }
+  if (filters.recordsHaveQualification(records, "EYTS")) {
+    output.push("EYTS")
+  }
+  return output
+}
+
 /*
   ====================================================================
   prettyMonthFromAugust
