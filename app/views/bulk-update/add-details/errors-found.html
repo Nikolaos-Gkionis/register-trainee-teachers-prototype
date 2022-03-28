@@ -4,6 +4,7 @@
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
+{% set totalTraineeRecords = traineesThatCanBeUpdated | length %}
 
 {% set errorTrainees     =  0 %}
 {% set unchangedTrainees =  0 %}

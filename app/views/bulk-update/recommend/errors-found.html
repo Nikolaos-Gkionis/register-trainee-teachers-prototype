@@ -4,6 +4,7 @@
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
+{% set totalTraineeRecords = traineesThatCanBeRecommended | length %}
 
 {% set errorTrainees     =  0 %}
 {% set unchangedTrainees =  0 %}

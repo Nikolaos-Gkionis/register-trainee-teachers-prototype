@@ -1,6 +1,6 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Review pending updates to trainee records" %}
+{% set pageHeading = "Check pending updates to trainee records" %}
 {% set navActive = 'bulk' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
@@ -85,7 +85,7 @@
 
 {% block content %}
 
-  {% include "_includes/bulk-update/review-pending-updates.html" %}
+  {% include "_includes/bulk-update/check-pending-updates.html" %}
 
 {% endblock %}
 

@@ -20,7 +20,7 @@ module.exports = router => {
       res.redirect('/bulk-update/add-details/fix-errors');
     } else if (data?.bulk?.addDetailsFixErrors == "Skip fixing errors") {
       delete data?.bulk?.addDetailsFixErrors
-      res.redirect('/bulk-update/add-details/review-pending-updates');
+      res.redirect('/bulk-update/add-details/check-pending-updates');
     } else {
       res.redirect('/bulk-update/add-details/errors-found');
     }
@@ -30,7 +30,7 @@ module.exports = router => {
   router.get('/bulk-update/add-details/no-update', function(req, res) {
     const data = req.session.data
     delete data?.bulk?.addDetailsFixErrors
-    res.redirect('/bulk-update/add-details/review-pending-updates');
+    res.redirect('/bulk-update/add-details/check-pending-updates');
   });
 
 
@@ -47,7 +47,7 @@ module.exports = router => {
       res.redirect('/bulk-update/recommend/fix-errors');
     } else if (data?.bulk?.recommendFixErrors == "Skip fixing errors") {
       delete data?.bulk?.recommendFixErrors
-      res.redirect('/bulk-update/recommend/review-pending-updates');
+      res.redirect('/bulk-update/recommend/check-pending-updates');
     } else {
       res.redirect('/bulk-update/recommend/errors-found');
     }
@@ -57,7 +57,7 @@ module.exports = router => {
   router.get('/bulk-update/recommend/no-update', function(req, res) {
     const data = req.session.data
     delete data?.bulk?.recommendFixErrors
-    res.redirect('/bulk-update/recommend/review-pending-updates');
+    res.redirect('/bulk-update/recommend/check-pending-updates');
   });
 
 }
