@@ -6,7 +6,7 @@
     </h1>
     {% include "_includes/bulk-upload/upload-summary.html" %}
     {% set errorPluralisation = "error" | pluralise(tableBodyRows.length) %}
-    <form action="/bulk-upload/{{ bulkPath }}/fix-errors-answer" method="post" novalidate>
+    <form action="/bulk-upload/{{ bulkPath }}/errors-found-answer" method="post" novalidate>
       {{ govukRadios({
         fieldset: {
           legend: {
