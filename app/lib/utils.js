@@ -1704,6 +1704,14 @@ exports.filterByCanBulkUpdate = (records) => {
   return filteredRecords
 }
 
+// Trainees that can be bulk updated
+exports.filterByCannotBulkUpdate = (records) => {
+  let filteredRecords = exports.filterByActive(records)
+  filteredRecords = exports.filterByEarlyYears(filteredRecords)
+  filteredRecords = exports.filterByIncomplete(filteredRecords)
+  return filteredRecords
+}
+
 // Trainees that can be bulk recommended
 exports.filterByCanBeRecommended = (records) => {
   let filteredRecords = exports.filterByComplete(records)
