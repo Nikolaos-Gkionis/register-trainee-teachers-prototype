@@ -651,11 +651,11 @@ module.exports = router => {
         ...( previousRecord.funding ? { funding: previousRecord.funding } : {} ),  // conditional
         dateFinished: record?.temp?.courseMoveTemp?.courseMoveDate
       }
-      if (record.historicCourseData){
-        record.historicCourseData.push(oldCourseData)
+      if (record.historicCourseDetails){
+        record.historicCourseDetails.push(oldCourseData)
       }
       else {
-        record.historicCourseData = [oldCourseData]
+        record.historicCourseDetails = [oldCourseData]
       }
     }
 

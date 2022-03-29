@@ -1,100 +1,242 @@
 {
-  "status": "Draft",
-  "events": {
-    "items": []
-  },
-  "reference": "KN5837",
-  "provider": "Coventry University",
-  "route": "Provider-led (postgrad)",
-  "personalDetails": {
-    "nationality": [
-      "Irish",
-      "American"
-    ],
-    "givenName": "Sarah Lilia",
-    "middleNames": "",
-    "familyName": "Jones",
-    "dateOfBirth": [
-      "3",
-      "12",
-      "1987"
-    ],
-    "sex": "Female",
-    "status": [
-      "Completed"
-    ]
-  },
-  "contactDetails": {
-    "internationalAddress": "",
-    "addressType": "domestic",
-    "address": {
-      "line1": "260 Bradford Street",
-      "line2": "Deritend",
-      "level2": "Birmingham",
-      "postcode": "B12 0QY"
+    "academicYear": "2021 to 2022",
+    "diversity": {
+        "diversityDisclosed": "true",
+        "ethnicGroup": "Black, African, Black British or Caribbean",
+        "ethnicGroupSpecific": "Another Black background",
+        "disabledAnswer": "Not provided"
     },
-    "phoneNumber": "07700 900941",
-    "email": "s.jones@example.com",
-    "status": [
-      "Completed"
+    "id": "directly-added",
+    "personalDetails": {
+        "givenName": "Dale",
+        "familyName": "Schowalter",
+        "middleNames": "Preston",
+        "nationality": [
+            "British"
+        ],
+        "sex": "Male",
+        "dateOfBirth": "1991-11-09T01:07:28.399Z",
+        "fullName": "Dale Preston Schowalter",
+        "shortName": "Dale Schowalter"
+    },
+    "provider": "Webury Hill SCITT",
+    "accreditingProviderType": "SCITT",
+    "route": "Provider-led (postgrad)",
+    "status": "Pending TRN",
+    "updatedDate": "2022-03-29T15:44:11.189Z",
+    "submittedDate": "2022-03-21T04:10:33.875Z",
+    "reference": "EN5769",
+    "source": "Manual",
+    "courseDetails": {
+        "ageRange": "11 to 18",
+        "code": "F974",
+        "duration": 1,
+        "id": "d8a7c5d5-441d-41d3-8889-05036d9c4df3",
+        "isPublishCourse": true,
+        "phase": "Secondary",
+        "qualifications": [
+            "QTS",
+            "PGCE"
+        ],
+        "qualificationsSummary": "PGCE with QTS full time",
+        "route": "Provider-led (postgrad)",
+        "startDateVague": "2021-08-31T23:00:00.000Z",
+        "academicYear": "2021 to 2022",
+        "studyMode": "Full time",
+        "publishSubjects": {
+            "first": "Physical education",
+            "second": "Chemistry"
+        },
+        "courseNameShort": "Physical education with chemistry",
+        "courseNameLong": "Physical education with chemistry (F974)",
+        "subjects": {
+            "first": "Physical education",
+            "second": "Chemistry"
+        }
+    },
+    "events": {
+        "items": [
+            {
+                "title": "Record created",
+                "user": "Provider",
+                "date": "2021-12-15T18:07:01.968Z"
+            },
+            {
+                "title": "Trainee submitted for TRN",
+                "user": "Provider",
+                "date": "2021-12-15T18:07:01.968Z"
+            },
+            {
+                "title": "Record updated",
+                "user": "Provider",
+                "date": "2022-03-29T15:43:03.830Z"
+            },
+            {
+                "title": "Record updated",
+                "user": "Provider",
+                "date": "2022-03-29T15:44:11.189Z"
+            }
+        ]
+    },
+    "trainingDetails": {
+        "traineeStarted": "true",
+        "commencementDate": "2022-03-21T04:10:33.875Z"
+    },
+    "isInternationalTrainee": false,
+    "contactDetails": {
+        "phoneNumber": "056 9614 9105",
+        "email": "allison31@hotmail.com",
+        "address": {
+            "line1": "1004 Kiley Street",
+            "line2": "",
+            "level2": "West Lesliebury",
+            "postcode": "BP6 6LO"
+        },
+        "addressType": "domestic"
+    },
+    "gcse": {
+        "maths": {
+            "type": "Scottish National 5",
+            "subject": "Maths",
+            "gradeBoundary": "4 and above"
+        },
+        "english": {
+            "type": "Scottish National 5",
+            "subject": "English",
+            "gradeBoundary": "4 and above"
+        },
+        "science": {
+            "type": "Scottish National 5",
+            "subject": "Science",
+            "gradeBoundary": "4 and above"
+        }
+    },
+    "degree": {
+        "items": [
+            {
+                "type": "BSc Education",
+                "subject": "Fashion",
+                "isInternational": "false",
+                "institution": "Backstage Academy (Training)",
+                "grade": "Pass",
+                "predicted": false,
+                "startDate": "2015",
+                "endDate": "2019",
+                "id": "cb7e588f-a59f-44a0-9e2a-bda871cefe5f"
+            }
+        ]
+    },
+    "funding": {
+        "initiative": "Not on a training initiative"
+    },
+    "placement": {
+        "items": [
+            {
+                "school": {
+                    "urn": "110257",
+                    "localAuthority": "Milton Keynes",
+                    "schoolName": "Wyvern School",
+                    "type": "Foundation school",
+                    "status": "Open",
+                    "phase": "Primary",
+                    "ukprn": "10080374",
+                    "addressLine1": "Aylesbury Street",
+                    "addressLine2": "Wolverton",
+                    "town": "Milton Keynes",
+                    "postcode": "MK12 5HU",
+                    "uuid": "85e899c9-d81c-404b-aa63-7c163875c1d3"
+                },
+                "id": "678834bf-79a3-4f8f-bcf8-02bad6426b6e"
+            },
+            {
+                "school": {
+                    "urn": "140696",
+                    "localAuthority": "Leicestershire",
+                    "schoolName": "Ab Kettleby School",
+                    "type": "Academy converter",
+                    "status": "Open",
+                    "phase": "Primary",
+                    "ukprn": "10045668",
+                    "addressLine1": "Wartnaby Road",
+                    "addressLine2": "Ab Kettleby",
+                    "town": "Melton Mowbray",
+                    "postcode": "LE14 3JJ",
+                    "uuid": "0d37f6f8-0a96-4189-a749-8d996cf1c86e"
+                },
+                "id": "ed78efdc-cf09-4704-8de1-ddeb5044f169"
+            }
+        ]
+    },
+    "outcome": {},
+    "selectedCourseTemp": "d8a7c5d5-441d-41d3-8889-05036d9c4df3",
+    "historicCourseDetails": [
+        {
+            "courseDetails": {
+                "ageRange": "11 to 18",
+                "code": "G640",
+                "duration": 1,
+                "id": "eedb5a80-431d-4e4c-9c8b-a6de5631120a",
+                "isPublishCourse": true,
+                "phase": "Secondary",
+                "qualifications": [
+                    "QTS",
+                    "PGCE"
+                ],
+                "qualificationsSummary": "PGCE with QTS full time",
+                "route": "Teaching apprenticeship (postgrad)",
+                "startDateVague": "2021-08-31T23:00:00.000Z",
+                "academicYear": "2021 to 2022",
+                "studyMode": "Full time",
+                "publishSubjects": {
+                    "first": "Physics"
+                },
+                "courseNameShort": "Physics",
+                "courseNameLong": "Physics (G640)",
+                "subjects": {
+                    "first": "Physics"
+                },
+                "startDate": "2021-09-02T23:00:00.000Z",
+                "endDate": "2022-06-02T23:00:00.000Z"
+            },
+            "schools": {
+                "leadSchool": {
+                    "urn": "137628",
+                    "localAuthority": "Nottinghamshire",
+                    "schoolName": "The Joseph Whitaker School",
+                    "type": "Academy converter",
+                    "status": "Open",
+                    "phase": "Secondary",
+                    "ukprn": "10035689",
+                    "addressLine1": "Warsop Lane",
+                    "addressLine2": "Rainworth",
+                    "town": "Mansfield",
+                    "postcode": "NG21 0AG",
+                    "uuid": "c3d5b7f8-f53a-45a9-bb3e-ba0f72338b1a"
+                },
+                "employingSchool": {
+                    "urn": "122762",
+                    "localAuthority": "Nottinghamshire",
+                    "schoolName": "Kneesall CofE Primary School",
+                    "type": "Voluntary controlled school",
+                    "status": "Open",
+                    "phase": "Primary",
+                    "ukprn": "10077939",
+                    "addressLine1": "School Lane",
+                    "addressLine2": "Kneesall",
+                    "town": "Newark",
+                    "postcode": "NG22 0AB",
+                    "uuid": "315867fe-1897-4503-90e5-01c4feb4ae0e"
+                }
+            },
+            "funding": {
+                "initiative": "Not on a training initiative",
+                "source": "grant"
+            },
+            "dateFinished": [
+                "1",
+                "2",
+                "2022"
+            ]
+        }
     ]
-  },
-  "diversity": {
-    "diversityDisclosed": "false",
-    "status": [
-      "Completed"
-    ]
-  },
-  "degree": {
-    "items": [
-      {
-        "isInternational": "true",
-        "subject": "Biology",
-        "country": "United States",
-        "endDate": "2013",
-        "type": "Bachelor degree",
-        "id": "31dc5e93-b521-425c-98d8-dec96eb2388c"
-      },
-      {
-        "isInternational": "false",
-        "subject": "Sport and exercise sciences",
-        "org": "The University of Manchester",
-        "endDate": "2016",
-        "type": "BSc - Bachelor of Science",
-        "grade": "First-class honours",
-        "id": "1faf0ae6-4c01-4224-9e49-06beffc0c5d0"
-      }
-    ],
-    "status": [
-      "Completed"
-    ]
-  },
-  "courseDetails": {
-    "subjects": ["Physics"],
-    "ageRange": "3 to 11 programme",
-    "startDate": [
-      "1",
-      "2",
-      "2021"
-    ],
-    "endDate": [
-      "1",
-      "6",
-      "2021"
-    ],
-    "status": [
-      "Completed"
-    ]
-  },
-  "trainingDetails": {
-    "commencementDate": [
-      "1",
-      "2",
-      "2021"
-    ],
-    "traineeId": "AO/03/21",
-    "status": [
-      "Completed"
-    ]
-  }
 }

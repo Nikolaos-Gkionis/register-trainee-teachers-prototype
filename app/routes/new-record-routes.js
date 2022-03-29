@@ -16,7 +16,7 @@ module.exports = router => {
   router.get('/new-record/direct-add', function (req, res) {
     const data = req.session.data
     utils.deleteTempData(data)
-    data.record = require('./../data/direct-add-record.json')
+    data.record = require('./../data/direct-add-draft-record.json')
     res.redirect('/new-record/overview')
   })
 

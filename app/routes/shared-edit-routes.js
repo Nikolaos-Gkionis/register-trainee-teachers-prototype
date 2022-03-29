@@ -12,6 +12,18 @@ const getSchools = () => {
 
 module.exports = router => {
 
+  // Hacky solution to manually import a record to draft state
+  // Useful for testing bugs so we can quickly restore a state
+  router.get('/record-direct-add', (req, res) => {
+    const data = req.session.data
+
+    utils.deleteTempData(data)
+    let record = require('./../data/direct-add-record.json')
+    data.records.push(record)
+    // utils.updateRecord(data, record)
+    res.redirect(`/record/${record.id}`)
+  })
+
   // Load up data for a record
   // This implimentation makes a copy of the record and stores it in a temporary location
   // any edits happen on this temporary data - depending on the journey, some routes may then

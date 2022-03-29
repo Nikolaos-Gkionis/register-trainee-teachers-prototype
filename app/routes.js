@@ -92,6 +92,8 @@ router.post('/direct-set-data', function(req, res, next){
   let theValue = data.directSet?.value
   let theValueJson = data.directSet?.valueJson
   let shouldMerge = data.directSet?.mergeJson == 'true'
+  let updateRecord = data.directSet?.updateRecord == 'true'
+
   let parsedJson
 
   delete data.directSet
@@ -121,6 +123,19 @@ router.post('/direct-set-data', function(req, res, next){
   console.log({theValue})
 
   _.set(data, theKey, theValue)
+
+  // If we were given record data, save it back to data.records so it persists
+  if (updateRecord){
+    if (data?.record?.id){
+      let recordIndex = data.records.findIndex(record => record.id == data.record.id)
+      if (recordIndex){
+        console.log(`Updating record at index ${recordIndex}`)
+        data.records[recordIndex] = data.record
+      }
+    }
+    else console.log("Error: no record id to update to")
+
+  }
 
   res.redirect("/direct-set-data")
 })
