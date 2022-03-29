@@ -7,28 +7,41 @@
   {% set expectedDuration = courseDetails.duration + " years" %}
 {% endif %}
 
-{% macro courseAndRouteHtml(record) %}
-  {% set _isPublishCourse = record.courseDetails.isPublishCourse | falsify %}
+{% macro courseAndRouteHtml(record, minimalPublishSummary) %}
+  {% set isPublishCourse = record.courseDetails.isPublishCourse | falsify %}
   <p class="govuk-body">{{record.route}}</p>
-
-  {% if _isPublishCourse %}
-    <p class="govuk-body">{{ record.courseDetails.courseNameLong }}</p>
-  {% elseif minimalPublishSummary %}
-    <p class="govuk-body">{{ record.courseDetails.subjects | prettifySubjects }}</p>
-  {% endif %}
+  <span class="govuk-hint">
+    {% if isPublishCourse %}
+      {{ record.courseDetails.courseNameLong }}
+    {% elseif minimalPublishSummary %}
+      {{ record.courseDetails.subjects | prettifySubjects }}
+    {% endif %}
+  </span>
 {% endmacro %}
+
+{% macro getCourseMoveLinkPath(defaultPath, nextPath, referrer, showCourseMoveQuestionUpFront) -%}
+  {%- if showCourseMoveQuestionUpFront -%}
+    {{- defaultPath + '/course-move-question'| addReferrer(defaultPath + nextPath) -}}
+  {% else %}
+    {{ (defaultPath + nextPath) | addReferrer(referrer) }}
+  {%- endif -%}
+{%- endmacro %}
+
+{% set testUrl = getCourseMoveLinkPath((recordPath + "/course-details"), '/select-route', referrer, showCourseMoveQuestionUpFront).val %}
+
 
 {% set courseRow = {
   key: {
     text: "Course" if not showPreviousCourse else "New course"
   },
   value: {
-    html: courseAndRouteHtml(record) | safe | trim or 'Not provided'
+    html: courseAndRouteHtml(record, minimalPublishSummary) | safe | trim or 'Not provided'
   },
   actions: {
     items: [
       {
         href: recordPath + "/course-details/select-route" | addReferrer(referrer),
+        href: getCourseMoveLinkPath((recordPath + "/course-details"), '/select-route', referrer, showCourseMoveQuestionUpFront),
         text: "Change",
         visuallyHiddenText: "course"
       }
@@ -36,14 +49,14 @@
   } if canAmend
 } %}
 
-{# For use in course change flow #}
+{# For use in course move flow #}
 {% set previousRecord = data.records | getRecordById(record.id) %}
 {% set previousCourseRow = {
   key: {
     text: "Previous course"
   },
   value: {
-    html: courseAndRouteHtml(previousRecord) | safe | trim or 'Not provided',
+    html: courseAndRouteHtml(previousRecord, minimalPublishSummary) | safe | trim or 'Not provided',
     classes: "govuk-hint"
   }
 } %}
@@ -59,6 +72,7 @@
     items: [
       {
         href: recordPath + "/course-details/phase" | addReferrer(referrer),
+        href: recordPath + "/course-details/course-move-question" | addReferrer(recordPath + "/course-details/phase"),
         text: "Change",
         visuallyHiddenText: "education phase"
       }
@@ -174,6 +188,38 @@
   } if canAmend
 } %}
 
+{% set courseMove = record.temp.courseMoveTemp %}
+
+{% set courseMoveHtml -%}
+  {%- if courseMove -%}
+    {%- if courseMove.isCourseMove | falsify -%}
+      {{- courseMove.courseMoveDate | govukDate -}}
+    {%- else -%}
+      Not a change of course
+    {%- endif -%}
+  {%- else -%}
+    Not provided
+  {%- endif -%}
+{% endset %}
+
+{% set courseMoveRow = {
+  key: {
+    text: "Course move" if not courseMove.isCourseMove | falsify else "Course move date"
+  },
+  value: {
+    text: courseMoveHtml | safe or 'Not provided'
+  },
+  actions: {
+    items: [
+      {
+        href: recordPath + "/course-details/course-move-question" | addReferrer(referrer),
+        text: "Change",
+        visuallyHiddenText: "change of course question"
+      }
+    ]
+  } if canAmend
+} if record | isNonDraft %}
+
 {# {% set durationRow = {
   key: {
     text: "Duration"
@@ -216,7 +262,8 @@
     courseRow,
     studyModeRow,
     startDateRow,
-    endDateRow
+    endDateRow,
+    courseMoveRow if showCourseMoveRow
   ] %}
 
 {% else %}
@@ -229,7 +276,8 @@
     studyModeRow,
     apprenticeshipStartDateRow,
     startDateRow,
-    endDateRow
+    endDateRow,
+    courseMoveRow if showCourseMoveRow
   ] %}
 
 {% endif %}
@@ -238,6 +286,7 @@
 {% if minimalPublishSummary %}
   {% set courseDetailsRows = [
     courseRow,
+    courseMoveRow if showCourseMoveRow,
     previousCourseRow if showPreviousCourse
   ] | removeEmpty %}
 {% endif %}
@@ -278,9 +327,16 @@
   {% include "_includes/incomplete.njk" %}
 
 {% else %}
+
   {{ appSummaryCard({
     classes: "govuk-!-margin-bottom-6",
     titleText: "Course details",
+    actions: {
+    items: [{
+      href: recordPath + "/course-details/is-course-move" | addReferrer(referrer),
+      text: "Move the trainee to a new course"
+    }]
+  } if canAmend and showCourseChangeOption,
     html: courseDetailsHtml
   }) }}
   

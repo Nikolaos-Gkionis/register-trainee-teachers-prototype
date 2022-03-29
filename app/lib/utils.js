@@ -15,6 +15,8 @@ const generateReference      = require('./../data/generators/reference-number')
 const academicQualifications = require('./../data/academic-qualifications.js')
 const years                  = require('./../data/years.js')
 
+let skipCourseDatesPage = true
+
 // -------------------------------------------------------------------
 // General
 // -------------------------------------------------------------------
@@ -288,6 +290,8 @@ exports.getNextPublishCourseDetailsUrl = (record, recordPath, referrer) => {
   let isMissingDates = exports.needsCourseDates(record)
   let isAllocated = exports.hasAllocatedPlaces(record)
 
+  let isMissingCourseMoveQuestion = !Boolean(record?.temp?.courseMoveTemp)
+
   if (hasUnmappedPublishSubjects){
     return `${recordPath}/course-details/choose-specialisms${referrer}`
   }
@@ -296,13 +300,16 @@ exports.getNextPublishCourseDetailsUrl = (record, recordPath, referrer) => {
     return `${recordPath}/course-details/study-mode${referrer}`
   }
   // Backfill course dates
-  else if (isMissingDates){
+  else if (isMissingDates && !skipCourseDatesPage){
     return `${recordPath}/course-details/dates${referrer}`
   }
   // else if (isAllocated) {
   //   // After /allocated-place the journey will match other course-details routes
   //   return `${recordPath}/course-details/allocated-place${referrer}`
   // }
+  else if (exports.isNonDraft(record) && isMissingCourseMoveQuestion){
+    return `${recordPath}/course-details/course-move-question${referrer}`
+  }
   else {
     return `${recordPath}/course-details/confirm${referrer}`
   }
@@ -2369,6 +2376,29 @@ exports.makeUrlWithQuery = (pathname, query) => {
     query: query,
   })
 }
+
+// New URL parsing functions
+exports.parseUrl = (inputUrl) => {
+  if (!_.isString(inputUrl)){
+    console.log(`Error with parseUrl: input not a string`)
+    return inputUrl
+  }
+  else return url.parse(inputUrl, true)
+}
+
+// Get structured query
+exports.getQueryFromUrl = (inputUrl) => {
+  return exports.parseUrl(inputUrl).query
+}
+
+// Get structured query
+exports.getPathnameFromUrl = (inputUrl) => {
+  return exports.parseUrl(inputUrl).pathname
+}
+
+// end new url passing functions
+
+
 
 // Update the current query with sort order set
 exports.createSortLink = function(pathname, sortOrder){

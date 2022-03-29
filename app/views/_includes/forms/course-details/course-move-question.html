@@ -1,0 +1,28 @@
+{% include "_includes/trainee-name-caption.njk" %}
+{# <h1 class="govuk-heading-l">
+  {{pageHeading}}
+</h1> #}
+
+{{ govukRadios({
+  fieldset: {
+    legend: {
+      text: pageHeading,
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--l"
+    }
+  },
+  items: [
+    {
+      value: "true",
+      text: "Yes, the trainee has moved to a different course"
+    },
+    {
+      value: "false",
+      text: "No, I am correcting a mistake or updating their existing course details"
+    }
+  ]
+} | decorateAttributes(record, "record.temp.courseMoveTemp.isCourseMove")) }}
+
+{{ govukButton({
+  text: "Continue"
+}) }}

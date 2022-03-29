@@ -2,6 +2,10 @@
 
 {% set pageHeading = "What type of training are they doing?" %}
 
+{% if data.record.temp.courseMoveTemp.isCourseMove %}
+  {% set pageHeading = "What type of training is the new course?" %}
+{% endif %}
+
 {% set formAction = "./select-route-answer" | addReferrer(referrer) %}
 
 

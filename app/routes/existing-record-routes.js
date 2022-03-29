@@ -9,7 +9,6 @@ const utils     = require('./../lib/utils')
 
 module.exports = router => {
 
-
   // Manually advance an application from pending to trn received
   router.get('/record/:uuid/trn', (req, res) => {
     const data = req.session.data
@@ -313,15 +312,15 @@ module.exports = router => {
   // Copy temp record back to real record
   router.post(['/record/:uuid/:page/update', '/record/:uuid/update'], (req, res) => {
     const data = req.session.data
-    const newRecord = data.record
+    const record = data.record
     let referrer = utils.getReferrer(req.query.referrer)
     // Update failed or no data
-    if (!newRecord){
+    if (!record){
       res.redirect('/record/:uuid')
     }
     else {
       utils.deleteTempData(data)
-      utils.updateRecord(data, newRecord)
+      utils.updateRecord(data, record)
       req.flash('success', 'Trainee record updated')
 
       if (referrer){
@@ -455,21 +454,7 @@ module.exports = router => {
   // end of delete, defer, withdraw routes
   // =========================================================================
 
-  // Existing record pages
-  router.get('/record/:uuid/:page*', function (req, res, next) {
-    let records = req.session.data.records
-    const referrer = req.query.referrer
-    res.locals.referrer = referrer
-    const record = records.find(record => record.id == req.params.uuid)
-    if (!record){
-      res.redirect('/records')
-    }
-    else {
-      // Use our own render as some templates live at /index.html
-      utils.render(path.join('record', req.params.page, req.params[0]), res, next)
-      // res.render(path.join('record', req.params.page, req.params[0]))
-    }
-  })
+
 
   // trainee-details
   router.post('/record/:uuid/trainee-start-date', function (req, res) {
@@ -488,4 +473,213 @@ module.exports = router => {
     }
     res.redirect(`/record/${req.params.uuid}/trainee-start-date/confirm${referrer}`)
   })
+
+
+  /*
+  =========================================================================
+  Course details
+  =========================================================================
+  */
+
+  // Route to set some date up front before redirecting on
+  router.get('/record/:uuid/course-details/is-course-move', function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
+
+    _.set(record, "temp.courseMoveTemp.courseMoveUpFront", "true")
+    _.set(record, "temp.courseMoveTemp.isCourseMove", "true")
+
+    res.redirect(`/record/${req.params.uuid}/course-details/course-move-date${referrer}`)
+
+  })
+
+  router.post('/record/:uuid/course-details/course-move-question-answer', function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
+
+    let isCourseMove = record?.temp?.courseMoveTemp?.isCourseMove
+
+    if (!isCourseMove){
+      res.redirect(`/record/${req.params.uuid}/course-details/course-move-question${referrer}`)
+    }
+    else if (isCourseMove == 'true'){
+      res.redirect(`/record/${req.params.uuid}/course-details/course-move-date${referrer}`)
+    }
+    else {
+
+      // Clear previous data if we've now been told it’s not a course change
+      delete record?.temp?.courseMoveTemp?.courseMoveDate
+
+      // If coming from final check page, send user back there
+      if (req.query.referrer && req.query.referrer.includes("final-check")){
+        res.redirect(`/record/${req.params.uuid}/course-details/final-check-course-change${referrer}`)
+      }
+
+      // Otherwise go to confirmation page
+      res.redirect(`/record/${req.params.uuid}/course-details/confirm${referrer}`)
+
+    }
+  })
+
+  // Redirect to course question if we don’t yet have data for it
+  router.get('/:recordtype/:uuid/course-details/confirm', function (req, res) {
+    const data = req.session.data
+    let record = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
+    let recordPath = utils.getRecordPath(req)
+
+    console.log('Record temp: ' + record?.temp)
+
+    let isMissingCourseMoveQuestion = !Boolean(record?.temp?.courseMoveTemp)
+
+    if (isMissingCourseMoveQuestion){
+      res.redirect(`${recordPath}/course-details/course-move-question${referrer}`)
+    }
+    else {
+      res.render(`${req.params.recordtype}/course-details/confirm`)
+    }
+
+  })
+
+  // Work out if course details have changed significantly and so we need to have the user
+  // check the school and funding sections
+  router.post('/:recordtype/:uuid/course-details/course-change-significant-change-check', function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
+    let recordPath = utils.getRecordPath(req)
+
+    let previousRecord = utils.getRecordById(data.records, record.id)
+
+    let courseMove = record?.temp?.courseMoveTemp
+    let isCourseMove = (courseMove?.isCourseMove == "true") ? true : false
+    if (isCourseMove){
+      console.log(`Course change: changed on ${courseMove.courseMoveDate}`)
+    }
+
+    let routeChanged = (record?.route != previousRecord?.route)
+
+    if (routeChanged){
+      console.log(`Course change: route changed from ${previousRecord?.route} to ${record?.rou}`)
+    }
+
+    // Check if the allocation subject has changed.
+    // If the specialism has changed but the allocation subject remains the same
+    // (eg physics to applied physics) then the change is minimal and it has no impact on funding
+    let newAllocationSubject = utils.getAllocationSubject(record)
+    let oldAllocationSubject = utils.getAllocationSubject(previousRecord)
+
+    let allocationSubjectChanged = !Boolean(newAllocationSubject) || (newAllocationSubject !== oldAllocationSubject)
+
+    if (allocationSubjectChanged){
+      console.log(`Course change: allocation subject changed from ${newAllocationSubject} to ${oldAllocationSubject}`)
+    }
+
+    // Clear out data for sections that may no longer be needed
+    if (!utils.requiresSection(record, "degree")){
+      delete record?.degree
+    }
+    if (!utils.requiresSection(record, "schools")){
+      delete record?.schools
+    }
+    if (!utils.requiresSection(record, "placement")){
+      delete record?.placement
+    }
+
+    // Schools have individual fields
+    if (!utils.requiresField(record, "leadSchool")){
+      delete record?.schools?.leadSchool
+    }
+    if (!utils.requiresField(record, "employingSchool")){
+      delete record?.schools?.employingSchool
+    }
+
+    if (routeChanged || allocationSubjectChanged){
+      // Don’t trust financial incentives after a significant change - better to
+      // collect again.
+      delete record?.funding?.source
+    }
+
+    // If the route or first subject has changed, that's a significant change and providers
+    // should review the rest of the training details
+    if (routeChanged || allocationSubjectChanged || isCourseMove){
+      res.redirect(`${recordPath}/course-details/course-change-instructions${referrer}`)
+    }
+    else {
+      // Implicitly not a course change, so we can delete any temp data
+      delete record?.temp?.courseMoveTemp
+      // 307 Redirect to POST route
+      res.redirect(307, `${recordPath}/course-details/update${referrer}`);
+    }
+  })
+
+  // Work out the next url to send the user after a significant course change
+  // This will look up what data is missing on the record and send the user to the form
+  // page for that data
+  router.get(['/:recordtype/:uuid/course-details/get-next-course-change-url','/:recordtype/course-details/get-next-course-change-url'], function (req, res) {
+    const data = req.session.data
+    let record = data.record
+    let recordPath = utils.getRecordPath(req)
+
+    // Unlike most pages, here we want to insert a new referrer in the query string
+    let reviewCourseChangeUrl = `${recordPath}/course-details/final-check-course-change`
+    let referrerArray = utils.pushReferrer(req.query.referrer, reviewCourseChangeUrl)
+    let referrer = utils.getReferrer(referrerArray)
+
+    res.redirect(utils.getNextCourseChangeUrl(record, recordPath, referrer))
+
+  })
+
+    // Work out if course details have changed significantly and so we need to have the user
+  // check the school and funding sections
+  router.post('/:recordtype/:uuid/course-details/final-check-course-change-answer', function (req, res) {
+    let data = req.session.data
+    let record = data.record
+    let referrer = utils.getReferrer(req.query.referrer)
+    let recordPath = utils.getRecordPath(req)
+
+    let previousRecord = utils.getRecordById(data.records, record.id)
+
+    let isCourseMove = (record?.temp?.courseMoveTemp?.isCourseMove == "true") ? true : false
+
+    if (isCourseMove){
+      let oldCourseData = {
+        courseDetails: previousRecord?.courseDetails,
+        ...( previousRecord.schools ? { schools: previousRecord.schools } : {} ), // conditional
+        ...( previousRecord.funding ? { funding: previousRecord.funding } : {} ),  // conditional
+        dateFinished: record?.temp?.courseMoveTemp?.courseMoveDate
+      }
+      if (record.historicCourseData){
+        record.historicCourseData.push(oldCourseData)
+      }
+      else {
+        record.historicCourseData = [oldCourseData]
+      }
+    }
+
+    delete record.temp
+
+    res.redirect(307, `${recordPath}/course-details/update${referrer}`);
+
+  })
+
+  // Existing record pages
+  // NOTE!: needs to come after more specific routes
+  router.get('/record/:uuid/:page*', function (req, res, next) {
+    let records = req.session.data.records
+    const referrer = req.query.referrer
+    res.locals.referrer = referrer
+    const record = records.find(record => record.id == req.params.uuid)
+    if (!record){
+      res.redirect('/records')
+    }
+    else {
+      // Use our own render as some templates live at /index.html
+      utils.render(path.join('record', req.params.page, req.params[0]), res, next)
+      // res.render(path.join('record', req.params.page, req.params[0]))
+    }
+  })
+
 }
