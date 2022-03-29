@@ -640,26 +640,31 @@ module.exports = router => {
     let referrer = utils.getReferrer(req.query.referrer)
     let recordPath = utils.getRecordPath(req)
 
-    let previousRecord = utils.getRecordById(data.records, record.id)
-
     let isCourseMove = (record?.temp?.courseMoveTemp?.isCourseMove == "true") ? true : false
 
     if (isCourseMove){
-      let oldCourseData = {
-        courseDetails: previousRecord?.courseDetails,
-        ...( previousRecord.schools ? { schools: previousRecord.schools } : {} ), // conditional
-        ...( previousRecord.funding ? { funding: previousRecord.funding } : {} ),  // conditional
-        dateFinished: record?.temp?.courseMoveTemp?.courseMoveDate
-      }
+
+      let bundle = {}
+      bundle.dateFinished = record?.temp?.courseMoveTemp?.courseMoveDate
+
+      let previousRecord = utils.getRecordById(data.records, record.id)
+
+      // Make a copy so we don’t edit the original
+      let previousRecordCopy = Object.assign({}, previousRecord)
+      // Delete historic course details on reord so we don’t create circular JSON
+      delete previousRecordCopy?.historicCourseDetails
+
+      bundle.recordData = previousRecordCopy
+
       if (record.historicCourseDetails){
-        record.historicCourseDetails.push(oldCourseData)
+        record.historicCourseDetails.push(bundle)
       }
       else {
-        record.historicCourseDetails = [oldCourseData]
+        record.historicCourseDetails = [bundle]
       }
     }
 
-    delete record.temp
+    delete record?.temp
 
     res.redirect(307, `${recordPath}/course-details/update${referrer}`);
 

@@ -2,31 +2,37 @@
     "academicYear": "2021 to 2022",
     "diversity": {
         "diversityDisclosed": "true",
-        "ethnicGroup": "Black, African, Black British or Caribbean",
-        "ethnicGroupSpecific": "Another Black background",
-        "disabledAnswer": "Not provided"
+        "ethnicGroup": "Prefer not to say",
+        "disabledAnswer": "Yes",
+        "disabilities": [
+            "Other"
+        ]
     },
     "id": "directly-added",
     "personalDetails": {
-        "givenName": "Dale",
-        "familyName": "Schowalter",
-        "middleNames": "Preston",
+        "givenName": "Carl",
+        "familyName": "Berge",
+        "middleNames": "Clayton Clifton",
         "nationality": [
             "British"
         ],
         "sex": "Male",
-        "dateOfBirth": "1991-11-09T01:07:28.399Z",
-        "fullName": "Dale Preston Schowalter",
-        "shortName": "Dale Schowalter"
+        "dateOfBirth": "1972-08-25T12:58:09.016Z",
+        "fullName": "Carl Clayton Clifton Berge",
+        "shortName": "Carl Berge"
     },
     "provider": "Webury Hill SCITT",
     "accreditingProviderType": "SCITT",
     "route": "Provider-led (postgrad)",
     "status": "Pending TRN",
-    "updatedDate": "2022-03-29T15:44:11.189Z",
-    "submittedDate": "2022-03-21T04:10:33.875Z",
-    "reference": "EN5769",
-    "source": "Manual",
+    "updatedDate": "2022-03-29T16:30:31.436Z",
+    "submittedDate": "2022-03-21T19:29:36.093Z",
+    "reference": "KL9720",
+    "source": "Apply",
+    "applyData": {
+        "recruitedDate": "2022-03-21T19:29:36.093Z",
+        "applicationDate": "2022-03-08T14:30:12.527Z"
+    },
     "courseDetails": {
         "ageRange": "11 to 18",
         "code": "F974",
@@ -57,56 +63,56 @@
     "events": {
         "items": [
             {
-                "title": "Record created",
+                "title": "Record imported from Apply",
                 "user": "Provider",
-                "date": "2021-12-15T18:07:01.968Z"
+                "date": "2021-11-09T02:17:34.321Z"
             },
             {
                 "title": "Trainee submitted for TRN",
                 "user": "Provider",
-                "date": "2021-12-15T18:07:01.968Z"
+                "date": "2021-11-09T02:17:34.321Z"
             },
             {
                 "title": "Record updated",
                 "user": "Provider",
-                "date": "2022-03-29T15:43:03.830Z"
+                "date": "2022-03-29T16:29:45.723Z"
             },
             {
                 "title": "Record updated",
                 "user": "Provider",
-                "date": "2022-03-29T15:44:11.189Z"
+                "date": "2022-03-29T16:30:31.436Z"
             }
         ]
     },
     "trainingDetails": {
         "traineeStarted": "true",
-        "commencementDate": "2022-03-21T04:10:33.875Z"
+        "commencementDate": "2022-03-21T19:29:36.093Z"
     },
     "isInternationalTrainee": false,
     "contactDetails": {
-        "phoneNumber": "056 9614 9105",
-        "email": "allison31@hotmail.com",
+        "phoneNumber": "0967 519 7344",
+        "email": "nadia.will2@yahoo.com",
         "address": {
-            "line1": "1004 Kiley Street",
+            "line1": "780 Blick Run",
             "line2": "",
-            "level2": "West Lesliebury",
-            "postcode": "BP6 6LO"
+            "level2": "North Richmond",
+            "postcode": "CN57 0IV"
         },
         "addressType": "domestic"
     },
     "gcse": {
         "maths": {
-            "type": "Scottish National 5",
+            "type": "GCSE",
             "subject": "Maths",
             "gradeBoundary": "4 and above"
         },
         "english": {
-            "type": "Scottish National 5",
+            "type": "GCSE",
             "subject": "English",
             "gradeBoundary": "4 and above"
         },
         "science": {
-            "type": "Scottish National 5",
+            "type": "GCSE",
             "subject": "Science",
             "gradeBoundary": "4 and above"
         }
@@ -114,15 +120,15 @@
     "degree": {
         "items": [
             {
-                "type": "BSc Education",
-                "subject": "Fashion",
+                "type": "Bachelor of Accountancy",
+                "subject": "French language",
                 "isInternational": "false",
-                "institution": "Backstage Academy (Training)",
-                "grade": "Pass",
-                "predicted": false,
-                "startDate": "2015",
-                "endDate": "2019",
-                "id": "cb7e588f-a59f-44a0-9e2a-bda871cefe5f"
+                "institution": "Plymouth College of Art",
+                "grade": "First-class honours",
+                "predicted": true,
+                "startDate": "2016",
+                "endDate": "2020",
+                "id": "4486cc10-3621-4e0f-8542-e375057535a1"
             }
         ]
     },
@@ -133,37 +139,20 @@
         "items": [
             {
                 "school": {
-                    "urn": "110257",
-                    "localAuthority": "Milton Keynes",
-                    "schoolName": "Wyvern School",
-                    "type": "Foundation school",
+                    "urn": "138050",
+                    "localAuthority": "West Sussex",
+                    "schoolName": "The Bewbush Academy",
+                    "type": "Academy sponsor led",
                     "status": "Open",
                     "phase": "Primary",
-                    "ukprn": "10080374",
-                    "addressLine1": "Aylesbury Street",
-                    "addressLine2": "Wolverton",
-                    "town": "Milton Keynes",
-                    "postcode": "MK12 5HU",
-                    "uuid": "85e899c9-d81c-404b-aa63-7c163875c1d3"
+                    "ukprn": "10037078",
+                    "addressLine1": "Dorsten Place",
+                    "addressLine2": "Bewbush",
+                    "town": "Crawley",
+                    "postcode": "RH11 8XW",
+                    "uuid": "7807a60c-30d3-4ea2-a29d-923c14bcdca7"
                 },
-                "id": "678834bf-79a3-4f8f-bcf8-02bad6426b6e"
-            },
-            {
-                "school": {
-                    "urn": "140696",
-                    "localAuthority": "Leicestershire",
-                    "schoolName": "Ab Kettleby School",
-                    "type": "Academy converter",
-                    "status": "Open",
-                    "phase": "Primary",
-                    "ukprn": "10045668",
-                    "addressLine1": "Wartnaby Road",
-                    "addressLine2": "Ab Kettleby",
-                    "town": "Melton Mowbray",
-                    "postcode": "LE14 3JJ",
-                    "uuid": "0d37f6f8-0a96-4189-a749-8d996cf1c86e"
-                },
-                "id": "ed78efdc-cf09-4704-8de1-ddeb5044f169"
+                "id": "49da554b-6c92-4d55-bde7-c8739e6fc533"
             }
         ]
     },
@@ -171,70 +160,368 @@
     "selectedCourseTemp": "d8a7c5d5-441d-41d3-8889-05036d9c4df3",
     "historicCourseDetails": [
         {
-            "courseDetails": {
-                "ageRange": "11 to 18",
-                "code": "G640",
-                "duration": 1,
-                "id": "eedb5a80-431d-4e4c-9c8b-a6de5631120a",
-                "isPublishCourse": true,
-                "phase": "Secondary",
-                "qualifications": [
-                    "QTS",
-                    "PGCE"
-                ],
-                "qualificationsSummary": "PGCE with QTS full time",
-                "route": "Teaching apprenticeship (postgrad)",
-                "startDateVague": "2021-08-31T23:00:00.000Z",
+            "recordData": {
                 "academicYear": "2021 to 2022",
-                "studyMode": "Full time",
-                "publishSubjects": {
-                    "first": "Physics"
+                "diversity": {
+                    "diversityDisclosed": "true",
+                    "ethnicGroup": "Prefer not to say",
+                    "disabledAnswer": "Yes",
+                    "disabilities": [
+                        "Other"
+                    ]
                 },
-                "courseNameShort": "Physics",
-                "courseNameLong": "Physics (G640)",
-                "subjects": {
-                    "first": "Physics"
+                "id": "9fcd2373-0254-468f-8252-6d4f151c9c19",
+                "personalDetails": {
+                    "givenName": "Carl",
+                    "familyName": "Berge",
+                    "middleNames": "Clayton Clifton",
+                    "nationality": [
+                        "British"
+                    ],
+                    "sex": "Male",
+                    "dateOfBirth": "1972-08-25T12:58:09.016Z",
+                    "fullName": "Carl Clayton Clifton Berge",
+                    "shortName": "Carl Berge"
                 },
-                "startDate": "2021-09-02T23:00:00.000Z",
-                "endDate": "2022-06-02T23:00:00.000Z"
-            },
-            "schools": {
-                "leadSchool": {
-                    "urn": "137628",
-                    "localAuthority": "Nottinghamshire",
-                    "schoolName": "The Joseph Whitaker School",
-                    "type": "Academy converter",
-                    "status": "Open",
+                "provider": "Webury Hill SCITT",
+                "accreditingProviderType": "SCITT",
+                "route": "School direct (salaried)",
+                "status": "Pending TRN",
+                "updatedDate": "2022-03-21T19:29:36.093Z",
+                "submittedDate": "2022-03-21T19:29:36.093Z",
+                "reference": "KL9720",
+                "source": "Apply",
+                "applyData": {
+                    "recruitedDate": "2022-03-21T19:29:36.093Z",
+                    "applicationDate": "2022-03-08T14:30:12.527Z"
+                },
+                "courseDetails": {
+                    "ageRange": "11 to 16",
+                    "code": "P910",
+                    "duration": 1,
+                    "id": "ed142d73-0374-4c23-8420-67d963ab19bb",
+                    "isPublishCourse": true,
                     "phase": "Secondary",
-                    "ukprn": "10035689",
-                    "addressLine1": "Warsop Lane",
-                    "addressLine2": "Rainworth",
-                    "town": "Mansfield",
-                    "postcode": "NG21 0AG",
-                    "uuid": "c3d5b7f8-f53a-45a9-bb3e-ba0f72338b1a"
+                    "qualifications": [
+                        "QTS",
+                        "PGCE"
+                    ],
+                    "qualificationsSummary": "PGCE with QTS full time",
+                    "route": "School direct (salaried)",
+                    "startDateVague": "2021-08-31T23:00:00.000Z",
+                    "academicYear": "2021 to 2022",
+                    "studyMode": "Full time",
+                    "publishSubjects": {
+                        "first": "German"
+                    },
+                    "courseNameShort": "German",
+                    "courseNameLong": "German (P910)",
+                    "subjects": {
+                        "first": "German language"
+                    },
+                    "startDate": "2021-09-17T23:00:00.000Z",
+                    "endDate": "2022-06-17T23:00:00.000Z"
                 },
-                "employingSchool": {
-                    "urn": "122762",
-                    "localAuthority": "Nottinghamshire",
-                    "schoolName": "Kneesall CofE Primary School",
-                    "type": "Voluntary controlled school",
-                    "status": "Open",
-                    "phase": "Primary",
-                    "ukprn": "10077939",
-                    "addressLine1": "School Lane",
-                    "addressLine2": "Kneesall",
-                    "town": "Newark",
-                    "postcode": "NG22 0AB",
-                    "uuid": "315867fe-1897-4503-90e5-01c4feb4ae0e"
-                }
-            },
-            "funding": {
-                "initiative": "Not on a training initiative",
-                "source": "grant"
+                "events": {
+                    "items": [
+                        {
+                            "title": "Record imported from Apply",
+                            "user": "Provider",
+                            "date": "2021-11-09T02:17:34.321Z"
+                        },
+                        {
+                            "title": "Trainee submitted for TRN",
+                            "user": "Provider",
+                            "date": "2021-11-09T02:17:34.321Z"
+                        }
+                    ]
+                },
+                "trainingDetails": {
+                    "traineeStarted": "true",
+                    "commencementDate": "2022-03-21T19:29:36.093Z"
+                },
+                "isInternationalTrainee": false,
+                "contactDetails": {
+                    "phoneNumber": "0967 519 7344",
+                    "email": "nadia.will2@yahoo.com",
+                    "address": {
+                        "line1": "780 Blick Run",
+                        "line2": "",
+                        "level2": "North Richmond",
+                        "postcode": "CN57 0IV"
+                    },
+                    "addressType": "domestic"
+                },
+                "gcse": {
+                    "maths": {
+                        "type": "GCSE",
+                        "subject": "Maths",
+                        "gradeBoundary": "4 and above"
+                    },
+                    "english": {
+                        "type": "GCSE",
+                        "subject": "English",
+                        "gradeBoundary": "4 and above"
+                    },
+                    "science": {
+                        "type": "GCSE",
+                        "subject": "Science",
+                        "gradeBoundary": "4 and above"
+                    }
+                },
+                "schools": {
+                    "leadSchool": {
+                        "urn": "137628",
+                        "localAuthority": "Nottinghamshire",
+                        "schoolName": "The Joseph Whitaker School",
+                        "type": "Academy converter",
+                        "status": "Open",
+                        "phase": "Secondary",
+                        "ukprn": "10035689",
+                        "addressLine1": "Warsop Lane",
+                        "addressLine2": "Rainworth",
+                        "town": "Mansfield",
+                        "postcode": "NG21 0AG",
+                        "uuid": "c3d5b7f8-f53a-45a9-bb3e-ba0f72338b1a"
+                    },
+                    "employingSchool": {
+                        "urn": "146331",
+                        "localAuthority": "Nottingham",
+                        "schoolName": "Djanogly Sherwood Academy",
+                        "type": "Academy sponsor led",
+                        "status": "Open",
+                        "phase": "Primary",
+                        "ukprn": "10081109",
+                        "addressLine1": "Sherwood Rise",
+                        "addressLine2": "Sherwood",
+                        "town": "Nottingham",
+                        "postcode": "NG7 7AR",
+                        "uuid": "1e456ad9-b353-4be5-b25d-cddd23799bf2"
+                    }
+                },
+                "degree": {
+                    "items": [
+                        {
+                            "type": "Bachelor of Accountancy",
+                            "subject": "French language",
+                            "isInternational": "false",
+                            "institution": "Plymouth College of Art",
+                            "grade": "First-class honours",
+                            "predicted": true,
+                            "startDate": "2016",
+                            "endDate": "2020",
+                            "id": "4486cc10-3621-4e0f-8542-e375057535a1"
+                        }
+                    ]
+                },
+                "funding": {
+                    "initiative": "Not on a training initiative",
+                    "source": "bursary"
+                },
+                "placement": {
+                    "items": [
+                        {
+                            "school": {
+                                "urn": "138050",
+                                "localAuthority": "West Sussex",
+                                "schoolName": "The Bewbush Academy",
+                                "type": "Academy sponsor led",
+                                "status": "Open",
+                                "phase": "Primary",
+                                "ukprn": "10037078",
+                                "addressLine1": "Dorsten Place",
+                                "addressLine2": "Bewbush",
+                                "town": "Crawley",
+                                "postcode": "RH11 8XW",
+                                "uuid": "7807a60c-30d3-4ea2-a29d-923c14bcdca7"
+                            },
+                            "id": "49da554b-6c92-4d55-bde7-c8739e6fc533"
+                        }
+                    ]
+                },
+                "outcome": {}
             },
             "dateFinished": [
                 "1",
                 "2",
+                "2022"
+            ]
+        },
+        {
+            "recordData": {
+                "academicYear": "2021 to 2022",
+                "diversity": {
+                    "diversityDisclosed": "true",
+                    "ethnicGroup": "Prefer not to say",
+                    "disabledAnswer": "Yes",
+                    "disabilities": [
+                        "Other"
+                    ]
+                },
+                "id": "9fcd2373-0254-468f-8252-6d4f151c9c19",
+                "personalDetails": {
+                    "givenName": "Carl",
+                    "familyName": "Berge",
+                    "middleNames": "Clayton Clifton",
+                    "nationality": [
+                        "British"
+                    ],
+                    "sex": "Male",
+                    "dateOfBirth": "1972-08-25T12:58:09.016Z",
+                    "fullName": "Carl Clayton Clifton Berge",
+                    "shortName": "Carl Berge"
+                },
+                "provider": "Webury Hill SCITT",
+                "accreditingProviderType": "SCITT",
+                "route": "School direct (fee funded)",
+                "status": "Pending TRN",
+                "updatedDate": "2022-03-29T16:29:45.723Z",
+                "submittedDate": "2022-03-21T19:29:36.093Z",
+                "reference": "KL9720",
+                "source": "Apply",
+                "applyData": {
+                    "recruitedDate": "2022-03-21T19:29:36.093Z",
+                    "applicationDate": "2022-03-08T14:30:12.527Z"
+                },
+                "courseDetails": {
+                    "ageRange": "11 to 18",
+                    "code": "H617",
+                    "duration": 1,
+                    "id": "847df604-d0f5-4464-a229-3494593353a7",
+                    "isPublishCourse": true,
+                    "phase": "Secondary",
+                    "qualifications": [
+                        "QTS",
+                        "PGCE"
+                    ],
+                    "qualificationsSummary": "PGCE with QTS full time",
+                    "route": "School direct (fee funded)",
+                    "startDateVague": "2021-11-01T00:00:00.000Z",
+                    "academicYear": "2021 to 2022",
+                    "studyMode": "Full time",
+                    "publishSubjects": {
+                        "first": "Latin"
+                    },
+                    "courseNameShort": "Latin",
+                    "courseNameLong": "Latin (H617)",
+                    "subjects": {
+                        "first": "Latin"
+                    }
+                },
+                "events": {
+                    "items": [
+                        {
+                            "title": "Record imported from Apply",
+                            "user": "Provider",
+                            "date": "2021-11-09T02:17:34.321Z"
+                        },
+                        {
+                            "title": "Trainee submitted for TRN",
+                            "user": "Provider",
+                            "date": "2021-11-09T02:17:34.321Z"
+                        },
+                        {
+                            "title": "Record updated",
+                            "user": "Provider",
+                            "date": "2022-03-29T16:29:45.723Z"
+                        }
+                    ]
+                },
+                "trainingDetails": {
+                    "traineeStarted": "true",
+                    "commencementDate": "2022-03-21T19:29:36.093Z"
+                },
+                "isInternationalTrainee": false,
+                "contactDetails": {
+                    "phoneNumber": "0967 519 7344",
+                    "email": "nadia.will2@yahoo.com",
+                    "address": {
+                        "line1": "780 Blick Run",
+                        "line2": "",
+                        "level2": "North Richmond",
+                        "postcode": "CN57 0IV"
+                    },
+                    "addressType": "domestic"
+                },
+                "gcse": {
+                    "maths": {
+                        "type": "GCSE",
+                        "subject": "Maths",
+                        "gradeBoundary": "4 and above"
+                    },
+                    "english": {
+                        "type": "GCSE",
+                        "subject": "English",
+                        "gradeBoundary": "4 and above"
+                    },
+                    "science": {
+                        "type": "GCSE",
+                        "subject": "Science",
+                        "gradeBoundary": "4 and above"
+                    }
+                },
+                "schools": {
+                    "leadSchool": {
+                        "urn": "137628",
+                        "localAuthority": "Nottinghamshire",
+                        "schoolName": "The Joseph Whitaker School",
+                        "type": "Academy converter",
+                        "status": "Open",
+                        "phase": "Secondary",
+                        "ukprn": "10035689",
+                        "addressLine1": "Warsop Lane",
+                        "addressLine2": "Rainworth",
+                        "town": "Mansfield",
+                        "postcode": "NG21 0AG",
+                        "uuid": "c3d5b7f8-f53a-45a9-bb3e-ba0f72338b1a"
+                    }
+                },
+                "degree": {
+                    "items": [
+                        {
+                            "type": "Bachelor of Accountancy",
+                            "subject": "French language",
+                            "isInternational": "false",
+                            "institution": "Plymouth College of Art",
+                            "grade": "First-class honours",
+                            "predicted": true,
+                            "startDate": "2016",
+                            "endDate": "2020",
+                            "id": "4486cc10-3621-4e0f-8542-e375057535a1"
+                        }
+                    ]
+                },
+                "funding": {
+                    "initiative": "Not on a training initiative",
+                    "source": "bursary"
+                },
+                "placement": {
+                    "items": [
+                        {
+                            "school": {
+                                "urn": "138050",
+                                "localAuthority": "West Sussex",
+                                "schoolName": "The Bewbush Academy",
+                                "type": "Academy sponsor led",
+                                "status": "Open",
+                                "phase": "Primary",
+                                "ukprn": "10037078",
+                                "addressLine1": "Dorsten Place",
+                                "addressLine2": "Bewbush",
+                                "town": "Crawley",
+                                "postcode": "RH11 8XW",
+                                "uuid": "7807a60c-30d3-4ea2-a29d-923c14bcdca7"
+                            },
+                            "id": "49da554b-6c92-4d55-bde7-c8739e6fc533"
+                        }
+                    ]
+                },
+                "outcome": {},
+                "selectedCourseTemp": "847df604-d0f5-4464-a229-3494593353a7"
+            },
+            "dateFinished": [
+                "1",
+                "5",
                 "2022"
             ]
         }
