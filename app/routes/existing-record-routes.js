@@ -642,6 +642,8 @@ module.exports = router => {
 
     let isCourseMove = (record?.temp?.courseMoveTemp?.isCourseMove == "true") ? true : false
 
+    let timelineMessage = (isCourseMove) ? "Traineed moved to new course" : false
+
     if (isCourseMove){
 
       let bundle = {}
@@ -666,7 +668,17 @@ module.exports = router => {
 
     delete record?.temp
 
-    res.redirect(307, `${recordPath}/course-details/update${referrer}`);
+    utils.deleteTempData(data)
+    utils.updateRecord(data, record, timelineMessage)
+    req.flash('success', 'Trainee record updated')
+
+    if (referrer){
+      res.redirect(utils.getReferrerDestination(req.query.referrer))
+    }
+    else {
+      // More likely we've come from this tab where most things are on
+      res.redirect(`/record/${req.params.uuid}`)
+    }
 
   })
 
