@@ -5,24 +5,17 @@
       <span class="govuk-caption-l">{{ data.signedInProviders | andSeparate }}</span>
       {{ pageHeading }}
     </h1>
-    <h2 class="govuk-heading-m">
-      1. Export the pending updates file or change your original file.
-    </h2>
     <p class="govuk-body">
-      <a href="../public/downloads/{{ bulkPath }}-change-pending.csv" 
-         download="{{ fileName }}"
-         class="govuk-link">
-        Export trainee records with pending updates (csv)
-      </a>
+      <a href="/public/downloads/{{ bulkPath }}-with-errors.csv" download="{{ fileName}}">Download your trainee records with a description of the errors (csv)</a> or change your original file.
     </p>
     <h2 class="govuk-heading-m">
-      2. Update your trainee records
+      1. Update your trainee records
     </h2>
     <p class="govuk">
-      Changes you make to this file will overwrite the previous pending changes. For example if you remove a row, changes made to that trainee will be lost.
+      Changes you make to this file will overwrite previous changes. For example, if you remove a row, no changes will be made to the trainee’s record.
     </p>
     <h2 class="govuk-heading-m">
-      3. Upload file
+      2. Upload file
     </h2>
     <form action="/bulk-update/{{ bulkPath }}/check-pending-updates" method="post" novalidate>
       {{ govukFileUpload({
