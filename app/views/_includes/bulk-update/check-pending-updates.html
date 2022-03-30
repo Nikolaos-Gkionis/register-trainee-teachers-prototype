@@ -16,7 +16,21 @@
       captionClasses: tableCaptionClasses,
       head: tableHeadRow,
       rows: tableBodyRows
-    }) }}
+    }) if bulkPath == "add-details" }}
+    {% if bulkPath == "recommend" %}
+      {{ govukTable({
+        caption: qtsTableCaption,
+        captionClasses: tableCaptionClasses,
+        head: tableHeadRow,
+        rows: qtsTableBodyRows
+      }) if qtsTableBodyRows }}
+      {{ govukTable({
+        caption: eytsTableCaption,
+        captionClasses: tableCaptionClasses,
+        head: tableHeadRow,
+        rows: eytsTableBodyRows
+      }) if eytsTableBodyRows }}
+    {% endif %}
   </div>
 </div>
 <div class="govuk-grid-row">
@@ -26,7 +40,7 @@
     </p>
     <form action="/bulk-update/{{ bulkPath }}/confirmation" method="post" novalidate>
         {{ govukButton({
-          text: "Confirm updates to records"
+          text: buttonText
         }) }}
         <p class="govuk-body">
           <a href="/bulk-update/cancel-bulk-changes" class="govuk-link">Cancel bulk updates to records</a>

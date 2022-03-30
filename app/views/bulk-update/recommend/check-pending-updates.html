@@ -17,25 +17,18 @@
       classes: "app-table__column-25"
     },
     {
-      text: "Study mode",
-      classes: "app-table__column-25"
-    },
-    {
-      text: "Teaching standard to be awarded",
+      text: "Postgraduate qualification",
       classes: "app-table__column-25"
     },
     {
       text: "Date standards met",
       classes: "app-table__column-25"
-    },
-    {
-      text: "Postgraduate qualification",
-      classes: "app-table__column-25"
     }
   ]
 %}
 
-{% set tableBodyRows = [] %}
+{% set qtsTableBodyRows = [] %}
+{% set eytsTableBodyRows = [] %}
 
 {% for trainee in traineesThatCanBeRecommended %}
 
@@ -48,17 +41,13 @@
   {% set rowAndCourse %}
     <p class="govuk-body govuk-!-margin-bottom-1">{{ trainee.route }}</p>
     {% if trainee.courseDetails.courseNameLong %}
-      <p class="govuk-body govuk-!-margin-bottom-0">{{ trainee.courseDetails.courseNameShort }}</p>
+      <p class="govuk-body govuk-!-margin-bottom-1">{{ trainee.courseDetails.courseNameShort }}</p>
     {% endif %}
+    <p class="govuk-body govuk-!-margin-bottom-0">
+      {{ trainee.courseDetails.studyMode }}
+    </p>
   {% endset %}
   {% set row = row | push({ text: rowAndCourse | safe }) %}
-
-  {% set row = row | push({ text: trainee.courseDetails.studyMode }) %}
-
-  {% set row = row | push({ text: trainee | getQualificationText }) %}
-
-  {% set standardsMetDate = [range(1, 29) | random | numberOfDigits(2), range(6, 7) | random | numberOfDigits(2), data.years.defaultCourseYear + 1] %}
-  {% set row = row | push({ text: standardsMetDate | govukDate })%}
 
   {% if trainee | isPostgraduate %}
     {% if trainee.route == "Assessment only" %}
@@ -71,17 +60,30 @@
   {% endif %}
   {% set row = row | push({ text: academicAward }) %}
 
-  {% set tableBodyRows = tableBodyRows | push(row) %}
+  {% set standardsMetDate = [range(1, 29) | random | numberOfDigits(2), range(6, 7) | random | numberOfDigits(2), data.years.defaultCourseYear + 1] %}
+  {% set row = row | push({ text: standardsMetDate | govukDate })%}
+
+
+  {% if trainee | getQualificationText == "QTS" %}
+    {% set qtsTableBodyRows = qtsTableBodyRows | push(row) %}
+  {% else %}
+    {% set eytsTableBodyRows = eytsTableBodyRows | push(row) %}
+  {% endif %}
 
 {% endfor %}
 
+{% set updatedTrainees = qtsTableBodyRows.length + eytsTableBodyRows.length %}
+
 {# These counts are used by include "_includes/bulk-update/upload-summary.html  #}
 {% set errorCount = 0 %}
-{% set unchangedCount = traineesThatCanBeUpdated.length - tableBodyRows.length %}
-{% set updatedCount = tableBodyRows.length %}
+{% set unchangedCount = traineesThatCanBeRecommended.length - tableBodyRows.length %}
+{% set updatedCount = updatedTrainees %}
 
-{% set tableCaption = "Pending updates to trainee records (" + tableBodyRows.length + ")" %}
+{% set qtsTableCaption  = "Trainees to be recommended for QTS (" + qtsTableBodyRows.length + ")" %}
+{% set eytsTableCaption = "Trainees to be recommended for EYTS (" + eytsTableBodyRows.length + ")" %}
 {% set tableCaptionClasses = "govuk-table__caption--m" %}
+
+{% set buttonText = "Recommend trainees for " + traineesThatCanBeRecommended | getQualifications | orSeparate %}
 
 {% set bulkPath = "recommend" %}
 
