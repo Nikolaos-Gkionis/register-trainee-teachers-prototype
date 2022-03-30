@@ -1,10 +1,11 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Check pending updates to trainee records" %}
-{% set navActive = 'bulk' %}
-
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
+
+{% set pageHeading = "Check pending updates before recommending trainees for " + traineesThatCanBeRecommended | getQualifications | orSeparate %}
+{% set navActive = 'bulk' %}
+
 
 {% set tableHeadRow = [
     {
@@ -20,7 +21,7 @@
       classes: "app-table__column-25"
     },
     {
-      text: "Teacher standard",
+      text: "Teaching standard to be awarded",
       classes: "app-table__column-25"
     },
     {
@@ -60,7 +61,7 @@
   {% set row = row | push({ text: standardsMetDate | govukDate })%}
 
   {% if trainee | isPostgraduate %}
-    {% if trainee.route == "Assessment Only" %}
+    {% if trainee.route == "Assessment only" %}
       {% set academicAward = "—" %}
     {% else %}
       {% set academicAward = ["PGCE", "PGDE", "None"] | random %}
