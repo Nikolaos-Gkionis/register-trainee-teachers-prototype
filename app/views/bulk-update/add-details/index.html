@@ -71,7 +71,7 @@
           You can find the URNs using <a href="https://www.get-information-schools.service.gov.uk/Search" class="govuk-link">Get information about schools</a>.
         </p>
         <p class="govuk-body">
-          You cannot add information in bulk if the school or setting does not have a URN, add those placements to the trainee record manually.
+          You cannot add information in bulk if the school or setting does not have a URN. Add those placements to the trainee record manually.
         </p>
         <p class="govuk-body">
           If the trainee did more than {{ data.settings.minPlacementsRequired }} placements, add those extra placements to the trainee record manually.
@@ -92,6 +92,9 @@
           },
           label: {
             text: "Upload a file"
+          },
+          attributes: {
+            "accept": ".csv"
           }
         }) }}
         {{ govukButton({
