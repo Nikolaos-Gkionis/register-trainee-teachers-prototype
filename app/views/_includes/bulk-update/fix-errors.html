@@ -11,7 +11,7 @@
       1. Fix the errors
     </h2>
     <p class="govuk-body">
-      Changes you make to this file will overwrite previous changes. For example, if you remove a row, changes made to that trainee will be lost.
+      Changes you make to this file will overwrite previous changes. For example, if you remove a row, no changes will be made to the trainee’s record.
     </p>
   </div>
 </div>
@@ -41,6 +41,9 @@
         },
         label: {
           text: "Upload a file"
+        },
+        attributes: {
+          "accept": ".csv"
         }
       }) }}
       {{ govukButton({

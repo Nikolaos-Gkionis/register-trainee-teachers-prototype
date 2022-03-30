@@ -1,7 +1,7 @@
 {% extends "_templates/_page.html" %}
 {% set navActive = 'bulk' %}
 
-{% set pageHeading = "Fix the errors in your trainee records" %}
+{% set pageHeading = "Fix errors in your trainee records" %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}

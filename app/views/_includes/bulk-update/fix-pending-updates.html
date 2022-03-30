@@ -6,7 +6,7 @@
       {{ pageHeading }}
     </h1>
     <h2 class="govuk-heading-m">
-      1. Export the pending updates file
+      1. Export the pending updates file or change your original file.
     </h2>
     <p class="govuk-body">
       <a href="../public/downloads/{{ bulkPath }}-change-pending.csv" 
@@ -33,6 +33,9 @@
         },
         label: {
           text: "Upload a file"
+        },
+        attributes: {
+          "accept": ".csv"
         }
       }) }}
       {{ govukButton({
