@@ -1,9 +1,9 @@
 TRN,Date standards met,Postgraduate qualification
-Do not change this column,"When the trainee started their ITT.
-Must be written DD-MM-YYYY. 
-For example, if the trainee started their ITT on 20 September 2022, write '20-09-2022'.
+Do not change this column,"When the trainee met the QTS or EYTS standards.
+Must be written DD/MM/YYYY. 
+For example, if the trainee met the teaching standard on 20 August 2022, write '20-08-2022'.
 The date must be in the past.
-If you do not know the trainee’s ITT start date, leave the cell empty.","For postgraduate trainees, in the column ‘Postgraduate qualification’ add one of these options:
+If the trainee has not met the teaching standard, leave the cell empty.","For postgraduate trainees, in the column ‘Postgraduate qualification’ add one of these options:
 - PCGE
 - PGDE
 - None
