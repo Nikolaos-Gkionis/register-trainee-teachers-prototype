@@ -49,6 +49,17 @@
   } if canAmend
 } %}
 
+{# Shown if trainee has been on a previous course - this is the date they started the latest course #}
+{% set dateMovedRow = {
+  key: {
+    text: "Date moved to this course"
+  },
+  value: {
+    html: (record.historicCourseDetails | last).dateFinished | govukDate or 'Not provided',
+    classes: "govuk-hint"
+  }
+} if record.historicCourseDetails %}
+
 {# For use in course move flow #}
 {% set previousRecord = data.records | getRecordById(record.id) %}
 {% set previousCourseRow = {
@@ -263,7 +274,8 @@
     studyModeRow,
     startDateRow,
     endDateRow,
-    courseMoveRow if showCourseMoveRow
+    courseMoveRow if showCourseMoveRow,
+    dateMovedRow if showDateMovedRow
   ] %}
 
 {% else %}
@@ -277,7 +289,8 @@
     apprenticeshipStartDateRow,
     startDateRow,
     endDateRow,
-    courseMoveRow if showCourseMoveRow
+    courseMoveRow if showCourseMoveRow,
+    dateMovedRow if showDateMovedRow
   ] %}
 
 {% endif %}
