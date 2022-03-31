@@ -1,19 +1,20 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Review updates to trainee records" %}
 {% set navActive = 'bulk' %}
+{% set backLink = 'false' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
 
 {% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
+{% set pageHeading = traineesThatCanBeUpdated | length  + " trainee records updated" %}
 
 {% block content %}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds-from-desktop">
       {{ govukPanel({
-        titleText: traineesThatCanBeUpdated | length  + " trainee records updated",
+        titleText: pageHeading,
         classes: "govuk-!-margin-bottom-7"
       }) }}
 

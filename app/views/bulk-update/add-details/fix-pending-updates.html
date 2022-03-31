@@ -1,13 +1,14 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Make changes to your pending updates" %}
+{% set pageContent = "makeChanges" %}
+{% set pageHeading = "Change your pending updates" %}
 {% set navActive = 'bulk' %}
 
 {% set bulkPath = "add-details" %}
 
 {% block content %}
 
-  {% include "_includes/bulk-update/fix-pending-updates.html" %}
+  {% include "_includes/bulk-update/fix-file.html" %}
 
 {% endblock %}
 

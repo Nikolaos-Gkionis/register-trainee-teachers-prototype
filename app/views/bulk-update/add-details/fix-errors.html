@@ -1,7 +1,8 @@
 {% extends "_templates/_page.html" %}
 {% set navActive = 'bulk' %}
 
-{% set pageHeading = "Fix errors in your trainee records" %}
+{% set pageContent = "fixErrors" %}
+{% set pageHeading = "Fix errors in your pending updates" %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeUpdated = filteredRecords | filterByCanBulkUpdate %}
@@ -116,6 +117,6 @@
 
 {% block content %}
 
-  {% include "_includes/bulk-update/fix-errors.html" %}
+  {% include "_includes/bulk-update/fix-file.html" %}
 
 {% endblock %}

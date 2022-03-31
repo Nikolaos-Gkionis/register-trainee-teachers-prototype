@@ -1,6 +1,7 @@
 {% extends "_templates/_page.html" %}
 
-{% set pageHeading = "Fix errors in your trainee records" %}
+{% set pageContent = "fixErrors" %}
+{% set pageHeading = "Fix errors in your pending updates" %}
 {% set navActive = 'bulk' %}
 
 {% set fileName = data.signedInProviders | makeFileName("fix errors","csv") %}
@@ -38,7 +39,7 @@
       'Date standards met: ‘07/20/2023’, enter a valid start date',
       'Date standards met: ‘20/07/2023’, trainee start date must be in the past',
       'Postgraduate qualification: ‘BA (Hons)’, enter ‘PGCE’, ‘PGDE’ or ‘None’ for postgraduate qualification',
-      'Postgraduate qualification: ‘PCGE’, trainees on undergraduate courses cannot be awarded a postgraduate qualification.',
+      'Postgraduate qualification: ‘PGCE’, trainees on undergraduate courses cannot be awarded a postgraduate qualification.',
       'Postgraduate qualification missing. If the trainee did not get a postgraduate qualification enter ‘None’.'
       ] | random
     %}
@@ -83,6 +84,6 @@
   ]
 %}
 
-  {% include "_includes/bulk-update/fix-errors.html" %}
+  {% include "_includes/bulk-update/fix-file.html" %}
 
 {% endblock %}

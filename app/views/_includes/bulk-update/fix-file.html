@@ -5,17 +5,17 @@
       {{ pageHeading }}
     </h1>
     <p class="govuk-body">
-      <a href="/public/downloads/{{ bulkPath }}-with-errors.csv" download="{{ fileName}}">Download your trainee records with a description of the errors (csv)</a> or change your original file.
+      <a href="/public/downloads/{{ bulkPath }}{{ "-with-errors" if pageContent == "fixErrors" }}.csv" download="{{ fileName}}">Download your trainee records {{ "with a description of the errors" if pageContent == "fixErrors" }} (csv)</a> or update your original file.
     </p>
     <h2 class="govuk-heading-m">
-      1. Fix the errors
+      1. {{ "Fix the errors" if pageContent == "fixErrors" else "Update your trainee records" }}
     </h2>
     <p class="govuk-body">
-      Changes you make to this file will overwrite previous changes. For example, if you remove a row, no changes will be made to the trainee’s record.
+      Changes you make to this file will overwrite previous updates. For example, if you remove a row, no updates will be made to the trainee’s record.
     </p>
   </div>
 </div>
-
+{% if pageContent == "fixErrors" %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     {{ govukTable({
@@ -26,13 +26,13 @@
     }) }}
   </div>
 </div>
-
+{% endif %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds-from-desktop">
     <h2 class="govuk-heading-m">
       2. Upload file
     </h2>
-    <form action="/bulk-update/{{ bulkPath }}/check-pending-updates" method="post" novalidate>
+    <form action="/bulk-update/{{ bulkPath }}/fix-file" method="post" novalidate>
       {{ govukFileUpload({
         id: "file-upload-1",
         name: "file-upload-1",
@@ -52,11 +52,15 @@
     </form>
     <p class="govuk-body">
       <a href="/bulk-update/{{ bulkPath }}/no-update" class="govuk-link">
-        Skip fixing errors and review pending updates to trainee records
+        {% if pageContent == "fixErrors" %}
+          Skip fixing errors and review pending updates to trainee records
+        {% else %}
+          Return to pending updates without making a change
+        {% endif %}
       </a>
     </p>
     <p class="govuk-body">
-      <a href="/bulk-update/cancel-bulk-changes" class="govuk-link">Cancel bulk changes to records</a>
+      <a href="/bulk-update/cancel-bulk-updates" class="govuk-link">Cancel bulk updates to records</a>
     </p>
   </div>
 </div>

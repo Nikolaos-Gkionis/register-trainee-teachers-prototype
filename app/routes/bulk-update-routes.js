@@ -26,6 +26,15 @@ module.exports = router => {
     }
   });
 
+  /* Set-up check updates page up as coming from upload */
+  router.get('/bulk-update/add-details/fix-file', function(req, res) {
+    const data = req.session.data
+    data.bulk = {
+      addDetailsFixErrors: true,
+    }
+    res.redirect('/bulk-update/add-details/check-pending-updates');
+  });
+
   /* Clear review errors answer */
   router.get('/bulk-update/add-details/no-update', function(req, res) {
     const data = req.session.data
@@ -51,6 +60,15 @@ module.exports = router => {
     } else {
       res.redirect('/bulk-update/recommend/errors-found');
     }
+  });
+
+  /* Set-up check updates page up as coming from upload */
+  router.get('/bulk-update/recommend/fix-file', function(req, res) {
+    const data = req.session.data
+    data.bulk = {
+      recommendFixErrors: true,
+    }
+    res.redirect('/bulk-update/recommend/check-pending-updates');
   });
 
   /* Clear review errors answer */

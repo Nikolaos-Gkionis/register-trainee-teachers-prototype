@@ -34,7 +34,7 @@
         2. Add details of the trainees outcome
       </h2>
       <p class="govuk-body">
-        Open ‘{{ fileName }}’ in <span class="app-nowrap">spreadsheet software</span> (for example, <span class="app-nowrap">Microsoft Excel</span>) and add when the trainee met {{ traineesThatCanBeRecommended | getQualifications | orSeparate }} {{ "and their postgraduate academic qualification" if needAcademicAward | filterByPostgraduate }}.
+        Open ‘ <span class="govuk-!-font-weight-bold">{{ fileName }}</span>’ in <span class="app-nowrap">spreadsheet software</span> (for example, <span class="app-nowrap">Microsoft Excel</span>) and add when the trainee met {{ traineesThatCanBeRecommended | getQualifications | orSeparate }} {{ "and their postgraduate academic qualification" if needAcademicAward | filterByPostgraduate }}.
       </p>
       <p class="govuk-body">
         You can leave rows or cells empty if you do not want to recommend the trainees for {{ traineesThatCanBeRecommended | getQualifications | orSeparate }}.
@@ -64,12 +64,12 @@
           options:
         </p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>PCGE</li>
+          <li>PGCE</li>
           <li>PGDE</li>
           <li>None</li>
         </ul>
         <p class="govuk-body">
-          If the trainee was not on a postgraduate course, leave the cell as ‘Not applicable’.
+          If the trainee was not on a postgraduate course, leave the cell as <span class="app-nowrap">‘Not applicable’</span>.
         </p>
       {% endif %}
 

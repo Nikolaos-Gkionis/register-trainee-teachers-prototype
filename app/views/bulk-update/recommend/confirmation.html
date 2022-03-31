@@ -1,6 +1,7 @@
 {% extends "_templates/_page.html" %}
 
 {% set navActive = 'bulk' %}
+{% set backLink = 'false' %}
 
 {% set filteredRecords = data.records | filterRecords(data) %}
 {% set traineesThatCanBeRecommended = filteredRecords | filterByCanBeRecommended %}
