@@ -1396,7 +1396,7 @@ exports.traineeStarted = (record) => {
 
 // Look up a record using it’s UUID
 exports.getRecordById = (records, id) => {
-  return records.find(record => record.id == id)
+  return (records) ? records.find(record => record.id == id) : false
 }
 
 // Look up several records using UUID
