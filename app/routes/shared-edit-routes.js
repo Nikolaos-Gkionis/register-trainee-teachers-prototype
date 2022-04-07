@@ -12,6 +12,18 @@ const getSchools = () => {
 
 module.exports = router => {
 
+  // Hacky solution to manually import a record to draft state
+  // Useful for testing bugs so we can quickly restore a state
+  router.get('/record-direct-add', (req, res) => {
+    const data = req.session.data
+
+    utils.deleteTempData(data)
+    let record = require('./../data/direct-add-record.json')
+    data.records.push(record)
+    // utils.updateRecord(data, record)
+    res.redirect(`/record/${record.id}`)
+  })
+
   // Load up data for a record
   // This implimentation makes a copy of the record and stores it in a temporary location
   // any edits happen on this temporary data - depending on the journey, some routes may then
@@ -393,7 +405,7 @@ module.exports = router => {
 
   })
 
-    // Decide whether to go down Publish pick-course journey or directly to manual course details
+  // Interpret which year we're looking for
   router.post(['/:recordtype/:uuid/course-details/course-year-answer','/:recordtype/course-details/course-year-answer'], function (req, res) {
     const data = req.session.data
     const record = data.record
@@ -441,7 +453,7 @@ module.exports = router => {
 
   })
 
-    // Decide whether to go down Publish pick-course journey or directly to manual course details
+  // Render publish courses for a specific year
   router.get(['/:recordtype/:uuid/course-details/pick-course/:courseStartYear','/:recordtype/course-details/pick-course/:courseStartYear'], function (req, res) {
     const data = req.session.data
     const record = data.record
@@ -478,7 +490,6 @@ module.exports = router => {
     }
 
   })
-
 
   // =============================================================================
   // Course details - Apply
@@ -609,7 +620,7 @@ module.exports = router => {
           // particular course we ask if the dates they add for that trainee should be saved back to
           // the course - if so we’ll now have them and can apply them to future trainees on that
           // course and study mode.
-          record.courseDetails = utils.setCourseDatesIfPresent(courseDetails)
+          record.courseDetails = utils.setCourseDatesIfPresent(record.courseDetails)
 
           if (utils.isDraft(record)){
             record = utils.setAcademicYear(record)
@@ -758,7 +769,8 @@ module.exports = router => {
   // =============================================================================
 
   // Picking a phase (Primary or Secondary education)
-  router.post(['/:recordtype/:uuid/course-details/phase','/:recordtype/course-details/phase'], function (req, res) {
+  // Mostly doing cleanup of data
+  router.post(['/:recordtype/:uuid/course-details/phase-answer','/:recordtype/course-details/phase-answer'], function (req, res) {
     const data = req.session.data
     let record = data.record
     let recordPath = utils.getRecordPath(req)
@@ -840,66 +852,8 @@ module.exports = router => {
     }
     else {
       res.redirect(`${recordPath}/course-details/confirm${referrer}`)
+
     }
-
-  })
-
-  // Work out if course details have changed significantly and so we need to have the user
-  // check the school and funding sections
-  router.post('/:recordtype/:uuid/course-details/course-change-check', function (req, res) {
-    let data = req.session.data
-    let record = data.record
-    let referrer = utils.getReferrer(req.query.referrer)
-    let recordPath = utils.getRecordPath(req)
-
-    let previousRecord = utils.getRecordById(data.records, record.id)
-
-    let routeChanged = (previousRecord?.route != record?.route)
-
-    let firstSubject = record?.courseDetails?.subjects?.first
-    let previousFirstSubject = previousRecord?.courseDetails?.subjects?.first
-    let firstSubjectChanged = !Boolean(firstSubject) || (previousFirstSubject !== firstSubject)
-
-    // Clear out school data if schools no longer needed
-    if (!utils.requiresSection(record, "degree")){
-      delete record?.degree
-    }
-    if (!utils.requiresSection(record, "schools")){
-      delete record?.schools
-    }
-    if (!utils.requiresField(record, "leadSchool")){
-      delete record?.schools?.leadSchool
-    }
-    if (!utils.requiresField(record, "employingSchool")){
-      delete record?.schools?.employingSchool
-    }
-
-    // If the route or first subject has changed, that's a significant change and providers
-    // should review the rest of the training details
-    if (routeChanged || firstSubjectChanged){
-
-      // Don’t trust financial incentives after a significant change - better to
-      // collect again.
-      delete record?.funding?.source
-
-      res.redirect(`${recordPath}/course-details/course-change-instructions${referrer}`)
-    }
-    else {
-      res.redirect(307, `${recordPath}/course-details/update${referrer}`);
-    }
-  })
-
-  router.get(['/:recordtype/:uuid/course-details/get-next-course-change-url','/:recordtype/course-details/get-next-course-change-url'], function (req, res) {
-    const data = req.session.data
-    let record = data.record
-    let recordPath = utils.getRecordPath(req)
-
-    // Unlike most pages, here we want to insert a new referrer in the query string
-    let reviewCourseChangeUrl = `${recordPath}/course-details/final-check-course-change`
-    let referrerArray = utils.pushReferrer(req.query.referrer, reviewCourseChangeUrl)
-    let referrer = utils.getReferrer(referrerArray)
-
-    res.redirect(utils.getNextCourseChangeUrl(record, recordPath, referrer))
 
   })
 

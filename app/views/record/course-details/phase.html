@@ -2,7 +2,7 @@
 
 {% set pageHeading = "Which phase of education will the trainee teach?" %}  
 
-{# {% set formAction = "./course-details/details" %} #}
+{% set formAction = "./phase-answer" | addReferrer(referrer) %}
 
 {% block formContent %}
   {% include "_includes/forms/course-details/phase.html" %}

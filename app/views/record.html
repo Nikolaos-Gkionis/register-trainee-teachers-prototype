@@ -70,7 +70,13 @@
     {% include "_includes/summary-cards/trainee-progress.html" %}
 
     <h2 class="govuk-heading-s">Course details</h2>
+    {# {% set showCourseChangeOption = true %} #}
+    {% set showDateMovedRow = true %}
     {% include "_includes/summary-cards/course-details.html" %}
+
+    {% if record.historicCourseDetails %}
+      <p class="govuk-body"><a href="{{recordPath}}/previous-course-details" class="govuk-link">View details of previous courses this trainee has been on</a></p>
+    {% endif %}
 
     {% if record | requiresSection("schools") %}
       <h2 class="govuk-heading-s">Schools</h2>

@@ -99,6 +99,19 @@
           ]
         } | decorateAttributes(data, "data.directSet.mergeJson")) }}
 
+        {{ govukCheckboxes({
+          items: [
+            {
+              value: 'true',
+              text: "Update trainee record" if data.record.id else "Update trainee record (no record to update)",
+              disabled: true if not data.record.id,
+              hint: {
+                text: "Will write changes in data.record back to data.records"
+              }
+            }
+          ]
+        } | decorateAttributes(data, "data.directSet.updateRecord")) }}
+
         <input name="successFlash" type="hidden" value="Data set">
 
         {{ govukButton({

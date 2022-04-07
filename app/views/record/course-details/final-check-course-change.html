@@ -9,7 +9,7 @@
 
 {% set gridColumn = 'govuk-grid-column-full' %}
 
-{% set formAction = "./update" | addReferrer("/record/" + data.record.id) %}
+{% set formAction = "./final-check-course-change-answer" | addReferrer("/record/" + data.record.id) %}
 
 {% set returnLink = {
   href: "./cancel-course-change" | addReferrer(referrer),
@@ -30,7 +30,12 @@
 
   {# Use minimal summary to provide a way to change, but not promote the full course #}
   {% set minimalPublishSummary = true %}
-  {# {% set showPreviousCourse = true %} #}
+
+  {% set showCourseMoveRow = true %}
+  {% if record.temp.courseMoveTemp.isCourseMove | falsify %}
+    {% set showPreviousCourse = true %}
+  {% endif %}
+
   {% include "_includes/summary-cards/course-details.html" %}
 
   {# Only show the degree section if they’ve changed from a course that didn't need degrees

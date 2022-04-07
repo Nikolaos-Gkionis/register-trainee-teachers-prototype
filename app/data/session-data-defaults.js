@@ -144,6 +144,8 @@ settings.draftsInPrimaryNav = 'true'
 // Start date is required when registering trainees
 settings.requireTraineeStartDate = 'true'
 
+settings.skipCourseDatesPage = 'true'
+
 // Default number of Publish courses that the provider offers
 settings.courseLimit = 12
 
