@@ -42,6 +42,9 @@
 {% set recordPath = "/record/" + record.id %}
 
 {% block content %}
+
+  {{ record | log(record | getShortName or 'Record') }}
+
   {% include "_includes/app-flash-message.html" %}
 
   {% block beforePageTitle %}{% endblock %}
