@@ -3,11 +3,6 @@ const weighted = require('weighted')
 
 module.exports = () => {
 
-  // Equality and diversity
-  const diversityQuestionnaireAnswered=faker.helpers.randomize(["true", "true", "false"])
-
-  let diversityQuestionnaire
-
   let ethnicGroup
   let ethnicGroupSpecific
   let disabledAnswer
@@ -49,8 +44,6 @@ module.exports = () => {
     ]
   }
 
-  if (diversityQuestionnaireAnswered == "true"){
-
     ethnicGroup = faker.helpers.randomize([
       "Asian or Asian British",
       "Black, African, Black British or Caribbean",
@@ -66,7 +59,10 @@ module.exports = () => {
         )
     }
 
-    disabledAnswer = faker.helpers.randomize(["Yes", "No", "Not provided"])
+    disabledAnswer = faker.helpers.randomize([
+      "They shared that they’re disabled",
+      "They shared that they’re not disabled",
+      "Not provided"])
 
     disabilityCount = faker.datatype.number(1, 3); // up to 3 disabilities
 
@@ -82,16 +78,12 @@ module.exports = () => {
     ]
     let shuffledDisabilities = disabilityChoices.sort(() => 0.5 - Math.random());
 
-    if ((disabledAnswer=="Yes") && disabilityCount){
+    if ((disabledAnswer=="They shared that they’re disabled") && disabilityCount){
       disabilities = shuffledDisabilities.slice(0, disabilityCount).sort();
     }
 
-  }
-
 
   return {
-    // nationality,
-    diversityDisclosed: diversityQuestionnaireAnswered,
     ethnicGroup,
     ethnicGroupSpecific,
     disabledAnswer,

@@ -1,27 +1,4 @@
 
-{% set diversityInformationDisclosed = (record.diversity.diversityDisclosed | falsify) %}
-{% set diversityDisclosedText = 'Information shared' if diversityInformationDisclosed else 'Not shared' %}
-
-{% set diversityRows = [
-  {
-    key: {
-      text: "Diversity information"
-    },
-    value: {
-      text: diversityDisclosedText
-    },
-    actions: {
-      items: [
-        {
-          href: recordPath + "/diversity/information-disclosed" | addReferrer(referrer),
-          text: "Change",
-          visuallyHiddenText: "diversity disclosed"
-        }
-      ]
-    } if canAmend
-  }
-  ] %}
-
 {% set ethnicGroup = record.diversity.ethnicGroup %}
 {% set ethnicBackground = record.diversity.ethnicBackground %}
 {% set ethnicBackgroundOther = record.diversity.ethnicBackgroundOther %}
@@ -56,10 +33,6 @@
     ]
   } if canAmend
 } %}
-
-{% if diversityInformationDisclosed and ethnicGroup %}
-  {% set diversityRows = diversityRows | push(ethnicGroupRow) %}
-{% endif %}
 
 {% set hasDisabilities = true if record.diversity.disabledAnswer == "They shared that they’re disabled" %}
 
@@ -113,9 +86,11 @@
     } if canAmend
   } %}
 
-{% if diversityInformationDisclosed %}
-  {% set diversityRows = diversityRows | push(disabilitiesAnswerRow) %}
-{% endif %}
+
+{% set diversityRows = [
+    ethnicGroupRow,
+    disabilitiesAnswerRow
+  ] %}
 
 {% set diversityHtml %}
   {{ govukSummaryList({
@@ -147,7 +122,7 @@
     {% set incompleteLinkText = "Continue section" %}
   {% else %}
     {% set incompleteText = "Diversity information not started" %}
-    {% set incompleteLink = recordPath + "/diversity/information-disclosed" %}
+    {% set incompleteLink = recordPath + "/diversity/ethnic-group" %}
     {% set incompleteLinkText = "Start section" %}
   {% endif %}
 
