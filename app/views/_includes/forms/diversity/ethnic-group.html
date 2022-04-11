@@ -1,5 +1,7 @@
 {% include "_includes/trainee-name-caption.njk" %}
 
+{% set showEthnicGroupHint = false %}
+
 {{ govukRadios({
     fieldset: {
       legend: {
@@ -8,50 +10,36 @@
         classes: "govuk-fieldset__legend--l"
       }
     },
-    items: [{
-      text: "Asian or Asian British",
-      label: {
-        classes: "govuk-label--s"
-      },
-      hint: {
-        text: "(includes any Asian background, for example, Bangladeshi, Chinese, Indian, Pakistani)"
-      }
-    },
+    items: [
     {
-      text: "Black, African, Black British or Caribbean",
-      label: {
-        classes: "govuk-label--s"
-      },
+      text: "White",
       hint: {
-        text: "(includes any Black background)"
-      }
+        text: "Includes any White background"
+      } if showEthnicGroupHint
     },
     {
       text: "Mixed or multiple ethnic groups",
-      label: {
-        classes: "govuk-label--s"
-      },
       hint: {
-        text: "(includes any Mixed background)"
-      }
+        text: "Includes any Mixed background"
+      } if showEthnicGroupHint
     },
     {
-      text: "White",
-      label: {
-        classes: "govuk-label--s"
-      },
+      text: "Asian or Asian British",
       hint: {
-        text: "(includes any White background)"
-      }
+        text: "Includes any Asian background, for example, Bangladeshi, Chinese, Indian, Pakistani"
+      } if showEthnicGroupHint
     },
     {
-      text: "Another ethnic group",
-      label: {
-        classes: "govuk-label--s"
-      },
+      text: "Black, African, Black British or Caribbean",
       hint: {
-        text: "(includes any other ethnic group, for example, Arab)"
-      }
+        text: "Includes any Black background"
+      } if showEthnicGroupHint
+    },
+    {
+      text: "Other ethnic group",
+      hint: {
+        text: "Includes any other ethnic group, for example, Arab"
+      } if showEthnicGroupHint
     },
     {
       divider: "or"
