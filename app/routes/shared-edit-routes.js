@@ -861,29 +861,6 @@ module.exports = router => {
   // Diversity section
   // =============================================================================
 
-  // Diversity branching
-  router.post(['/:recordtype/:uuid/diversity/information-disclosed','/:recordtype/diversity/information-disclosed'], function (req, res) {
-    const data = req.session.data
-    let record = data.record // copy record
-    let diversityDisclosed = _.get(data, 'record.diversity.diversityDisclosed')
-    let referrer = utils.getReferrer(req.query.referrer)
-    let recordPath = utils.getRecordPath(req)
-
-    // No data, return to page
-    if (!diversityDisclosed){
-      res.redirect(`${recordPath}/diversity/information-disclosed${referrer}`)
-    }
-    else if (diversityDisclosed == true || diversityDisclosed == "true"){
-      res.redirect(`${recordPath}/diversity/ethnic-group${referrer}`)
-    }
-    else {
-      if (utils.isDraft(record) && utils.sourceIsApply(record)){
-        res.redirect(utils.orReferrer(`${recordPath}/overview`, req.query.referrer))
-      }
-      else res.redirect(`${recordPath}/diversity/confirm${referrer}`)
-    }
-  })
-
   // Ethnic group branching
   router.post(['/:recordtype/:uuid/diversity/ethnic-group','/:recordtype/diversity/ethnic-group'], function (req, res) {
     let data = req.session.data

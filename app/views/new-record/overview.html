@@ -50,7 +50,7 @@
   } if record | requiresSection("contactDetails"),
   {
     text: "Diversity information",
-    href: "diversity/information-disclosed" | reviewIfInProgress(record.diversity, 'diversity'),
+    href: "diversity/ethnic-group" | reviewIfInProgress(record.diversity, 'diversity'),
     id: "diversity",
     tag: {
       classes: record.diversity | getStatusText | getStatusClass,
