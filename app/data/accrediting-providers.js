@@ -311,7 +311,7 @@ const permanentAccreditingProviders = [
 const higherEducationInstitutions = [
   "University of Lincoln",
   // "Durham University",
-  "Coventry University",
+  "King’s Oak University",
   // "Imperial College London"
 ]
 
