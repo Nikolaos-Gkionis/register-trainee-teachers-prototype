@@ -112,7 +112,7 @@ const getSecondarySubjects = (subjectCount) => {
   let randomisedSecondarySubjects = faker.helpers.shuffle(ittSubjects.commonSecondarySubjects)
   let randomisedScienceSubjects = faker.helpers.shuffle(['Physics', 'Chemistry', 'Biology'])
 
-  // PE is one of these two
+  // PE is one of these three
   let randomPeSubject = faker.helpers.randomize(peSubjects)
 
   // Bias slightly towards specific subjects but have some random
@@ -121,7 +121,6 @@ const getSecondarySubjects = (subjectCount) => {
     subjects = faker.helpers.randomize([
       faker.helpers.randomize(ittSubjects.coreSubjects),
       faker.helpers.randomize(ittSubjects.commonSecondarySubjects),
-      // "Physical education"  // included to test allocations
     ])
   }
 
@@ -186,7 +185,6 @@ const getSecondaryPublishSubjects = (subjectCount) => {
       "Modern languages",
       randomisedLanguages.slice(0,1), // One language
       "Latin",
-      "Ancient languages",
       "Design and technology", // good example with lots of specialisms
       "Physical education" // common example that should be a specialism
     ])
