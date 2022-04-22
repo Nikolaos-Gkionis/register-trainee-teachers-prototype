@@ -41,11 +41,8 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
           subjects.second = "English studies"
           break
         case "Primary with physical education":
-          if (pickRandom){
-            subjects.second = "Sport and exercise sciences"
-            courseDetails.publishSubjects.second = "Physical education"
-          }
-          else subjects.second = null
+          subjects.second = "Physical education"
+          courseDetails.publishSubjects.second = "Physical education"
           break
         case "Primary with science":
           subjects.second = "General sciences"
@@ -60,11 +57,8 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
           subjects.first = "Specialist teaching (primary with mathematics)"
           break
         case "Primary with modern languages":
-          if (pickRandom) {
-            subjects.second = randomLanguage
-            courseDetails.publishSubjects.second = "Modern languages"
-          }
-          else subjects.second = null
+          subjects.second = randomLanguage
+          courseDetails.publishSubjects.second = "Modern languages"
           break
       }
       
@@ -73,14 +67,13 @@ const setSubjectSpecialisms = (courseDetails, pickRandom) => {
     }
     else {
 
-      
       // Some publish subjects unambiguously map to a specialism
       // if so, set it directly
       if (publishSubjects[theSubject].specialism) {
         courseDetails.subjects[ordinal] = publishSubjects[theSubject].specialism
       }
-      // Where the publish subject doesn't unambiguously map to a specialism,
-      // then pick a random specialism
+      // Where the publish subject doesn’t unambiguously map to a specialism,
+      // then pick a random specialism to simulate the user having picked one.
       else if (pickRandom) {
         let randomisedSubjects = faker.helpers.shuffle(publishSubjects[theSubject].subjectSpecialisms)
         courseDetails.subjects[ordinal] = randomisedSubjects[0]

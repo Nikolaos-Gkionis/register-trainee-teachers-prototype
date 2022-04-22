@@ -47,7 +47,7 @@ const upcaseFirstChar = input => {
 let subjectSpecialismsCsv = 
 `Subect specialism (Register reworded),EBacc Subject,Allocation Subject - (Register reworded)
 product design,No,Art and design
-creative arts and design,No,Art and design
+art and design,No,Art and design
 applied biology,Yes,Biology
 biology,Yes,Biology
 environmental sciences,No,Biology
@@ -100,7 +100,7 @@ primary teaching,No,Primary
 psychology,No,Other subjects
 religious studies,No,Religious education
 Russian languages,Yes,Modern languages
-general sciences,Yes,Biology
+general sciences,Yes,General sciences
 social sciences,No,Other subjects
 Spanish language,Yes,Modern languages
 public services,No,Other subjects
@@ -169,15 +169,14 @@ let allocationSubjectsArray = [... new Set(subjectsObjectArray.map(specialism =>
 // {
 //   'Art and design': {
 //     name: 'Art and design',
-//     subjectSpecialisms: [ 'Graphic design', 'Creative arts and design' ]
+//     subjectSpecialisms: [ 'Graphic design', 'Art and design' ]
 //   },
 //   Biology: {
 //     name: 'Biology',
 //     subjectSpecialisms: [
 //       'Applied biology',
 //       'Biology',
-//       'Environmental sciences',
-//       'General sciences'
+//       'Environmental sciences'
 //     ]
 //   },
 //   'Business studies': {
@@ -226,7 +225,7 @@ commonPrimarySubjects = upcaseFirstChar([
 
 // Todo: are these needed any more? should use publish list
 commonSecondarySubjects = upcaseFirstChar([
-  "creative arts and design",
+  "art and design",
   "biology",
   "business studies",
   "chemistry",
@@ -268,7 +267,7 @@ coreSubjects = upcaseFirstChar([
 // Publish’s list is a bit different than the dttp list. Most things can map to a specialism, 
 // but not all. All should map to an allocation subject at least.
 // -------------------------------------------------------------------
-let publishSubjectsCsv = `Publish subject,Allocation Subject - (Register reworded),Subect specialism (Register reworded)
+let publishSubjectsCsv = `Publish subject,Allocation Subject,Subect specialism
 art and design,Art and design,
 biology,Biology,
 business studies,Business studies,
@@ -307,7 +306,7 @@ primary with modern languages,Primary,primary teaching,modern languages
 psychology,Other subjects,psychology
 religious education,Religious education,religious studies
 Russian,Modern languages,Russian languages
-science,Biology,general sciences
+science,General sciences,general sciences
 social sciences,Other subjects,social sciences
 Spanish,Modern languages,Spanish language
 modern languages,Modern languages,
