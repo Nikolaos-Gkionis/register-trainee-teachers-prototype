@@ -38,6 +38,17 @@ exports.falsify = (input) => {
   return input;
 }
 
+// Pick a random item from array. Supports passing in your own
+// random function. Providing a function lets us use a seeded random
+// generator so the results are predictable.
+exports.pickRandom = (array, randomFunction = Math.random) => {
+  if (!Array.isArray(array) || array.length == 0) {
+    console.log("Error with pickRandom: no array provided")
+    return false
+  }
+  return array[Math.floor(randomFunction() * array.length)]
+}
+
 // Sort two things alphabetically, not case-sensitive
 exports.sortAlphabetical = (x, y) => {
   if(x.toLowerCase() !== y.toLowerCase()) {

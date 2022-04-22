@@ -1,12 +1,12 @@
 const _ = require('lodash')
+const filters = require('./../filters.js')()
 const moment = require('moment')
 const path = require('path')
-const utils = require('./../lib/utils')
+const seedRandom = require('seedrandom')
 const url = require('url')
-const filters = require('./../filters.js')()
-const { faker } = require('@faker-js/faker')
+const utils = require('./../lib/utils')
 const weighted = require('weighted')
-
+const { faker } = require('@faker-js/faker')
 
 const getRandomArbitrary = (min, max) => {
   return Math.floor(Math.random() * (max - min) + min)
@@ -42,11 +42,11 @@ module.exports = router => {
       res.redirect('/bulk-update/add-details/fix-errors');
     } else if (data?.bulk?.addDetailsFixErrors == "Skip fixing errors") {
       delete data?.bulk?.addDetailsFixErrors
-      res.redirect('/bulk-update/add-details/check-pending-updates');
+      res.redirect('/bulk-update/add-details/check-pending-updates')
     } else {
-      res.redirect('/bulk-update/add-details/errors-found');
+      res.redirect('/bulk-update/add-details/errors-found')
     }
-  });
+  })
 
   /* Set-up check updates page up as coming from upload */
   router.get('/bulk-update/add-details/fix-file', function(req, res) {
@@ -71,6 +71,7 @@ module.exports = router => {
     const data = req.session.data
     let filteredRecords  = utils.filterRecords(data.records, data)
     let uploadedTrainees = utils.filterByCanBulkUpdate(filteredRecords)
+    let randomSeeded = seedRandom("update")
 
     let templateErrors = [
       'TRN not recognised',
@@ -83,14 +84,15 @@ module.exports = router => {
 
     /* For each record, randomly pick whether it's ok, in error, or unchanged. If in error, pick a random error */
     let processedRows = uploadedTrainees.map((trainee, index) => {
+
       let row = {
         rowNumber: index + 1,
         trainee,
-        uploadStatus: weighted.select(["error", "unchanged", "updated"], [0.25, 0.05, 0.7])
+        uploadStatus: weighted.select(["error", "unchanged", "updated"], [0.25, 0.05, 0.7], randomSeeded)
       }
 
       if (row.uploadStatus == "error") {
-        row.errorMessage = faker.helpers.randomize(templateErrors)
+        row.errorMessage = utils.pickRandom(templateErrors, randomSeeded)
       }
 
       if (!row.trainee.trainingDetails.commencementDate) {
@@ -118,6 +120,9 @@ module.exports = router => {
       res.redirect('/bulk-update/add-details/fix-errors')
     } else if (!rowsHaveErrors(processedRows) && rowsHaveUpdates(processedRows)) {
       res.redirect('/bulk-update/add-details/check-pending-updates')
+    }
+    else {
+      res.redirect('/bulk-update/add-details/ralph-to-add-url')
     }
   })
 
@@ -165,6 +170,7 @@ module.exports = router => {
     const data = req.session.data
     let filteredRecords  = utils.filterRecords(data.records, data)
     let uploadedTrainees = utils.filterByReadyToRecommend(filteredRecords)
+    let randomSeeded = seedRandom("recommend")
 
     let templateErrors = [
       'TRN not recognised',
@@ -186,12 +192,12 @@ module.exports = router => {
       let row = {
         rowNumber: index + 1,
         trainee,
-        uploadStatus: weighted.select(["error", "unchanged", "updated"], [0.25, 0.05, 0.7]),
+        uploadStatus: weighted.select(["error", "unchanged", "updated"], [0.25, 0.05, 0.7], randomSeeded),
         assessmentDate: getRandomArbitrary(6, 8) + "/" + getRandomArbitrary(1, 28) + "/" + data.years.endOfCurrentCycle
       }
 
       if (row.uploadStatus == "error") {
-        row.errorMessage = faker.helpers.randomize(templateErrors)
+        row.errorMessage = utils.pickRandom(templateErrors, randomSeeded)
       }
 
       return row
@@ -208,8 +214,9 @@ module.exports = router => {
     } else if (!rowsHaveErrors(processedRows) && rowsHaveUpdates(processedRows)) {
       res.redirect('/bulk-update/recommend/check-pending-updates')
     }
-
-    res.redirect('/bulk-update/recommend/errors-found');
+    else {
+      res.redirect('/bulk-update/recommend/errors-found')
+    }
   })
 
 }
