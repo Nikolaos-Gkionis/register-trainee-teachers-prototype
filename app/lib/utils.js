@@ -157,7 +157,7 @@ exports.dateToAcademicYear = date => {
     return false
   }
   let theYear = theDate.year()
-  let testDate = moment(`${theYear}-09-01`)
+  let testDate = moment(`${theYear}-08-01`)
 
   if (theDate.isBefore(testDate)){
     return exports.yearToAcademicYearString(theYear -1)
