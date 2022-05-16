@@ -1,0 +1,25 @@
+
+.app-admin-banner {
+  background: govuk-tint(govuk-colour("purple"), 90);
+}
+
+.app-admin-banner__container {
+  @include moj-width-container;
+
+  &:after {
+    content: '';
+    display: inline-block;
+  }
+
+  padding: govuk-spacing(4);
+  padding-bottom: 0;
+
+}
+
+.app-admin-banner__tag {
+  float: left;
+}
+
+.app-admin-banner__tag-line {
+  display: flex;
+}

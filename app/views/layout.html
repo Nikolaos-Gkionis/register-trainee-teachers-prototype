@@ -33,6 +33,7 @@
 {# custom components #}
 {# Most of these copied from the Apply for teacher training prototype #}
 {% from "_components/admin-feature/macro.njk"   import appAdminFeature %}
+{% from "_components/admin-banner/macro.njk"   import appAdminBanner %}
 {% from "_components/autocomplete/macro.njk"   import appAutocomplete %}
 {% from "_components/autocomplete-new/macro.njk"   import appAutocompleteFromSelect %}
 {% from "_components/autocomplete-new/macro.njk"   import appAutocompleteFromInput %}
@@ -64,6 +65,12 @@
 {% endblock %}
 
 {% block header %}
+
+    {# Show banner to get out of impersonation mode #}
+    {% if data.isImpersonating | falsify %}
+      {% include "_includes/impersonate-provider-banner.njk" %}
+    {% endif %}
+
   {% include "_includes/cookie-banner.html" %}
   {# Set serviceName in config.js. #}
   {% set headerClass = 'app-light-header' %}
@@ -86,9 +93,8 @@
   }) }}
 
   {% set rightHandSideNavHtml %}
-    {# Only show provider link if there’s more than one #}
-{#     {% if data.isHatModel and data.settings.userProviders | length > 0 %} #}
 
+  {% if not data.isAdmin and not data.isImpersonating | falsify %}
     {% set providerName = data.settings.userActiveProvider %}
     {% if providerName | providerIsLeadSchool %}
       {% set providerName -%}
@@ -96,19 +102,20 @@
       {%- endset %}
     {% endif %}
 
-      <nav class="moj-primary-navigation">
-        <ul class="moj-primary-navigation__list">
+    <nav class="moj-primary-navigation">
+      <ul class="moj-primary-navigation__list">
 
-            <li class="moj-primary-navigation__item">
-              <a class="moj-primary-navigation__link {{ 'aria-current="page"' | safe if navActive == 'provider' }}" href="/select-organisation">
-                {{ providerName }}
-              </a>
-            </li>
+          <li class="moj-primary-navigation__item">
+            <a class="moj-primary-navigation__link {{ 'aria-current="page"' | safe if navActive == 'provider' }}" href="/select-organisation">
+              {{ providerName }}
+            </a>
+          </li>
 
-        </ul>
+      </ul>
 
-      </nav>
-    {# {% endif %} #}
+    </nav>
+  {% endif %}
+
   {% endset %}
 
   {% set navItems = [{
@@ -166,9 +173,12 @@
 
   {% endif %}
 
+
+
 {% endblock %}
 
 {% block beforeContent %}
+
 {{ govukPhaseBanner({
   tag: {
     text: "prototype"
@@ -176,6 +186,7 @@
   classes: 'govuk-!-margin-top-1',
   html: 'This is a prototype of a new service – your <a href="#" class="govuk-link">feedback</a> will help us improve it'
 }) }}
+
 {% block pageNavigation %}
 {% endblock %}
 {% block pageBanner %}

@@ -1,0 +1,49 @@
+{% set isImpersonating = data.isImpersonating == 'true' %}
+
+
+{% set impersonateUserCtaHtml %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds-from-desktop">
+
+      {% set hasLeadSchool = record | hasLeadSchool %}
+      {% set leadSchoolName = record | getLeadSchoolName %}
+
+      <p class="govuk-body">View this information as {{record.provider}} {{"or " + leadSchoolName if hasLeadSchool }} would see it.</p>
+
+      {% set buttonUrl = currentPageUrl + "?settings[userActiveProvider]=" + record.provider + "&isImpersonating=true&clearQuery=true" %}
+
+      {% if hasLeadSchool %}
+        <div class="govuk-button-group govuk-!-margin-bottom-0">
+      {% endif %}
+      {{ govukButton({
+        classes: "govuk-!-margin-bottom-1",
+        "text": "View as " + record.provider,
+        href: buttonUrl
+      }) }}
+
+      {% if hasLeadSchool %}
+
+        {% set leadSchoolUrl = currentPageUrl + "?settings[userActiveProvider]=" + leadSchoolName + "&isImpersonating=true&clearQuery=true" %}
+
+        {{ govukButton({
+          classes: "govuk-!-margin-bottom-1",
+          "text": "View as " + leadSchoolName,
+          href: leadSchoolUrl
+        }) }}
+
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+{% endset %}
+
+
+{{ appAdminFeature({
+  html: impersonateUserCtaHtml
+}) }}
+
+
+
+
