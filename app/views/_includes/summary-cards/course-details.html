@@ -14,7 +14,8 @@
     {% if isPublishCourse %}
       {{ record.courseDetails.courseNameLong }}
     {% else %}
-      {{ record.courseDetails.subjects | prettifySubjects }}
+      {# {{ record.courseDetails.subjects | prettifySubjects }} #}
+      {{ record | getAllocationSubject }}
     {% endif %}
   </span>
 {% endmacro %}
